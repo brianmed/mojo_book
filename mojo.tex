@@ -349,4 +349,46 @@ and the "param" method exposes the data to the application - using the "name"
 argument.  "name" is common between the form, the POST request, and the
 application.
 
+\chapter*{Mojolicious Application}
+\markboth{\MakeUppercase{Mojolicious Application}}{}
+\addcontentsline{toc}{chapter}{Mojolicious Application}
+
+\section{A full suite}
+
+The previous portion of this book focused on Mojolicious::Lite applications;
+however, in order to realize our Photo application it will be easier to use the
+full blown application features of Mojolicious.  An application of this type
+can be started with:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ mojo generate app Photo
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ /mojo/LaTeX_code_reference/mojo_book>/opt/perl-5.20.1/bin/mojo generate app Photo
+[mkdir] /Users/bpm/.../photo/script
+[write] /Users/bpm/.../photo/script/photo
+[chmod] /Users/bpm/.../photo/script/photo 744
+[mkdir] /Users/bpm/.../photo/lib
+[write] /Users/bpm/.../photo/lib/Photo.pm
+[mkdir] /Users/bpm/.../photo/lib/Photo/Controller
+[write] /Users/bpm/.../photo/lib/Photo/Controller/Example.pm
+[mkdir] /Users/bpm/.../photo/t
+[write] /Users/bpm/.../photo/t/basic.t
+[mkdir] /Users/bpm/.../photo/log
+[mkdir] /Users/bpm/.../photo/public
+[write] /Users/bpm/.../photo/public/index.html
+[mkdir] /Users/bpm/.../photo/templates/layouts
+[write] /Users/bpm/.../photo/templates/layouts/default.html.ep
+[mkdir] /Users/bpm/.../photo/templates/example
+[write] /Users/bpm/.../photo/templates/example/welcome.html.ep
+\end{lstlisting}
+
+The app is runable via:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ cd photo
+$ /opt/perl-5.20.1/bin/morbo -v script/photo
+\end{lstlisting}
+
 \end{document}
