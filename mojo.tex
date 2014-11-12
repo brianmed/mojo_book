@@ -1,0 +1,352 @@
+\documentclass[16pt,pdftex]{book}
+\usepackage[T1]{fontenc}
+\usepackage{listings}
+\usepackage{verbatim}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\small\sffamily,
+  numbers=none,
+  frame=none,
+  columns=fullflexible,
+  linewidth=1.0\linewidth,
+  xleftmargin=0.0\linewidth,
+  xrightmargin=0.0\linewidth
+}
+
+\lstdefinestyle{BashOutputStyle}{
+  basicstyle=\small\ttfamily,
+  numbers=none,
+  frame=tblr,
+  columns=fullflexible,
+  backgroundcolor=\color{blue!10},
+  linewidth=1.0\linewidth,
+  xleftmargin=0.0\linewidth,
+  xrightmargin=0.0\linewidth
+}
+
+\lstdefinestyle{BlockStyle}{
+  basicstyle=\small\ttfamily,
+  numbers=none,
+  frame=none,
+  columns=fullflexible,
+  linewidth=1.0\linewidth,
+  xleftmargin=0.0\linewidth,
+  xrightmargin=0.0\linewidth
+}
+
+\lstset{% general command to set parameter(s) 
+basicstyle=\small, % print whole listing small 
+keywordstyle=\color{black}\bfseries\underbar,
+commentstyle=\color{white}, 
+frame=none,
+escapeinside={(*@}{@*)},
+stringstyle=\ttfamily, 
+showstringspaces=false,
+numbers=left}
+
+\begin{document}
+
+\title{Get some Mojo}
+\author{Brian Medley}
+
+\frontmatter
+\maketitle
+\tableofcontents
+
+\mainmatter
+
+\chapter*{Rationale}
+\markboth{\MakeUppercase{Rationale}}{}
+\addcontentsline{toc}{chapter}{Rationale}
+
+\section{Mojolicious}
+
+Thus begins our quest for Mojo - a tutorial approach to learning web
+technologies. We will be learning Mojolicious [http://mojolicio.us]; at the
+time of this writing it is a "next generation web framework for the Perl
+Programming language". To achieve this, intermediate with some advanced
+computer knowledge is assumed. You do not need to be a developer to read this
+book.
+
+From chapters 2 to the end we will be building a Photo album application. What
+does next generation mean? It is a MVC framework that includes:
+
+\begin{itemize}
+\item \verb|Full stack HTTP and WebSocket client/server.|
+\item \verb|IPv6, TLS, SNI, IDNA, Comet|
+\item \verb|Non-blocking I/O and embeddable web server|
+\item \verb|JSON and HTML/XML parse with CSS selectors|
+\item \verb|Templates|
+\item \verb|Sessions|
+\item \verb|Cookie management|
+\item \verb|HTTP / WebSocket|
+\item \verb|Routes|
+\item \verb|CGI / PSGI auto-detection|
+\item \verb|Static files|
+\item \verb|Testing framework|
+\item \verb|Plugins|
+\end{itemize}
+
+\chapter*{Preperation}
+\markboth{\MakeUppercase{Preperation}}{}
+\addcontentsline{toc}{chapter}{Preperation}
+
+\subsection{Perl}
+
+Mojolicious requires Perl.  We will be using Perl on Linux with 5.20.1.  Your
+system perl is probably a lower version, so we will bootstrap our install with 
+Perl-Build and App::cpanminus.
+
+\begin{lstlisting}[style=BashInputStyle]
+$ curl -L -n -O https://raw.github.com/.../perl-build
+$ perl perl-build 5.20.1 /opt/perl-5.20.1
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+Fetching 5.20.1 ...
+Downloaded http://.../SHAY/perl-5.20.1.tar.bz2 to .../perl-5.20.1.tar.bz2
+Configuring perl '5.20.1'
+...
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashInputStyle]
+$ curl -L http://cpanmin.us | /opt/perl-5.20.1/perl - App::cpanminus
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+--> Working on App::cpanminus
+Fetching http://www.cpan.org/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7014.tar.gz ... OK
+Configuring App-cpanminus-1.7014 ... OK
+...
+Building and testing App-cpanminus-1.7014 ... OK
+Successfully installed App-cpanminus-1.7014
+3 distributions installed
+\end{lstlisting}
+
+After doing these things it will be easier to install Mojolicious and any required modules.
+Also, there is now a fully functional perl install that can be tinkered with to your hearts content.
+To verify the install run:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ /opt/perl-5.20.1/bin/perl -v
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+This is perl 5, version 20, subversion 1 (v5.20.1) built for darwin-2level
+
+Copyright 1987-2014, Larry Wall
+
+Perl may be copied only under the terms of either the Artistic License or the
+GNU General Public License, which may be found in the Perl 5 source kit.
+
+Complete documentation for Perl, including FAQ lists, should be found on
+this system using "man perl" or "perldoc perl".  If you have access to the
+Internet, point your browser at http://www.perl.org/, the Perl Home Page.
+\end{lstlisting}
+
+For convience, a symlink can be added so that /opt/perl points to
+/opt/perl/5.20.1/bin/perl.
+
+\begin{lstlisting}[style=BashInputStyle]
+$ ln -s /opt/perl-5.20.1/bin/perl /opt/perl
+\end{lstlisting}
+
+\subsection{Installation}
+
+Adding the CPAN module to the system installs everything needed for
+Mojolicious. 
+
+\begin{lstlisting}[style=BashInputStyle]
+$ /opt/perl-5.20.1/bin/cpanm Mojolicious
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+...
+Mojolicious will be installed by the cpanm utility.
+\end{lstlisting}
+
+\subsection{Hello World}
+
+Now that we have Mojolicious installed, we can start writing code for our
+website. Our first example is a full program and you are not expected to
+understand everything. It is geared to get your feet wet. After this, we will
+be a tutorial introduction into HTTP, HTML, Javascript, CSS, and other Web
+technologies.  Our examples is a Mojolicious::Lite application. It is a
+Real-time micro web framework. This micro web framework can have the entire web
+structure in a file.
+
+\lstinputlisting[]{hello_world.pl}
+
+Line \ref{_ex1_1_use} turns your perl script into a full featured web
+application, that uses strict, warnings, utf8 and Perl 5.10 features. It's fun.
+
+Run the program like so:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ /opt/perl-5.20.1/bin/morbo -v hello_worl.pl
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+[“Mon Sep 3 19:08:38 2012] [info] Listening at "http://*:3000".
+Server available at http://127.0.0.1:3000.”
+\end{lstlisting}
+
+We now have a full featured web server running on port 3000. You may view in
+any browser. In your URL bar put: http://127.0.0.1:3000 and view the page.
+Next, add Carpe diem after line \ref{_ex1_1_add_line_here}. Save the file and reload
+the page in the browser. morbo will restart your server once a change is made.
+
+\chapter*{Going Forward}
+\markboth{\MakeUppercase{Going Forward}}{}
+\addcontentsline{toc}{chapter}{Going Forward}
+
+\section{Preamble}
+
+Here we get down with Mojo.  A brief introduction of HTTP 1.1 is given; Routes,
+Logging, GET/POST Parameters, Templates, Sessions, and Static files.
+
+\section{HTTP 1.1}
+
+\subsection{Under the Hood}
+
+As you know, web pages are loaded from a server. When you goto domain.com, then
+the default HTML is loaded using HTTP.  As you will see, the transfer, or
+request, from the server to your web browser client can be considered a file
+transfer. For example, when http://127.0.0.1:3000 was visited something like
+the following was sent from your browser to the server:
+
+\begin{lstlisting}[style=BlockStyle]
+    GET / HTTP/1.1
+    Host: 127.0.0.1:3000
+    Connection: keep-alive
+    Cache-Control: max-age=0
+    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+    User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHT
+    Accept-Encoding: gzip,deflate,sdch
+    Accept-Language: en-US,en;q=0.8
+\end{lstlisting}
+
+Then, the server responded with:
+
+\begin{lstlisting}[style=BlockStyle]
+    HTTP/1.1 200 OK
+    Content-Length: 2
+    Server: Mojolicious (Perl)
+    Connection: keep-alive
+    Date: Wed, 30 Oct 2013 23:44:04 GMT
+    Content-Type: text/html;charset=UTF-8
+\end{lstlisting}
+
+If we were to goto http://127.0.0.1:3000/hello, then the GET request would start with:
+
+\begin{lstlisting}[style=BlockStyle]
+    GET /hello HTTP 1.1
+\end{lstlisting}
+
+Of note, is that the implied "/" and "/hello" are the pages that the server is being requested to serve.
+
+\section{Routes}
+
+\subsection{Finding our way}
+
+Routes enable Mojolicious to easily glue together an incoming request with
+code.
+
+From the Mojolicious::Lite perldoc:
+
+Routes are basically just fancy paths that can contain different kinds of
+placeholders. \$self is a Mojolicious::Controller object containing both, the
+HTTP request and response.
+
+For example, given the code below:
+
+\lstinputlisting[]{routes.pl}
+
+The \textbf{get '/foo'} will redirect a \textbf{HTTP GET /foo} request to the anonymous
+subroutine listed. It should be noted that a GET and POST can be redirected to
+a different subroutine.  This is a very powerful construct that allows us to
+execute arbitrary business logic (system commands, SQL, control flow logic,
+etc) for a given request.
+
+\begin{center}
+  \begin{tabular}{|l|r|}
+    \hline
+    GET  & CODE\\
+    \hline
+    GET /foo & \ref{_ex2_1_get}: get "/foo" => sub {}\\
+    POST /foo & \ref{_ex2_1_post}: post "/foo" => sub {}\\
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Extending hello\_world.pl}
+
+It would be nice to be able to click and get different "page" from web server
+that gave us feedback. We will use the internal templating system called
+Embedded Perl.
+
+\lstinputlisting[]{ex2_2.pl}
+
+Once ran via morbo we can click the "carpe" link and get dynamic feedback from our web server.
+
+\section{Logging}
+
+\subsection{From whence we came}
+
+At times it is appropriate to log data while processing a code in the backend.
+In development mode a file in \textbf{log}/development.log is used and in production
+mode a file \textbf{log}/production.log is utilized. The modes can be switched around
+via \textit{MOJO\_MODE} environment variable. Merely creating a log directory will enable
+the output into these files.
+
+\begin{lstlisting}[style=BashInputStyle]
+$ mkdir log
+\end{lstlisting}
+
+Now we can send logging data to the proper file with code such as:
+
+\verbatiminput{ex2_3.pl}
+
+In addition, usage statistics for each request are logged to the
+development.log file.  For example, the below is from the route snippet above.
+
+\begin{lstlisting}[style=BashOutputStyle]
+    [Mon Sep  3 22:07:35 2012] [info] Listening at "http://*:3000".
+    [Mon Sep  3 22:07:38 2012] [debug] Your secret passphrase needs to be changed!!!
+    [Mon Sep  3 22:07:38 2012] [debug] GET /carpe (Mozilla/5.0 (X11; Linux x86\_64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/21.0.1180.89 Safari/537.1).
+    [Mon Sep  3 22:07:38 2012] [debug] Routing to a callback.
+    [Mon Sep  3 22:07:38 2012] [debug] {
+      'now' => 'Mon Sep  3 22:07:38 2012'
+    }
+\end{lstlisting}
+
+\section{Parameters}
+
+\subsection{Variety is the spice...}
+
+Input and output are intrinsic to any computer program, perhaps doubly so to a
+web application.  A significant source of user input comes from GET and POST
+parameters.
+
+These parameters present themselves through the requests and
+responses the web server and client make.  They can be in href URLs, forms, and
+javascript code.
+
+As a specific example, the following code can be used to
+demonstrate a POST action that logs a user in.  The parameter is the username -
+there is no password, not very secure.
+
+\lstinputlisting[]{ex2_3.pl}
+
+The application usage is straightforward: run the program and then enter your
+username followed by a return.  You should then be logged in.
+
+The parameter "name" is an agreement between the view and the controller.
+Before you're logged in there is html that presents a form and the form is sent
+back to the server in the form of a POST request.  This request is processed
+and the "param" method exposes the data to the application - using the "name"
+argument.  "name" is common between the form, the POST request, and the
+application.
+
+\end{document}
