@@ -68,7 +68,7 @@ sub startup {
         return 1;
     });
     
-    $r->get('/')->to(controller => 'Index', action => 'slash');
+    $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_route}@*)
     $r->post('/init')->to(controller => 'Index', action => 'init');
 }
 

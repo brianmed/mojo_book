@@ -4,7 +4,7 @@ use Mojo::Base qw(Mojolicious::Controller);
 use File::Spec;
 use SiteCode::Account;
 
-sub slash {
+sub slash { # (*@\label{_appendix_slash}@*)
     my $c = shift;
 
     if ($c->session->{username}) {
@@ -20,7 +20,7 @@ sub slash {
         return;
     }
 
-    $c->reply->static('setup.htm');
+    $c->reply->static('setup.htm'); # (*@\label{_appendix_static}@*)
 }
 
 sub init {

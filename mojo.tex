@@ -364,24 +364,12 @@ can be started with:
 $ mojo generate app Photo
 \end{lstlisting}
 
+However, we are going to use the git checkout of this book which includes all the 
+code for our Photo app.
+
 \begin{lstlisting}[style=BashOutputStyle]
-$ /mojo/LaTeX_code_reference/mojo_book>/opt/perl-5.20.1/bin/mojo generate app Photo
-[mkdir] /Users/bpm/.../photo/script
-[write] /Users/bpm/.../photo/script/photo
-[chmod] /Users/bpm/.../photo/script/photo 744
-[mkdir] /Users/bpm/.../photo/lib
-[write] /Users/bpm/.../photo/lib/Photo.pm
-[mkdir] /Users/bpm/.../photo/lib/Photo/Controller
-[write] /Users/bpm/.../photo/lib/Photo/Controller/Example.pm
-[mkdir] /Users/bpm/.../photo/t
-[write] /Users/bpm/.../photo/t/basic.t
-[mkdir] /Users/bpm/.../photo/log
-[mkdir] /Users/bpm/.../photo/public
-[write] /Users/bpm/.../photo/public/index.html
-[mkdir] /Users/bpm/.../photo/templates/layouts
-[write] /Users/bpm/.../photo/templates/layouts/default.html.ep
-[mkdir] /Users/bpm/.../photo/templates/example
-[write] /Users/bpm/.../photo/templates/example/welcome.html.ep
+$ cd /opt
+$ git clone git@github.com:brianmed/mojo_book.git
 \end{lstlisting}
 
 The app is runable via:
@@ -390,5 +378,43 @@ The app is runable via:
 $ cd photo
 $ /opt/perl-5.20.1/bin/morbo -v script/photo
 \end{lstlisting}
+
+When we point our browser to http://localhost:3000 we'll get our app.  As you
+can see, our version is in /opt/mojo\_book/photo and expects its config file to
+be in /opt/photo.  See the apppendix for a config file example.
+
+After the config file has been setup, we can run our app via "script/photo";
+this is a perl script that bootstraps our app.  Most of the time you won't need
+to modify this; however, if module directories are needed, then "use lib" statements
+can be put here.
+
+What happens next?
+
+\subsection{Startup}
+
+Mojolicious initializes our app and then calls Photo::startup.
+
+The startup method adds, configures plugins; sets up some logging; adds in helpers;
+and sets up routes.  As you can see, in line \ref{_appendix_route} of lib/Photo.pm 
+our route for the index page is setup.
+
+When a user agent does a GET /, then our route at line \ref{_appendix_slash} will be 
+called in lib/Photo/Controller/Index.pm and the index.html file will be served via
+line \ref{_appendix_static}.
+
+The file is in photo/public...
+
+\appendix
+\section{Photo Album code}
+
+\lstinputlisting[]{/opt/photo}
+
+\lstinputlisting[]{photo/script/photo}
+
+\lstinputlisting[]{photo/lib/Photo.pm}
+
+\lstinputlisting[]{photo/lib/Photo/Controller/Index.pm}
+
+\lstinputlisting[]{photo/public/index.html}
 
 \end{document}
