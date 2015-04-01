@@ -4,12 +4,9 @@ use Mojo::Base -base;
 
 use Mojo::Util;
 
-use SiteCode::DBX;
 use Crypt::Eksblowfish::Bcrypt;
 
 use File::Temp;
-
-has dbx  => sub { SiteCode::DBX->new };
 
 has [qw(id username password email route)] => undef;
 
@@ -91,67 +88,18 @@ sub chkpw
 
 sub exists {
     my $class = shift;
+    my $site_conf = shift;
+    my $username = shift;
 
     my %opt = @_;
 
-    if ($opt{username}) {
-        return(SiteCode::DBX->new->col("SELECT id FROM account WHERE username = ?", undef, $opt{username}));
+    if ($username) {
+        if (-f File::Spec->catfile($$site_conf{user_dir}, $username)) {
+            return(1);
+        }
     }
 
     return(0);
-}
-
-sub key
-{
-    my $self = shift;
-    my $key = shift;
-
-    my $dbx = SiteCode::DBX->new();
-
-    if (scalar(@_)) {
-        if (defined $_[0]) {
-            my $value = shift;
-            my $defined = $self->key($key);
-
-            if (defined $defined) {
-                my $id = $dbx->col("SELECT id FROM account_key WHERE account_id = ? AND account_key = ?", undef, $self->id(), $key);
-                $dbx->do("UPDATE account_value SET account_value = ? WHERE account_key_id = ?", undef, $value, $id);
-
-                $dbx->dbh->commit;
-            }
-            else {
-                $dbx->do("INSERT INTO account_key (account_id, account_key) VALUES (?, ?)", undef, $self->id(), $key);
-                my $id = $dbx->col("SELECT id FROM account_key WHERE account_id = ? AND account_key = ?", undef, $self->id(), $key);
-                $dbx->do("INSERT INTO account_value (account_key_id, account_value) VALUES (?, ?)", undef, $id, $value);
-
-                $dbx->dbh->commit;
-            }
-        }
-        else {
-            my $defined = $self->key($key);
-
-            if ($defined) {
-                my $id = $dbx->col("SELECT id FROM account_key WHERE account_id = ? AND account_key = ?", undef, $self->id(), $key);
-                $dbx->do("DELETE FROM account_key where id = ?", undef, $id);
-
-                $dbx->dbh->commit;
-            }
-        }
-    }
-
-    my $row = $dbx->row(qq(
-        SELECT 
-            account_key, account_value 
-        FROM 
-            account_key, account_value 
-        WHERE account_key = ?
-            AND account_id = ?
-            AND account_key.account_id = account_id
-            AND account_key.id = account_value.account_key_id
-    ), undef, $key, $self->id());
-
-    my $ret = $row->{account_value};
-    return($ret);
 }
 
 # http://www.eiboeck.de/blog/2012-09-11-hash-your-passwords
