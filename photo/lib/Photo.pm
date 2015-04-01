@@ -69,6 +69,8 @@ sub startup {
     });
     
     $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_route}@*)
+    $r->any('/login')->to(controller => 'Index', action => 'login');
+    $r->get('/logout')->to(controller => 'Index', action => 'logout');
     $r->any('/setup')->to(controller => 'Index', action => 'setup');
     $r->get('/photos')->to(controller => 'Photos', action => 'index');
 }

@@ -139,6 +139,7 @@ $(document).ready(function () {
         </ul>
     </li>
    <li><a href="#upload" data-toggle="modal">Upload</a></li>
+   <li><a href="/logout">Logout</a></li>
     </ul>
    
     </div>

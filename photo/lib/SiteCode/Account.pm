@@ -2,46 +2,33 @@ package SiteCode::Account;
 
 use Mojo::Base -base;
 
-use Mojo::JSON qw(encode_json);
-use Mojo::Util qw(spurt);
+use Mojo::JSON qw(decode_json encode_json);
+use Mojo::Util qw(spurt slurp);
 use Crypt::Eksblowfish::Bcrypt;
 use File::Temp;
+use File::Spec;
 
-has [qw(id username password email route)] => undef;
-
-sub _lookup_id_with_username {
-    my $self = shift;
-
-    return($self->dbx->col("SELECT id FROM account WHERE username = ?", undef, $self->username));
-}
-
-sub _lookup {
-    my $self = shift;
-    my $lookup = shift;
-
-    return($self->dbx->col("SELECT $lookup FROM account WHERE id = ?", undef, $self->id));
-}
+has [qw(username route site_conf)] => undef;
 
 sub new {
     my $class = shift;
+    my %ops = @_;
 
     my $self = $class->SUPER::new(@_);
 
-    eval {
-        $self->id($self->_lookup_id_with_username());
+    my $file = File::Spec->catfile($self->site_conf->{user_dir}, $self->username);
+    my $bytes = slurp($file);
+    my $hash = decode_json($bytes);
 
-        if ($self->password) {
-            unless($self->chkpw($self->password)) {
+    eval {
+        if ($ops{password}) {
+            unless($self->check_password($ops{password}, $$hash{password})) {
                 die("Credentials mis-match.\n");
             }
         }
-
-        foreach my $key (qw(password email)) {
-            $self->$key($self->_lookup($key));
-        }
     };
     if ($@) {
-        $self->route->app->log->debug("RTCRoom::Account::new: $@") if $self->route;
+        $self->route->app->log->debug("SiteCode::Account::new: $@") if $self->route;
         die($@);
     }
 
@@ -59,16 +46,6 @@ sub insert
     my $file = File::Spec->catfile($$site_conf{user_dir}, $ops{username});
     my $bytes = encode_json({username => "admin", password => $password_hash});
     spurt($bytes, $file);
-}
-
-sub chkpw
-{
-    my $self = shift;
-    my $pw = shift;
-
-    my $saved_pw = $self->dbx()->col("SELECT password FROM account WHERE id = ?", undef, $self->id());
-
-    return($self->check_password($pw, $saved_pw));
 }
 
 sub exists {
