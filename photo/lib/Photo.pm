@@ -70,6 +70,7 @@ sub startup {
     
     $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_route}@*)
     $r->any('/setup')->to(controller => 'Index', action => 'setup');
+    $r->get('/photos')->to(controller => 'Photos', action => 'index');
 }
 
 1;

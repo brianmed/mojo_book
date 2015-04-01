@@ -8,7 +8,7 @@ sub slash { # (*@\label{_appendix_slash}@*)
     my $c = shift;
 
     if ($c->session->{username}) {
-        my $url = $c->url_for('/photo.htm');
+        my $url = $c->url_for('/photos');
         return($c->redirect_to($url));
     }
 
@@ -25,6 +25,13 @@ sub slash { # (*@\label{_appendix_slash}@*)
 
 sub setup {
     my $c = shift;
+
+    my $site_conf = $c->site_config;
+
+    if (SiteCode::Account->exists($site_conf, "admin")) {
+        my $url = $c->url_for('/');
+        return($c->redirect_to($url));
+    }
 
     if ("GET" eq $c->req->method) {
         return;
@@ -44,10 +51,16 @@ sub setup {
     if ($validation->has_error) {
         return($c->render);
     }
-    else {
-        my $url = $c->url_for('/');
-        return($c->redirect_to($url));
-    }
+
+    my $password = $validation->param("orig_passwd");
+
+    SiteCode::Account->insert($site_conf, username => "admin", password => $password);
+
+    $c->session(username => "admin");
+    $c->session(expiration => 604800);
+    
+    my $url = $c->url_for('/');
+    return($c->redirect_to($url));
 }
 
 1;

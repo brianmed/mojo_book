@@ -2,10 +2,9 @@ package SiteCode::Account;
 
 use Mojo::Base -base;
 
-use Mojo::Util;
-
+use Mojo::JSON qw(encode_json);
+use Mojo::Util qw(spurt);
 use Crypt::Eksblowfish::Bcrypt;
-
 use File::Temp;
 
 has [qw(id username password email route)] => undef;
@@ -52,28 +51,14 @@ sub new {
 sub insert
 {
     my $class = shift;
-    my $ops = shift;
+    my $site_conf = shift;
+    my %ops = @_;
 
-    my $dbx = SiteCode::DBX->new();
-    my $password_hash = $class->hash_password($ops->{password});
+    my $password_hash = $class->hash_password($ops{password});
 
-    if ($ops->{id}) {
-        $dbx->do(
-            "INSERT INTO account (id, username, password, email) VALUES (?, ?, ?, ?)", undef, 
-            $ops->{id}, $ops->{username}, $password_hash, $ops->{email}
-        );
-    }
-    else {
-        $dbx->do(
-            "INSERT INTO account (username, password, email) VALUES (?, ?, ?)", undef, 
-            $ops->{username}, $password_hash, $ops->{email}
-        );
-    }
-    $dbx->dbh->commit;
-
-    my $id = $dbx->col("SELECT id FROM account WHERE username = ?", undef, $ops->{username});
-
-    return($id);
+    my $file = File::Spec->catfile($$site_conf{user_dir}, $ops{username});
+    my $bytes = encode_json({username => "admin", password => $password_hash});
+    spurt($bytes, $file);
 }
 
 sub chkpw
@@ -90,8 +75,6 @@ sub exists {
     my $class = shift;
     my $site_conf = shift;
     my $username = shift;
-
-    my %opt = @_;
 
     if ($username) {
         if (-f File::Spec->catfile($$site_conf{user_dir}, $username)) {
