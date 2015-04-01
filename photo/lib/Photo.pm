@@ -69,7 +69,7 @@ sub startup {
     });
     
     $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_route}@*)
-    $r->post('/init')->to(controller => 'Index', action => 'init');
+    $r->any('/setup')->to(controller => 'Index', action => 'setup');
 }
 
 1;

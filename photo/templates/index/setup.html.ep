@@ -1,0 +1,39 @@
+% layout 'modal';
+<div class="container">
+	<div class="row">
+		<!--a class="btn btn-primary" data-toggle="modal" href="#myModal" >Login</a-->
+
+        % if (my $err = validation->error('orig_passwd')) {
+        %   stash(error => "Password must entered") if $err->[0] eq 'required';
+        %   stash(error => "Password must be 1 - 8 characters") if $err->[0] eq 'size';
+        %   stash(error => "Password must be A-Z, a-z, and 0-9 characters") if $err->[0] eq 'like';
+        % }
+
+        % if (my $err = validation->error('verify_passwd')) {
+        %   stash(error => "Verify must entered") if $err->[0] eq 'required';
+        %   stash(error => "Verify must equal Password") if $err->[0] eq 'equal_to';
+        % }
+        
+        <div class="modal hide" id="myModal">
+          <div class="modal-header">
+            <!--button type="button" class="close" data-dismiss="modal">x</button-->
+            <h3>Admin Setup</h3>
+          </div>
+
+        % if (stash('error')) {
+            <div class="alert">
+              %= stash('error')
+            </div>
+        % }
+
+          <div class="modal-body">
+            <form method="post" action='/setup'>
+              <p><input type="text" class="span3" name="username" id="username" value="admin" disabled></p>
+              <p><input type="password" class="span3" name="orig_passwd" placeholder="Password"></p>
+              <p><input type="password" class="span3" name="verify_passwd" placeholder="Verify"></p>
+              <p><button type="submit" class="btn btn-primary">Setup</button></p>
+            </form>
+          </div>
+        </div>
+	</div>
+</div>

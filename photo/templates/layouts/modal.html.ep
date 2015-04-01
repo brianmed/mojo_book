@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<meta charset='UTF-8'>
+<link rel='stylesheet prefetch' href='/css/bootstrap.css'>
+</head>
+
+<body>
+
+<%= content %>
+
+<script src="js/jquery-1.8.3.js"></script>
+<script src="js/bootstrap.js"></script>
+
+<script>
+    $('#myModal').modal({
+        keyboard: false,
+        show: true,
+        backdrop: 'static'
+    });
+</script>
+
+</body>
+</html>
+
