@@ -395,19 +395,53 @@ What happens next?
 Mojolicious initializes our app and then calls Photo::startup.
 
 The startup method adds, configures plugins; sets up some logging; adds in helpers;
-and sets up routes.  As you can see, in line \ref{_appendix_route} of lib/Photo.pm 
+and sets up routes.  As you can see, in line \ref{_appendix_startup_slash_route} of lib/Photo.pm 
 our route for the index page is setup.
 
-When a user agent does a GET /, then our route at line \ref{_appendix_slash} will be 
-called in lib/Photo/Controller/Index.pm and the index.html file will be served via
-line \ref{_appendix_static}.
+When a user agent does a GET /, then our route at line \ref{_appendix_route_slash} will be 
+called in lib/Photo/Controller/Index.pm and the slash.html.ep file will be served via
+line \ref{_appendix_render_slash}.
 
-The file is in photo/public...
+Given that, lets go back and discet Photo::startup one "section" at a time.
+
+At line \ref{_appendix_startup_debug} we turn on development logging for when
+we are running in production mode.  This is a convience for early stage
+production or when debugging something.  Next, at
+\ref{_appendix_startup_config} we initialize the config data structure with a
+config file.
+
+This file is just a perl data structure and can be hand edited or
+programmatically defined.  Another option is to use JSCONConfig and a JSON
+config file.  Below is an example config file.
+
+\lstinputlisting[]{photo.config}
+
+The next setup phase is to initialize the secret passphrase at
+\ref{_appendix_startup_secrets}.  Multiple passphrases are supported to allow
+for phasing out an old passphrase.  These passphrases are used for things like
+signed cookies (such as in the sessions).
+
+After our secret passphrases, at line \ref{_appendix_startup_helpers} we setup
+the helpers.  A helper is a sub that is made available to the controller object
+and the application object, as well as a function in ep templates.  There are
+two helpers defined and then initialized.
+
+The next piece setup is hypnotoad and we will defer that till we talk about deployment.
+
+After hypnotoad we setup our routes; an api authentication section; and the
+code called when a HTTP request is made to our app.  At line
+\ref{_appendix_startup_slash_route} the "entry" point to our app from the user
+agent is defined - namely the initial page.  It should be noted that we can
+defined "get" and "post" for these routes.  
+
+In addition "any" is supported.
+
+\subsection{Controller}
 
 \appendix
 \section{Photo Album code}
 
-\lstinputlisting[]{/opt/photo}
+% \lstinputlisting[]{/opt/photo}
 
 \lstinputlisting[]{photo/script/photo}
 
@@ -415,6 +449,6 @@ The file is in photo/public...
 
 \lstinputlisting[]{photo/lib/Photo/Controller/Index.pm}
 
-\lstinputlisting[]{photo/public/index.html}
+\lstinputlisting[]{photo/templates/index/slash.html.ep}
 
 \end{document}

@@ -15,27 +15,33 @@ sub site_config
 sub startup {
     my $self = shift;
 
-    $self->log->level("debug");
+    $self->log->level("debug"); # (*@\label{_appendix_startup_debug}@*)
 
-    my $site_config = $self->plugin("Config" => {file => '/opt/mojo_book/photo.config'});
-    $self->secrets([$$site_config{site_secret}]);
+    my $site_config = $self->plugin("Config" => {file => '/opt/mojo_book/photo.config'}); # (*@\label{_appendix_startup_config}@*)
 
+    $self->secrets([$$site_config{site_secret}]); # (*@\label{_appendix_startup_secrets}@*)
+
+    # (*@\label{_appendix_startup_helpers}@*)
     $self->helper(site_dir => \&site_dir);
     $self->helper(site_config => \&site_config);
     $self->site_dir($$site_config{site_dir});
     $self->site_config($site_config);
 
+    # (*@\label{_appendix_startup_accesslog}@*)
+    $self->plugin(AccessLog => {log => "$$site_config{site_dir}/log/access.log", format => '%h %l %u %t "%r" %>s %b %D "%{Referer}i" "%{User-Agent}i"'});
+
+    # (*@\label{_appendix_startup_hypnotoad}@*)
     my $listen = [];
     push(@{ $listen }, "http://$$site_config{hypnotoad_ip}:$$site_config{hypnotoad_port}") if $$site_config{hypnotoad_port};
     push(@{ $listen }, "https://$$site_config{hypnotoad_ip}:$$site_config{hypnotoad_tls}") if $$site_config{hypnotoad_tls};
 
     $self->config(hypnotoad => {listen => $listen, workers => $$site_config{hypnotoad_workers}, user => $$site_config{user}, group => $$site_config{group}, inactivity_timeout => 15, heartbeat_timeout => 15, heartbeat_interval => 15, accepts => 100});
-
-    $self->plugin(AccessLog => {log => "$$site_config{site_dir}/log/access.log", format => '%h %l %u %t "%r" %>s %b %D "%{Referer}i" "%{User-Agent}i"'});
     
     # Router
+    # (*@\label{_appendix_startup_router}@*)
     my $r = $self->routes;
 
+    # (*@\label{_appendix_startup_api}@*)
     my $api = $r->under (sub {
         my $self = shift;
 
@@ -68,11 +74,10 @@ sub startup {
         return 1;
     });
     
-    $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_route}@*)
-    $r->any('/login')->to(controller => 'Index', action => 'login');
-    $r->get('/logout')->to(controller => 'Index', action => 'logout');
-    $r->any('/setup')->to(controller => 'Index', action => 'setup');
-    $r->get('/photos')->to(controller => 'Photos', action => 'index');
+    # (*@\label{_appendix_startup_routes}@*)
+    $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_startup_slash_route}@*)
+    $r->post('/save')->to(controller => 'Index', action => 'save');
+    $r->post('/switch')->to(controller => 'Index', action => 'switch');
 }
 
 1;
