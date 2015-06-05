@@ -12,6 +12,11 @@ sub site_config
     state $site_config = pop;
 }
 
+sub album
+{
+    state $album = pop;
+}
+
 sub startup {
     my $self = shift;
 
@@ -24,6 +29,7 @@ sub startup {
     # (*@\label{_appendix_startup_helpers}@*)
     $self->helper(site_dir => \&site_dir);
     $self->helper(site_config => \&site_config);
+    $self->helper(album => \&album);
     $self->site_dir($$site_config{site_dir});
     $self->site_config($site_config);
 
@@ -40,6 +46,17 @@ sub startup {
     # Router
     # (*@\label{_appendix_startup_router}@*)
     my $r = $self->routes;
+
+    my $have_album = $r->under (sub {
+        my $self = shift;
+
+        if (!$self->session("album")) {
+            my $url = $self->url_for('/');
+            return($self->redirect_to($url));
+        }
+
+        return 1;
+    });
 
     # (*@\label{_appendix_startup_api}@*)
     my $api = $r->under (sub {
@@ -76,8 +93,12 @@ sub startup {
     
     # (*@\label{_appendix_startup_routes}@*)
     $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_startup_slash_route}@*)
-    $r->post('/save')->to(controller => 'Index', action => 'save');
-    $r->post('/switch')->to(controller => 'Index', action => 'switch');
+
+    $r->get('/album/create')->to(controller => 'Album', action => 'create');
+    $r->post('/album/save')->to(controller => 'Album', action => 'save');
+    $r->post('/album/switch')->to(controller => 'Album', action => 'switch');
+
+    $have_album->get('/album/show')->to(controller => 'Album', action => 'show');
 }
 
 1;
