@@ -10,7 +10,6 @@ sub slash { # (*@\label{_appendix_route_slash}@*)
     my $c = shift;
 
     return($c->render); # (*@\label{_appendix_render_slash}@*)
-
 }
 
 1;
