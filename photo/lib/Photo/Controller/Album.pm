@@ -8,11 +8,14 @@ sub show {
     my $c = shift;
 
     my $site_config = $c->site_config;
-    my $albums = SiteCode::Albums->new(path => $$site_config{album_dir});
+    my $dir = $$site_config{album_dir};
+    my $albums = SiteCode::Albums->new(path => $dir);
 
-    $c->app->log->debug("album: " . $c->session->{album});
+    my $album = SiteCode::Album->new(path => "$dir/" . $c->session->{album}, name => $c->session->{album});
+    $c->app->log->debug("album: " . $album->name);
 
-    $c->stash(album => $c->session->{album});
+    $c->stash(album => $album);
+    $c->stash(slots => $album->slots);
     $c->stash(albums => $albums->all);
 
     return($c->render);
@@ -39,7 +42,7 @@ sub save {
         return($c->redirect_to($url));
     }
 
-    my $album = SiteCode::Album->new(path => "$dir/$album_name");
+    my $album = SiteCode::Album->new(path => "$dir/$album_name", name => $album_name);
 
     if ($album->exists) {
         $c->flash("error" => "Album exists");
@@ -60,6 +63,74 @@ sub save {
 
     my $url = $c->url_for('/');
     return($c->redirect_to($url));
+}
+
+sub upload {
+    my $c = shift;
+
+    my $url = $c->url_for('/album/show');
+
+    # Check file size
+    if ($c->req->is_limit_exceeded) {
+        $c->flash("error" => "File size too big");
+
+        return($c->redirect_to($url));
+    }
+
+    my $photo = $c->param('photo');
+    my $descr = $c->param('descr');
+    my $label = $c->param('label');
+
+    unless ($label) {
+        $c->flash("error" => "Label not found");
+
+        return($c->redirect_to($url));
+    }
+    unless ($descr) {
+        $c->flash("error" => "Description not found");
+
+        return($c->redirect_to($url));
+    }
+    unless (ref $photo) {
+        $c->flash("error" => "File not found");
+
+        return($c->redirect_to($url));
+    }
+    unless ($photo->size) {
+        $c->flash("error" => "File not found");
+
+        return($c->redirect_to($url));
+    }
+
+    eval {
+        my $site_config = $c->site_config;
+        my $dir = $$site_config{album_dir};
+        my $album_name = $c->session->{album};
+        my $album = SiteCode::Album->new(path => "$dir/$album_name", name => $album_name);
+
+        $album->add(photo => $photo, label => $label, descr => $descr);
+    };
+    if ($@) {
+        $c->flash("error" => $@);
+
+        return($c->redirect_to($url));
+    }
+
+    return($c->redirect_to($url));
+}
+
+sub photo {
+    my $c = shift;
+
+    my $site_config = $c->site_config;
+    my $dir = $$site_config{album_dir};
+    my $album = SiteCode::Album->new(path => "$dir/" . $c->session->{album}, name => $c->session->{album});
+
+    my $slot = $c->param("slot");
+
+    my $filename = $album->photo($slot);
+
+    $c->reply->static($filename);
 }
 
 sub switch {

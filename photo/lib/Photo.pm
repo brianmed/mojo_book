@@ -12,6 +12,13 @@ sub site_config
     state $site_config = pop;
 }
 
+sub photo_url
+{
+    my $slot = pop;
+
+    return shift->url_for("/album/photo/$slot")->to_abs;
+}
+
 sub startup {
     my $self = shift;
 
@@ -24,7 +31,7 @@ sub startup {
     # (*@\label{_appendix_startup_helpers}@*)
     $self->helper(site_dir => \&site_dir);
     $self->helper(site_config => \&site_config);
-    $self->helper(album => \&album);
+    $self->helper(photo_url => \&photo_url);
     $self->site_dir($$site_config{site_dir});
     $self->site_config($site_config);
 
@@ -90,10 +97,12 @@ sub startup {
     $r->get('/')->to(controller => 'Index', action => 'slash'); # (*@\label{_appendix_startup_slash_route}@*)
 
     $r->get('/album/create')->to(controller => 'Album', action => 'create');
-    $r->post('/album/save')->to(controller => 'Album', action => 'save');
     $r->get('/album/switch/:name')->to(controller => 'Album', action => 'switch', name => undef);
 
     $have_album->get('/album/show')->to(controller => 'Album', action => 'show');
+    $have_album->get('/album/photo/:slot')->to(controller => 'Album', action => 'photo');
+    $have_album->post('/album/upload')->to(controller => 'Album', action => 'upload');
+    $have_album->post('/album/save')->to(controller => 'Album', action => 'save');
 }
 
 1;
