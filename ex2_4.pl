@@ -1,23 +1,18 @@
 #!/opt/perl
 use Mojolicious::Lite;
 
-get '/' => sub {
-    my $self = shift;
+get '/:name' => sub { # (*@\label{_ex2_4_placeholder}@*)
+    my $c = shift;
 
-    $self->app->log->debug("get");
+    my $name = $c->param("name");
 
-    $self->render("slash");
-};
-post '/' => sub {
-    my $self = shift;
+    $c->app->log->debug("get");
+    my $url = $self->url_for('/Example')->to_abs;
 
-    $self->app->log->debug("post");
+    $c->stash(name => $name); # (*@\label{_ex2_4_stash}@*)
+    $c->stash(url => $url);
 
-    my $name  = $self->param("name");
-
-    $self->session->{name} = $name;
-
-    $self->render("slash");
+    $c->render("slash");
 };
 app->start;
 
@@ -25,10 +20,8 @@ __DATA__
 
 @@ slash.html.ep
 
-% if (session "name") {
-<%= session "name" %>, you are logged in.
+% if (stash('name')) {
+    You are <%= stash('name') %>
 % } else {
-<form method=post>
-Login: <input type=text name=name>
-</form>
+    Please pass in a name to the url like so '<%= stash('url') %>'.
 % }

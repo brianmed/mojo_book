@@ -1,7 +1,10 @@
-\documentclass[16pt,pdftex]{book}
+\documentclass[16pt,pdftex]{report}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
 \usepackage{verbatim}
+\usepackage{textcomp}
+\usepackage{pslatex}	    % to use PostScript fonts
+\usepackage{parskip}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
@@ -11,7 +14,8 @@
   columns=fullflexible,
   linewidth=1.0\linewidth,
   xleftmargin=0.0\linewidth,
-  xrightmargin=0.0\linewidth
+  xrightmargin=0.0\linewidth,
+  literate={-}{\textminus}{1}
 }
 
 \lstdefinestyle{BashOutputStyle}{
@@ -50,11 +54,8 @@ numbers=left}
 \title{Get some Mojo}
 \author{Brian Medley}
 
-\frontmatter
 \maketitle
 \tableofcontents
-
-\mainmatter
 
 \chapter*{Rationale}
 \markboth{\MakeUppercase{Rationale}}{}
@@ -172,7 +173,7 @@ Now that we have Mojolicious installed, we can start writing code for our
 website. Our first example is a full program and you are not expected to
 understand everything. It is geared to get your feet wet. After this, we will
 be a tutorial introduction into HTTP, HTML, Javascript, CSS, and other Web
-technologies.  Our examples is a Mojolicious::Lite application. It is a
+technologies.  Our first example is a Mojolicious::Lite application. It is a
 Real-time micro web framework. This micro web framework can have the entire web
 structure in a file.
 
@@ -184,18 +185,53 @@ application, that uses strict, warnings, utf8 and Perl 5.10 features. It's fun.
 Run the program like so:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ /opt/perl-5.20.1/bin/morbo -v hello_worl.pl
+$ morbo -v hello_worl.pl
 \end{lstlisting}
 
 \begin{lstlisting}[style=BashOutputStyle]
-[“Mon Sep 3 19:08:38 2012] [info] Listening at "http://*:3000".
-Server available at http://127.0.0.1:3000.”
+["Mon Sep 3 19:08:38 2012] [info] Listening at "http://*:3000".
+Server available at http://127.0.0.1:3000."
 \end{lstlisting}
 
 We now have a full featured web server running on port 3000. You may view in
 any browser. In your URL bar put: http://127.0.0.1:3000 and view the page.
 Next, add Carpe diem after line \ref{_ex1_1_add_line_here}. Save the file and reload
 the page in the browser. morbo will restart your server once a change is made.
+
+The other way to build an app is with a well-structured web application. This
+is where the business logic and application setup are put in several files, as
+opposed to just one.  A full app is created with the "generate app" command and
+an example is below.
+
+\begin{lstlisting}[style=BashInputStyle]
+$ mojo generate app Example           
+\end{lstlisting}
+
+\begin{lstlisting}[style=BashOutputStyle]
+  [mkdir] /private/tmp/example/script
+  [write] /private/tmp/example/script/example
+  [chmod] /private/tmp/example/script/example 744
+  [mkdir] /private/tmp/example/lib
+  [write] /private/tmp/example/lib/Example.pm
+  [mkdir] /private/tmp/example/lib/Example/Controller
+  [write] /private/tmp/example/lib/Example/Controller/Example.pm
+  [mkdir] /private/tmp/example/t
+  [write] /private/tmp/example/t/basic.t
+  [mkdir] /private/tmp/example/log
+  [mkdir] /private/tmp/example/public
+  [write] /private/tmp/example/public/index.html
+  [mkdir] /private/tmp/example/templates/layouts
+  [write] /private/tmp/example/templates/layouts/default.html.ep
+  [mkdir] /private/tmp/example/templates/example
+  [write] /private/tmp/example/templates/example/welcome.html.ep
+\end{lstlisting}
+
+As you can see, it has a invocation script, startup package (lib/Example.pm),
+an example Controller, some tests, and example content (the index.html and .ep
+template files).
+
+We are going to be using lite apps going forward until the photo album is
+encountered later on.
 
 \chapter*{Going Forward}
 \markboth{\MakeUppercase{Going Forward}}{}
@@ -349,6 +385,20 @@ and the "param" method exposes the data to the application - using the "name"
 argument.  "name" is common between the form, the POST request, and the
 application.
 
+\section{Templates and Stash}
+
+\subsection{How did that get there?}
+
+Templates are the bread and butter of dynamic content generation.  They take
+input from the controller and load that into a templating system to create
+content.  The content is usually a web page with HTML, CSS, and Javascript.
+However, there are other possibilites, as well, such as text.
+
+The input from the controller is placed in a "stash" data structure.  There are
+a few ways to setup this data structure.  One method is to 
+
+\lstinputlisting[]{ex2_4.pl}
+
 \chapter*{Mojolicious Application}
 \markboth{\MakeUppercase{Mojolicious Application}}{}
 \addcontentsline{toc}{chapter}{Mojolicious Application}
@@ -376,7 +426,7 @@ The app is runable via:
 
 \begin{lstlisting}[style=BashInputStyle]
 $ cd photo
-$ /opt/perl-5.20.1/bin/morbo -v script/photo
+$ morbo -v script/photo
 \end{lstlisting}
 
 When we point our browser to http://localhost:3000 we'll get our app.  As you
@@ -442,6 +492,8 @@ A controller encapsulates the business logic for our website.  Fine grained
 control can be exerted over the app by using pacakages and subs.  One package
 can control the "main" page with login and logout and other packages can focus
 on other sub systems of our app.
+
+For our app, we have a landing 
 
 \appendix
 \section{Photo Album code}
