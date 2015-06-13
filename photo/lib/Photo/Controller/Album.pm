@@ -130,7 +130,7 @@ sub photo {
 
     my $filename = $album->photo($slot);
 
-    $c->reply->static($filename);
+    $c->reply->asset(Mojo::Asset::File->new(path => $filename));
 }
 
 sub switch {

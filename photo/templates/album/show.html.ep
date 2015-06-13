@@ -86,26 +86,27 @@
                 <div id="myCarousel" class="carousel slide">
                     <ol class="carousel-indicators">
                         % foreach my $slot (@{ stash('slots') }) {
-                            % my $active = $slot ? "" : "active";
-                            <li data-target="#myCarousel" data-slide-to="<%= $slot %>" class="<%= $active %>"></li>
+                            % my $active = $slot->{idx} ? "" : "active";
+                            <li data-target="#myCarousel" data-slide-to="<%= $slot->{idx} %>" class="<%= $active %>"></li>
                         % }
                     </ol>
 
                     <div class="carousel-inner">
-                    </div>
 
                         % foreach my $slot (@{ stash('slots') }) {
-                            % my $active = $slot ? "" : "active";
+                            % my $active = $slot->{idx} ? "" : "active";
 
                             <div class="item <%= $active %>">
                                 <img src="<%= url_for->path("/album/photo/$slot->{idx}") %>">
                                 <div class="carousel-caption">
                                      <h4><%= $slot->{label} %></h4>
 
-                                    <p><%= $slot->{description} %></p>
+                                    <p><%= $slot->{descr} %></p>
                                 </div>
                             </div>
                         % }
+
+                    </div>
 
                     <!--div class="carousel-inner">
                         <div class="item active">
@@ -132,8 +133,12 @@
                                 <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
                             </div>
                         </div>
-                    </div--> <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-                     <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+                    </div-->
+
+                    % if (1 != @{ stash('slots')}) {
+                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+                    <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+                    % } 
                 </div>
             </div>
         </div>
