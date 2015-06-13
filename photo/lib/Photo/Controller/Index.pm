@@ -9,7 +9,6 @@ sub slash { # (*@\label{_appendix_route_slash}@*)
     my $c = shift;
 
     my $site_config = $c->site_config;
-
     my $all = SiteCode::Albums->new(path => $$site_config{album_dir})->all;
 
     if (0 == @{ $all }) {

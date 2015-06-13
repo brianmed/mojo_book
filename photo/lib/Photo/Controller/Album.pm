@@ -8,11 +8,12 @@ sub show {
     my $c = shift;
 
     my $site_config = $c->site_config;
-
     my $albums = SiteCode::Albums->new(path => $$site_config{album_dir});
-    $c->album($albums->album($c->session->{album}));
 
-    $c->app->log->debug("album: " . $c->album);
+    $c->app->log->debug("album: " . $c->session->{album});
+
+    $c->stash(album => $c->session->{album});
+    $c->stash(albums => $albums->all);
 
     return($c->render);
 }
@@ -64,6 +65,21 @@ sub save {
 sub switch {
     my $c = shift;
 
+    if (defined $c->param("name")) {
+        my $album_name = $c->param("name");
+
+        $c->session(album => $album_name);
+
+        my $url = $c->url_for('/');
+        return($c->redirect_to($url));
+    }
+
+    my $site_config = $c->site_config;
+    my $all = SiteCode::Albums->new(path => $$site_config{album_dir})->all;
+
+    $c->stash(albums => $all);
+
+    return($c->render);
 }
 
 1;

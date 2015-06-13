@@ -23,7 +23,22 @@
 
     <form>
       <fieldset>
-        <legend><%= album()->name %></legend>
+        <legend>
+            <%= stash('album') %> -
+            <div class="btn-group">
+                <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+                  Albums
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/album/create">Create</a></li>
+                    <li class="divider"></li>
+                    % foreach my $album (@{ stash('albums') }) {
+                      <li><a href="/album/switch/<%= $album->name %>"><%= $album->name %></a></li>
+                    % }
+                </ul>
+            </div>
+        </legend>
         <label>Label</label>
         <input type="text" placeholder="Label">
 
@@ -45,28 +60,6 @@
 
     <button type="submit" class="btn">Upload</button>
     </form>
-    </div>
-    </div>
-
-<hr>
-
-    <div class="row">
-    <div class="span12">
-
-    <div class="btn-group">
-        <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
-          Switch Album
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li><a href="#">Action</a></li>
-          <li><a href="#">Another action</a></li>
-          <li><a href="#">Something else here</a></li>
-          <li class="divider"></li>
-          <li><a href="#">Separated link</a></li>
-        </ul>
-    </div>
-
     </div>
     </div>
 

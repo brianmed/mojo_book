@@ -239,8 +239,12 @@ encountered later on.
 
 \section{Preamble}
 
-Here we get down with Mojo.  A brief introduction of HTTP 1.1 is given; Routes,
-Logging, GET/POST Parameters, Templates, Sessions, and Static files.
+Here we get down with Mojo.  A brief introduction of HTTP 1.1 is given and then
+we look at some specific ways that Mojolicious creates a framework around
+web technologies to make things easier for development.  Specifically, we will look
+at Routes, Logging, GET/POST Parameters, Templates, and Sessions.
+
+After that our attention will be turned to a Photo album app.
 
 \section{HTTP 1.1}
 
@@ -274,13 +278,16 @@ Then, the server responded with:
     Content-Type: text/html;charset=UTF-8
 \end{lstlisting}
 
-If we were to goto http://127.0.0.1:3000/hello, then the GET request would start with:
+If we were to goto http://127.0.0.1:3000/hello, then the GET request would
+start with:
 
 \begin{lstlisting}[style=BlockStyle]
     GET /hello HTTP 1.1
 \end{lstlisting}
 
-Of note, is that the implied "/" and "/hello" are the pages that the server is being requested to serve.
+Of note, is that when we access http://127.0.0.1:3000 there is an implied "/"
+and when http://127.0.0.1:3000/hello there is a specific "/hello".  These are
+the pages that the server is being requested to serve.
 
 \section{Routes}
 
@@ -292,8 +299,7 @@ code.
 From the Mojolicious::Lite perldoc:
 
 Routes are basically just fancy paths that can contain different kinds of
-placeholders. \$self is a Mojolicious::Controller object containing both, the
-HTTP request and response.
+placeholders.
 
 For example, given the code below:
 
@@ -304,6 +310,9 @@ subroutine listed. It should be noted that a GET and POST can be redirected to
 a different subroutine.  This is a very powerful construct that allows us to
 execute arbitrary business logic (system commands, SQL, control flow logic,
 etc) for a given request.
+
+Also, \$self is a Mojolicious::Controller object containing both, the HTTP
+request and response.
 
 \begin{center}
   \begin{tabular}{|l|r|}
@@ -395,7 +404,13 @@ content.  The content is usually a web page with HTML, CSS, and Javascript.
 However, there are other possibilites, as well, such as text.
 
 The input from the controller is placed in a "stash" data structure.  There are
-a few ways to setup this data structure.  One method is to 
+a few ways to setup this data structure.  One approach is to use the "stash"
+controller method.
+
+For example, in line \ref{_ex_2_4_stash} of ex2\_4.pl we set the "name" stash 
+parameter which will be available in the templates.  Specifically, at line 
+\ref{_ex_2_4_stash_usage} the "stash" helper is used to dynamically adjust
+the template output.
 
 \lstinputlisting[]{ex2_4.pl}
 

@@ -20,7 +20,7 @@ __DATA__
 
 @@ slash.html.ep
 
-% if (stash('name')) {
+% if (stash('name')) {  <!-- (*@\label{_ex2_4_stash_usage}@*) -->
     You are <%= stash('name') %>
 % } else {
     Please pass in a name to the url like so '<%= stash('url') %>'.

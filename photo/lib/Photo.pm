@@ -12,11 +12,6 @@ sub site_config
     state $site_config = pop;
 }
 
-sub album
-{
-    state $album = pop;
-}
-
 sub startup {
     my $self = shift;
 
@@ -96,7 +91,7 @@ sub startup {
 
     $r->get('/album/create')->to(controller => 'Album', action => 'create');
     $r->post('/album/save')->to(controller => 'Album', action => 'save');
-    $r->post('/album/switch')->to(controller => 'Album', action => 'switch');
+    $r->get('/album/switch/:name')->to(controller => 'Album', action => 'switch', name => undef);
 
     $have_album->get('/album/show')->to(controller => 'Album', action => 'show');
 }
