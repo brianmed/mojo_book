@@ -12,12 +12,6 @@ sub site_config
     state $site_config = pop;
 }
 
-sub photo_url
-{
-    my $slot = pop;
-
-    return shift->url_for("/album/photo/$slot")->to_abs;
-}
 
 sub startup {
     my $self = shift;
@@ -31,7 +25,6 @@ sub startup {
     # (*@\label{_appendix_startup_helpers}@*)
     $self->helper(site_dir => \&site_dir);
     $self->helper(site_config => \&site_config);
-    $self->helper(photo_url => \&photo_url);
     $self->site_dir($$site_config{site_dir});
     $self->site_config($site_config);
 
@@ -55,39 +48,6 @@ sub startup {
         if (!$self->session("album")) {
             my $url = $self->url_for('/');
             return($self->redirect_to($url));
-        }
-
-        return 1;
-    });
-
-    # (*@\label{_appendix_startup_api}@*)
-    my $api = $r->under (sub {
-        my $self = shift;
-
-        return($self->render(json => {status => "error", data => { message => "No JSON found" }})) unless $self->req->json;
-
-        my $site_dir = $self->site_dir;
-        my $username = $self->req->json->{username};
-        my $api_key = $self->req->json->{api_key};
-
-        unless ($username) {
-            $self->render(json => {status => "error", data => { message => "No username found" }});
-
-            return undef;
-        }
-
-        my $account = SiteCode::Account->new(username => $username);
-
-        unless ($api_key) {
-            $self->render(json => {status => "error", data => { message => "No API Key found" }});
-
-            return undef;
-        }
-
-        unless ($api_key eq $account->key("api_key")) {
-            $self->render(json => {status => "error", data => { message => "Credentials mis-match" }});
-
-            return undef;
         }
 
         return 1;

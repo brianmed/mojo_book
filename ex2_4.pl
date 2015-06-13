@@ -1,4 +1,3 @@
-#!/opt/perl
 use Mojolicious::Lite;
 
 get '/:name' => sub { # (*@\label{_ex2_4_placeholder}@*)
@@ -23,5 +22,5 @@ __DATA__
 % if (stash('name')) {  <!-- (*@\label{_ex2_4_stash_usage}@*) -->
     You are <%= stash('name') %>
 % } else {
-    Please pass in a name to the url like so '<%= stash('url') %>'.
+    Please pass in a name to the url like so '<\%= stash('url') %>'.
 % }

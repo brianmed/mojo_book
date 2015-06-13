@@ -1,5 +1,3 @@
-#!/opt/perl
-
 use Mojolicious::Lite; # (*@\label{_ex1_1_use}@*)
 
 get '/' => sub {

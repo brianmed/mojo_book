@@ -1,5 +1,3 @@
-#!/opt/perl
-
 use Mojolicious::Lite;
 
 get '/carpe' => sub {
