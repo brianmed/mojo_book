@@ -35,7 +35,19 @@ DOC=mojo
 # 12:15		site_config{hypnotoad_ip}
 # 12:16		Sorry for the noise... Anyway, that's my two cents.
 #
-# Form validation, template layouts, deployment, non-blocking, and testing
+# ajr_: bpmedley; you might also want to make it explicit what you expect the
+# reader to know before they start reading. Keep things as simple as possible.
+# There are so many packages around today, it's impossible to know them all.
+#
+# Form validation, CSRF, template layouts, deployment, non-blocking, and testing
+#
+# Working with JSON
+#
+# Working with a Database
+#
+# Exception pages
+#
+# User Agent
 
 all: clean doc
 

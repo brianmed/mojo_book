@@ -2,16 +2,22 @@
 \usepackage[left=0.5in, right=0.5in, top=1.0in, bottom=1.0in]{geometry}
 \usepackage{layout}
 \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage{textcomp}
 \usepackage{pslatex}	    % to use PostScript fonts
 \usepackage{parskip}
+\usepackage{wasysym}
 \usepackage[scaled]{beramono}
 \usepackage[]{microtype}
 
 \newcommand\Small{\fontsize{10}{10.2}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-60}\lsstyle}
+
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
@@ -46,11 +52,24 @@
   xrightmargin=0.0\linewidth
 }
 
+\lstdefinestyle{CodeStyle}{
+  basicstyle=\LSTfont,
+  keywordstyle=\color{black}\bfseries\underbar,
+  frame=none,
+  escapeinside={(*@}{@*)},
+  stringstyle=\ttfamily, 
+  showstringspaces=false,
+  numbers=left
+}
+
 \lstset{% general command to set parameter(s) 
 basicstyle=\small, % print whole listing small 
 keywordstyle=\color{black}\bfseries\underbar,
 frame=none,
-literate={\ \ }{{\ }}1,
+literate=%
+          {♥}{{$\varheart$}}{1}
+          {‹}{{\LEFTarrow}}{1}
+          {›}{{\RIGHTarrow}}{1},
 escapeinside={(*@}{@*)},
 stringstyle=\ttfamily, 
 showstringspaces=false,
@@ -109,7 +128,7 @@ does next generation mean? It is a MVC framework that includes:
 \markboth{\MakeUppercase{Preparation}}{}
 \addcontentsline{toc}{chapter}{Preparation}
 
-\subsection{Perl}
+{\Large Perl}
 
 Mojolicious requires Perl.  We will be using Perl on Linux with 5.20.1.  Your
 system perl is probably a lower version, so we will bootstrap our install with 
@@ -169,7 +188,7 @@ For convience, a symlink can be added so that /opt/perl points to
 $ ln -s /opt/perl-5.20.1/bin/perl /opt/perl
 \end{lstlisting}
 
-\subsection{Installation}
+{\Large Installallation}
 
 Adding the CPAN module to the system installs everything needed for
 Mojolicious. 
@@ -183,7 +202,7 @@ $ /opt/perl-5.20.1/bin/cpanm Mojolicious
 Mojolicious will be installed by the cpanm utility.
 \end{lstlisting}
 
-\subsection{Hello World}
+{\Large Hello World In Text}
 
 Now that we have Mojolicious installed, we can start writing code for our
 website. Our first example is a full program and you are not expected to
@@ -193,7 +212,7 @@ technologies.  Our first example is a Mojolicious::Lite application. It is a
 Real-time micro web framework. This micro web framework can have the entire web
 structure in a file.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl]{hello_world.pl}
+\lstinputlisting[language=Perl, style=CodeStyle]{hello_world_text.pl}
 
 Line \ref{_ex1_1_use} turns your perl script into a full featured web
 application, that uses strict, warnings, utf8 and Perl 5.10 features. It's fun.
@@ -211,8 +230,19 @@ Server available at http://127.0.0.1:3000."
 
 We now have a full featured web server running on port 3000. You may view in
 any browser. In your URL bar put: http://127.0.0.1:3000 and view the page.
-Next, add Carpe diem after line \ref{_ex1_1_add_line_here}. Save the file and reload
-the page in the browser. morbo will restart your server once a change is made.
+
+{\Large Hello World In HTML}
+
+Next, modify the contents of hello\_world.pl to look like this:
+
+\lstinputlisting[language=Perl, style=CodeStyle]{hello_world_html.pl}
+
+Our morbo server should automatically restart and load the new file contents.  The code
+at line \ref{_ex1_2_render} display the inlined page below.
+
+Next, add Carpe diem after line \ref{_ex1_2_add_line_here}. Save the file and
+reload the page in the browser. The morbo server will restart your server once
+a change is made.
 
 The other way to build an app is with a well-structured web application. This
 is where the business logic and application setup are put in several files, as
@@ -264,7 +294,7 @@ After that our attention will be turned to a Photo album app.
 
 \section{HTTP 1.1}
 
-\subsection{Under the Hood}
+{\Large Under the Hood}
 
 As you know, web pages are loaded from a server. When you goto domain.com, then
 the default HTML is loaded using HTTP.  As you will see, the transfer, or
@@ -307,7 +337,7 @@ the pages that the server is being requested to serve.
 
 \section{Routes}
 
-\subsection{Finding our way}
+{\Large Finding our way}
 
 Routes enable Mojolicious to easily glue together an incoming request with
 code.
@@ -341,7 +371,7 @@ request and response.
   \end{tabular}
 \end{center}
 
-\subsection{Extending hello\_world.pl}
+{\Large Extending hello\_world.pl}
 
 It would be nice to be able to click and get different "page" from web server
 that gave us feedback. We will use the internal templating system called
@@ -353,7 +383,7 @@ Once ran via morbo we can click the "carpe" link and get dynamic feedback from o
 
 \section{Logging}
 
-\subsection{From whence we came}
+{\Large From whence we came}
 
 At times it is appropriate to log data while processing a code in the backend.
 In development mode a file in \textbf{log}/development.log is used and in production
@@ -384,7 +414,7 @@ development.log file.  For example, the below is from the route snippet above.
 
 \section{Parameters}
 
-\subsection{Variety is the spice...}
+{\Large Variet is the spice...}
 
 Input and output are intrinsic to any computer program, perhaps doubly so to a
 web application.  A significant source of user input comes from GET and POST
@@ -412,7 +442,7 @@ application.
 
 \section{Templates and Stash}
 
-\subsection{How did that get there?}
+{\Large How did that get there?}
 
 Templates are the bread and butter of dynamic content generation.  They take
 input from the controller and load that into a templating system to create
@@ -471,7 +501,7 @@ can be put here.
 
 What happens next?
 
-\subsection{Startup}
+{\Large Startup}
 
 Mojolicious initializes our app and then calls Photo::startup.
 
@@ -543,7 +573,7 @@ nested route and if "1" is returned the child route will be allowed to run
 authorization checks.  If they don't pass either one, then a redirect can
 happen, or some flag can be set.
 
-\subsection{Controller}
+{\Large Controller}
 
 A controller encapsulates the business logic for our website.  Fine grained
 control can be exerted over the app by using pacakages and subs.  One package
@@ -556,7 +586,7 @@ our app and the other holds all the business logic for the photo album.
 We can view an album, create one, switch to a new album, upload a photo, and
 view a photo.
 
-\subsection{Landing Page}
+{\Large Landing Page}
 
 The main page does several things - allow for viewing; selecting, or creating
 an album.  Below is the method responsible for all this.
@@ -591,7 +621,7 @@ That's all you got to do, and you get:
     limit, depending on browser.
 \end{lstlisting}
 
-\subsection{Photo}
+{\Large Photo}
 
 Initialy, no photo albums exist in the model.
 
