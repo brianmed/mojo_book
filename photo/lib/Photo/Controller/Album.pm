@@ -65,6 +65,26 @@ sub save {
     return($c->redirect_to($url));
 }
 
+sub switch {
+    my $c = shift;
+
+    if (defined $c->param("name")) {
+        my $album_name = $c->param("name");
+
+        $c->session(album => $album_name);
+
+        my $url = $c->url_for('/');
+        return($c->redirect_to($url));
+    }
+
+    my $site_config = $c->site_config;
+    my $all = SiteCode::Albums->new(path => $$site_config{album_dir})->all;
+
+    $c->stash(albums => $all);
+
+    return($c->render);
+}
+
 sub upload {
     my $c = shift;
 
@@ -131,26 +151,6 @@ sub photo {
     my $filename = $album->photo($slot);
 
     $c->reply->asset(Mojo::Asset::File->new(path => $filename));
-}
-
-sub switch {
-    my $c = shift;
-
-    if (defined $c->param("name")) {
-        my $album_name = $c->param("name");
-
-        $c->session(album => $album_name);
-
-        my $url = $c->url_for('/');
-        return($c->redirect_to($url));
-    }
-
-    my $site_config = $c->site_config;
-    my $all = SiteCode::Albums->new(path => $$site_config{album_dir})->all;
-
-    $c->stash(albums => $all);
-
-    return($c->render);
 }
 
 1;

@@ -10,7 +10,7 @@
 \usepackage[scaled]{beramono}
 \usepackage[]{microtype}
 
-\newcommand\Small{\fontsize{12}{12.2}\selectfont}
+\newcommand\Small{\fontsize{10}{10.2}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-60}\lsstyle}
 
 \lstdefinestyle{BashInputStyle}{
@@ -526,20 +526,47 @@ control can be exerted over the app by using pacakages and subs.  One package
 can control the "main" page with login and logout and other packages can focus
 on other sub systems of our app.
 
-For our app, we have a landing page to select an album; the album viewer page;
-and the album creation page.  However, we have the following endpoints.
+For our app, we have the Index and Album controllers.  One is the landing page for
+our app and the other holds all the business logic for the photo album.
 
-% \appendix
-% \section{Photo Album code}
+We can view an album, create one, switch to a new album, upload a photo, and
+view a photo.
 
-% \lstinputlisting[]{/opt/photo}
+\subsection{Landing Page}
 
-% \lstinputlisting[]{photo/script/photo}
+The main page does several things - allow for viewing; selecting, or creating
+an album.  Below is the method responsible for all this.
 
-% \lstinputlisting[]{photo/lib/Photo.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=30]{photo/lib/Photo/Controller/Index.pm}
 
-% \lstinputlisting[]{photo/lib/Photo/Controller/Index.pm}
+Code starting at line \ref{_slash_no_albums} checks to see if any albums have
+been created; if not, the user is redirected to /album/create.  This is
+possible, in part, due to our helper at line \ref{_slash_setup}.  In addition,
+we're using the handy url\_for and redirect\_to methods. These methods allow
+for more easily working with URLs and generating a 302 response.
 
-% \lstinputlisting[]{photo/templates/index/slash.html.ep}
+In addition, it should be noted that our SiteCode::Albums package is a Moose
+class that works really well with Mojolicious.
+
+One last thing, is that this switch-a-roo logic is made possible by the
+marvelous session handling in Mojolicious.  There are several ways to use the
+session, two are detailed below.  The first line reads a variable from the
+session and the second line sets the variable.
+
+\begin{lstlisting}[style=BlockStyle]
+    my $foo     = $c->session('foo');
+    $c          = $c->session(foo => 'bar');
+\end{lstlisting}
+
+That's all you got to do, and you get:
+
+\begin{lstlisting}[style=BlockStyle]
+    Persistent data storage for the next few requests, all session data gets
+    serialized with Mojo::JSON and stored Base64 encoded in HMAC-SHA1 signed
+    cookies, to prevent tampering. Note that cookies usually have a 4096 byte (4KB)
+    limit, depending on browser.
+\end{lstlisting}
+
+\subsection{Photo}
 
 \end{document}
