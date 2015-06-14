@@ -51,6 +51,7 @@ basicstyle=\small, % print whole listing small
 keywordstyle=\color{black}\bfseries\underbar,
 commentstyle=\color{white}, 
 frame=none,
+literate={\ \ }{{\ }}1,
 escapeinside={(*@}{@*)},
 stringstyle=\ttfamily, 
 showstringspaces=false,
@@ -646,5 +647,27 @@ In addition, we put some debug information in the log to demonstrate how that
 operates.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=15, lastline=15]{photo/lib/Photo/Controller/Album.pm}
+
+Our template for this action (album/show.html.ep) does several things. In the
+HTML body we have our error handling, form to handle a new photo upload, button
+that allows for switching between albums, and the picture viewing code.  
+
+The picture code is in the template twice.  The first time is if there are no
+photos to view and the second is when we have a photo.
+
+The form code is shown below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Html, firstline=38, lastline=67]{photo/templates/album/show.html.ep}
+
+At line \ref{_form_start} we specify action that will happen when we upload a
+file.  Line \ref{_form_moose} is pretty cool because we're accessing a value in
+the stash that is a Moose accessor.  Lines 13 to 15 process our album array to  % grr
+generate a pulldown for the user to select an album.  They are shown below.
+
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=50, lastline=52]{photo/templates/album/show.html.ep}
+
+The ability to intermix perl loop and control structures with plain html is
+very powerful. As a specific example, the above allows us to iterate over an 
+array of objects in the stash to create a portion of our html document.
 
 \end{document}
