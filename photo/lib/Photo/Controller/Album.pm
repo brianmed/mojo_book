@@ -143,7 +143,6 @@ sub photo {
     my $filename = $album->photo($slot); # <!-- (*@\label{_photo_filename}@*) -->
 
     $c->reply->asset(Mojo::Asset::File->new(path => $filename)); # <!-- (*@\label{_photo_reply}@*) -->
-
 }
 
 1;

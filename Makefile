@@ -34,6 +34,8 @@ DOC=mojo
 #    common one: $$
 # 12:15		site_config{hypnotoad_ip}
 # 12:16		Sorry for the noise... Anyway, that's my two cents.
+#
+# Form validation, template layouts, deployment, non-blocking, and testing
 
 all: clean doc
 

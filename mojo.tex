@@ -717,7 +717,7 @@ and the other being the image itself.
 
 The img src tag route, which is the Photo::Controller::Album::photo sub is shown below.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=134, lastline=147]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=134, lastline=146]{photo/lib/Photo/Controller/Album.pm}
 
 This retrieves our selected album, gets the photo in a particular slot, and
 then sets our reply to use that file. At line \ref{_photo_session} is where the
@@ -726,5 +726,15 @@ is given to us from the template and \ref{_photo_filename} gets the filename
 for the photo in that slot.  It's an absolute path.
 
 This path is then served at line \ref{_photo_reply}.
+
+The last bit of code is used to manually switch to a different album. It's main utility
+is when the session expires and the user has to choose an album, again.  The code is
+below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=62, lastline=80]{photo/lib/Photo/Controller/Album.pm}
+
+If we've been given a name from the view, then we save the album name in the session and
+redirect back to the landing page.  This should then do another redirect back to the
+album viewer.
 
 \end{document}
