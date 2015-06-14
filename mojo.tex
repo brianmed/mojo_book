@@ -49,7 +49,6 @@
 \lstset{% general command to set parameter(s) 
 basicstyle=\small, % print whole listing small 
 keywordstyle=\color{black}\bfseries\underbar,
-commentstyle=\color{white}, 
 frame=none,
 literate={\ \ }{{\ }}1,
 escapeinside={(*@}{@*)},
@@ -669,5 +668,63 @@ generate a pulldown for the user to select an album.  They are shown below.
 The ability to intermix perl loop and control structures with plain html is
 very powerful. As a specific example, the above allows us to iterate over an 
 array of objects in the stash to create a portion of our html document.
+
+After our form, we process the HTML to display the album.  This is shown below.
+
+\begin{lstlisting}[language=Html, style=BlockStyle]
+    % if (0 == @{ stash('slots') }) {
+        <div class="row">
+            <div class="span12">
+                No photos found
+            </div>
+        </div>
+    % }
+
+    % if (0 != @{ stash('slots') }) {
+    ...
+    % }
+\end{lstlisting}
+
+Note that there are two sections.  One is for when there is no photos in the album
+and the other is for when there are.  The code for when there are photos is much
+more interesting than when there aren't, so lets look at a few snippets from it:
+
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=87, lastline=90]{photo/templates/album/show.html.ep}
+
+This snippet processes our album array and is used to give us a 'lil dot to click on
+to maneuver through the pics.  Of note is how the \$active variable is used to populate
+our class.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Html, firstline=93, lastline=108]{photo/templates/album/show.html.ep}
+
+The next snippet displays the pictures. The line at \ref{_form_url_for} provides the 
+src for the img tag. Without it, it would be difficult to have pictures.
+
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=110, lastline=113]{photo/templates/album/show.html.ep}
+
+Finally, we the left and right arrows over the image if there is more than photo.
+
+Ok!  We've done a lot and have a bit more to go.  We should talk about the file upload
+and img src tag routes.  Below is the form code that will POST to our upload route.
+
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=38, lastline=38]{photo/templates/album/show.html.ep}
+
+The upload action is this sub: Photo::Controller::Album::upload.  This does
+some validation, creates a photo album object, and then stores the photo in a
+new "slot".  A slot is merely a way to refer to a set of pictures.  Each slot
+is comprised of two files, one being the metadata for the image (a JSON file)
+and the other being the image itself.
+
+The img src tag route, which is the Photo::Controller::Album::photo sub is shown below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=134, lastline=147]{photo/lib/Photo/Controller/Album.pm}
+
+This retrieves our selected album, gets the photo in a particular slot, and
+then sets our reply to use that file. At line \ref{_photo_session} is where the
+album object is created - this shows one way to access session variables. The slot
+is given to us from the template and \ref{_photo_filename} gets the filename
+for the photo in that slot.  It's an absolute path.
+
+This path is then served at line \ref{_photo_reply}.
 
 \end{document}

@@ -19,102 +19,102 @@
 
 <div class="container">
 
-    % if (flash('error')) {
-        <div class="row">
-        <div class="span12">
-
-        <div class="alert alert-error">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          <%= flash('error') %>
-        </div>
-
-        </div>
-        </div>
-    % }
-
+% if (flash('error')) {
     <div class="row">
     <div class="span12">
 
-    <form action="/album/upload" method="post" enctype="multipart/form-data"> <!-- (*@\label{_form_start}@*) -->
-      <fieldset>
-        <legend>
-            <%= stash('album')->name %> - <!-- (*@\label{_form_moose}@*) -->
-            <div class="btn-group">
-                <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-                  Albums
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/album/create">Create</a></li>
-                    <li class="divider"></li>
-                    % foreach my $album (@{ stash('albums') }) {  <!-- (*@\label{_form_switch_start}@*) -->
-                      <li><a href="/album/switch/<%= $album->name %>"><%= $album->name %></a></li>
-                    % }  <!-- (*@\label{_form_switch_end}@*) -->
-                </ul>
-            </div>
-        </legend>
-        <label>Label</label>
-        <input type="text" placeholder="Label" name="label">
-
-        <label>Description</label>
-        <input type="text" placeholder="Description" name="descr">
-
-        <label>File</label>
-        <input type="file" name="photo">
-      </fieldset>
-    <br>
-    <button type="submit" class="btn">Upload</button>
-    </form>
+    <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= flash('error') %>
+    </div>
 
     </div>
     </div>
+% }
 
-    <hr>
+<div class="row">
+<div class="span12">
 
-    % if (0 == @{ stash('slots') }) {
-        <div class="row">
-            <div class="span12">
-                No photos found
+<form action="/album/upload" method="post" enctype="multipart/form-data"> <!-- (*@\label{_form_start}@*) -->
+  <fieldset>
+    <legend>
+        <%= stash('album')->name %> - <!-- (*@\label{_form_moose}@*) -->
+        <div class="btn-group">
+            <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
+              Albums
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="/album/create">Create</a></li>
+                <li class="divider"></li>
+                % foreach my $album (@{ stash('albums') }) {  <!-- (*@\label{_form_switch_start}@*) -->
+                  <li><a href="/album/switch/<%= $album->name %>"><%= $album->name %></a></li>
+                % }  <!-- (*@\label{_form_switch_end}@*) -->
+            </ul>
+        </div>
+    </legend>
+    <label>Label</label>
+    <input type="text" placeholder="Label" name="label">
+
+    <label>Description</label>
+    <input type="text" placeholder="Description" name="descr">
+
+    <label>File</label>
+    <input type="file" name="photo">
+  </fieldset>
+<br>
+<button type="submit" class="btn">Upload</button>
+</form>
+
+</div>
+</div>
+
+<hr>
+
+% if (0 == @{ stash('slots') }) {
+    <div class="row">
+        <div class="span12">
+            No photos found
+        </div>
+    </div>
+% }
+
+% if (0 != @{ stash('slots') }) {
+    <div class="row">
+        <div class="span12">
+            <div id="myCarousel" class="carousel slide">
+                <ol class="carousel-indicators">
+    % foreach my $slot (@{ stash('slots') }) {
+        % my $active = $slot->{idx} ? "" : "active";
+        <li data-target="#myCarousel" data-slide-to="<%= $slot->{idx} %>" class="<%= $active %>"></li>
+    % }
+</ol>
+
+<div class="carousel-inner">
+
+    % foreach my $slot (@{ stash('slots') }) {
+        % my $active = $slot->{idx} ? "" : "active";
+
+        <div class="item <%= $active %>">
+            <img src="<%= url_for->path("/album/photo/$slot->{idx}") %>"> <!-- (*@\label{_form_url_for}@*) --> 
+            <div class="carousel-caption">
+                 <h4><%= $slot->{label} %></h4>
+
+                <p><%= $slot->{descr} %></p>
             </div>
         </div>
     % }
 
-    % if (0 != @{ stash('slots') }) {
-        <div class="row">
-            <div class="span12">
-                <div id="myCarousel" class="carousel slide">
-                    <ol class="carousel-indicators">
-                        % foreach my $slot (@{ stash('slots') }) {
-                            % my $active = $slot->{idx} ? "" : "active";
-                            <li data-target="#myCarousel" data-slide-to="<%= $slot->{idx} %>" class="<%= $active %>"></li>
-                        % }
-                    </ol>
+</div>
 
-                    <div class="carousel-inner">
-
-                        % foreach my $slot (@{ stash('slots') }) {
-                            % my $active = $slot->{idx} ? "" : "active";
-
-                            <div class="item <%= $active %>">
-                                <img src="<%= url_for->path("/album/photo/$slot->{idx}") %>">
-                                <div class="carousel-caption">
-                                     <h4><%= $slot->{label} %></h4>
-
-                                    <p><%= $slot->{descr} %></p>
-                                </div>
-                            </div>
-                        % }
-
-                    </div>
-
-                    % if (1 != @{ stash('slots')}) {
-                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-                    <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
-                    % } 
-                </div>
+% if (1 != @{ stash('slots')}) {
+<a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+<a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+% } 
             </div>
         </div>
-    % }
+    </div>
+% }
 </div>
 </body>
 </html>
