@@ -47,7 +47,8 @@ sub startup {
 
         if (!$self->session("album")) {
             my $url = $self->url_for('/');
-            return($self->redirect_to($url));
+            $self->redirect_to($url);
+            return undef;
         }
 
         return 1;
