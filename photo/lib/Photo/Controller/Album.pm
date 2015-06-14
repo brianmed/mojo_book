@@ -21,12 +21,6 @@ sub show {
     return($c->render);
 }
 
-sub create {
-    my $c = shift;
-
-    return($c->render);
-}
-
 sub save {
     my $c = shift;
 
