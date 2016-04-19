@@ -99,11 +99,9 @@ https://creativecommons.org/licenses/by-nc-nd/3.0/
 \section{Mojolicious}
 
 Thus begins our quest for Mojo - a tutorial approach to learning web
-technologies. We will be learning Mojolicious [http://mojolicio.us]; at the
+technologies. We will be learning Mojolicious [http://mojolicious.org]; at the
 time of this writing it is a "next generation web framework for the Perl
-Programming language". To achieve this, intermediate with some advanced
-computer knowledge is assumed. You do not need to be a developer to read this
-book.
+Programming language".
 
 From chapters 2 to the end we will be building a Photo album application. What
 does next generation mean? It is a MVC framework that includes:
@@ -414,7 +412,7 @@ development.log file.  For example, the below is from the route snippet above.
 
 \section{Parameters}
 
-{\Large Variet is the spice...}
+{\Large Variety is the spice...}
 
 Input and output are intrinsic to any computer program, perhaps doubly so to a
 web application.  A significant source of user input comes from GET and POST
@@ -460,7 +458,7 @@ parameter which will be available in the templates.  Specifically, at line
 \ref{_ex2_4_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
 
-\chapter*{Mojolicious Application}
+\chapter*{Mojolicious Photo Application}
 \markboth{\MakeUppercase{Mojolicious Application}}{}
 \addcontentsline{toc}{chapter}{Mojolicious Application}
 
@@ -509,7 +507,7 @@ The startup method adds, configures plugins; sets up some logging; adds in
 helpers; and sets up routes.  For example, as you can see below in the line from
 lib/Photo.pm our route for the index page is setup.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, numbers=none, firstline=90, lastline=90]{photo/lib/Photo.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, numbers=none, firstline=35, lastline=35]{photo/lib/Photo.pm}
 
 When a user agent does a GET /, then Photo::Controller::Index::slash will be
 called and the slash.html.ep file will be served.
@@ -523,7 +521,7 @@ mode.  This is a convience for early stage production or when debugging
 something.  Simply comment out for Production.  Next, we initialize the
 config data structure with a file.  These are lines 1 and 3 below.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=19, lastline=21]{photo/lib/Photo.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=10]{photo/lib/Photo.pm}
 
 This file is just a perl data structure and can be hand edited or
 programmatically defined.  Another option is to use JSCONConfig and a JSON
@@ -536,28 +534,37 @@ passphrases are supported to allow for phasing out an old passphrase.  These
 passphrases are used for things like signed cookies (which are used in the
 sessions).
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, numbers=none, firstline=23, lastline=23]{photo/lib/Photo.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, numbers=none, firstline=12, lastline=12]{photo/lib/Photo.pm}
 
-After our secret passphrases we setup the helpers.  A helper is a sub that is
-made available to the controller object and the application object, as well as
-a function in ep templates.  There are two helpers defined and then
-initialized.
+% TODO use a database helper
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=26, lastline=29]{photo/lib/Photo.pm}
+%%% After our secret passphrases we setup the helpers.  A helper is a sub that is
+%%% made available to the controller object and the application object, as well as
+%%% a function in ep templates.  There are two helpers defined and then
+%%% initialized.
+%%% 
+%%% \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=26, lastline=29]{photo/lib/Photo.pm}
+%%% 
+%%% The next piece setup is hypnotoad and we will defer that till we talk about
+%%% deployment.
 
-The next piece setup is hypnotoad and we will defer that till we talk about
-deployment.
+After our passphrase we setup our routes; an "under" nested route that verifies
+the session; and route setup itself.  At line 15 the "entry" point to our app
+from the user agent is defined - namely the initial page.  It should be noted
+that we can define "get" and "post" for these routes.  
 
-After hypnotoad we setup our routes; an "under" nested route that verifies the
-session; and route setup itself.  At line \ref{_appendix_startup_slash_route}
-the "entry" point to our app from the user agent is defined - namely the
-initial page.  It should be noted that we can define "get" and "post" for these
-routes.  
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=21, lastline=35]{photo/lib/Photo.pm}
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=58, lastline=66]{photo/lib/Photo.pm}
+Arbitrary perl (DB lookups, JSON parsing, file processing) can be put in the
+nested route and if "1" is returned the child route will be allowed to run
+"undef" and it won't.  Very handy for doing basic authentication and
+authorization checks.  If they don't pass either one, then a redirect can
+happen, or some flag can be set.
 
 In addition "any" is supported - which is useful for supporting GET and POST on
 the same route.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=37, lastline=49]{photo/lib/Photo.pm}
 
 One thing that should be mentioned about our routes is that they have two modes of
 operation.  One is when we have no session and another is when there is a session.
@@ -565,13 +572,7 @@ Our session stores the selected album and the \$have\_album nested route verifie
 if the session is still valid.. if not, the user agent will be redirected back to the
 landing page.  The code is below.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=45, lastline=55]{photo/lib/Photo.pm}
-
-Arbitrary perl (DB lookups, JSON parsing, file processing) can be put in the
-nested route and if "1" is returned the child route will be allowed to run
-"undef" and it won't.  Very handy for doing basic authentication and
-authorization checks.  If they don't pass either one, then a redirect can
-happen, or some flag can be set.
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=51, lastline=62]{photo/lib/Photo.pm}
 
 {\Large Controller}
 
@@ -593,14 +594,10 @@ an album.  Below is the method responsible for all this.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=30]{photo/lib/Photo/Controller/Index.pm}
 
-Code starting at line \ref{_slash_no_albums} checks to see if any albums have
-been created; if not, the user is redirected to /album/create.  This is
-possible, in part, due to our helper at line \ref{_slash_setup}.  In addition,
-we're using the handy url\_for and redirect\_to methods. These methods allow
-for more easily working with URLs and generating a 302 response.
-
-In addition, it should be noted that our SiteCode::Albums package is a Moose
-class that works really well with Mojolicious.
+Code starting at line 4 checks to see if any albums have been created; if not,
+the user is redirected to /album/create.  In addition, we're using the handy
+url\_for and redirect\_to methods. These methods allow for more easily working
+with URLs and generating a 302 response.
 
 One last thing, is that this switch-a-roo logic is made possible by the
 marvelous session handling in Mojolicious.  There are several ways to use the
@@ -659,13 +656,13 @@ That is, it "switches" to that album. Below is the erorr handling.  Of note is t
 the flash error value is stored with an API similar to the stash.  After setting our
 error flag we redirect back to displaying the create view.
 
-\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=41, lastline=46]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=27, lastline=35]{photo/lib/Photo/Controller/Album.pm}
 
 After the input checks are done and the album created, we switch to that album
 and redirect back to the landing page - while will detect that a selected album
 and act appropriately.
 
-\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=55, lastline=59]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=53, lastline=57]{photo/lib/Photo/Controller/Album.pm}
 
 Also, one thing to see that we have a "warn" in the code there. It's main
 purpose is to show that this is possible and will go the "console". For
@@ -677,7 +674,7 @@ album viewer.  The action for this is Photo::Controller::Album::show. This sub
 is responsible for shimmying data from our model (a bunch of JSON files) to the
 view.  Below is how that is accomplished.
 
-It should be noted that we are able to pass a Moose object to the view.
+It should be noted that we are able to pass an object to the view.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=17, lastline=19]{photo/lib/Photo/Controller/Album.pm}
 
@@ -698,8 +695,8 @@ The form code is shown below.
 \lstinputlisting[basicstyle=\LSTfont, language=Html, firstline=38, lastline=67]{photo/templates/album/show.html.ep}
 
 At line \ref{_form_start} we specify action that will happen when we upload a
-file.  Line \ref{_form_moose} is pretty cool because we're accessing a value in
-the stash that is a Moose accessor.  Lines 13 to 15 process our album array to  % grr
+file.  Line \ref{_form_object} is pretty cool because we're accessing a value in
+the stash that is an object.  Lines 13 to 15 process our album array to
 generate a pulldown for the user to select an album.  They are shown below.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=50, lastline=52]{photo/templates/album/show.html.ep}
@@ -756,7 +753,7 @@ and the other being the image itself.
 
 The img src tag route, which is the Photo::Controller::Album::photo sub is shown below.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=134, lastline=146]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=131, lastline=142]{photo/lib/Photo/Controller/Album.pm}
 
 This retrieves our selected album, gets the photo in a particular slot, and
 then sets our reply to use that file. At line \ref{_photo_session} is where the
@@ -770,7 +767,7 @@ The last bit of code is used to manually switch to a different album. It's main 
 is when the session expires and the user has to choose an album, again.  The code is
 below.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=62, lastline=80]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=60, lastline=78]{photo/lib/Photo/Controller/Album.pm}
 
 If we've been given a name from the view, then we save the album name in the session and
 redirect back to the landing page.  This should then do another redirect back to the

@@ -38,7 +38,7 @@
 <form action="/album/upload" method="post" enctype="multipart/form-data"> <!-- (*@\label{_form_start}@*) -->
   <fieldset>
     <legend>
-        <%= stash('album')->name %> - <!-- (*@\label{_form_moose}@*) -->
+        <%= stash('album')->name %> - <!-- (*@\label{_form_object}@*) -->
         <div class="btn-group">
             <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
               Albums
