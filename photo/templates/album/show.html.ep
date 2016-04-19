@@ -47,9 +47,9 @@
             <ul class="dropdown-menu">
                 <li><a href="/album/create">Create</a></li>
                 <li class="divider"></li>
-                % foreach my $album (@{ stash('albums') }) {  <!-- (*@\label{_form_switch_start}@*) -->
+                % foreach my $album (@{ stash('albums') }) {
                   <li><a href="/album/switch/<%= $album->name %>"><%= $album->name %></a></li>
-                % }  <!-- (*@\label{_form_switch_end}@*) -->
+                % }
             </ul>
         </div>
     </legend>

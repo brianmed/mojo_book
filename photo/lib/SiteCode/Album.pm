@@ -1,14 +1,13 @@
 package SiteCode::Album;
 
-use Mojo::Base -strict;
+use Mojo::Base -base;
 
-use Moose;
 use Mojo::JSON qw(encode_json decode_json);
 use Mojo::Util qw(spurt slurp);
 use File::Basename qw(basename);
 
-has 'path' => (is => 'ro', isa => 'Str');
-has 'name' => (is => 'ro', isa => 'Str');
+has 'path';
+has 'name';
 
 sub create {
     my $this = shift;

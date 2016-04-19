@@ -1,11 +1,10 @@
 package SiteCode::Albums;
 
-use Mojo::Base -strict;
+use Mojo::Base -base;
 
-use Moose;
 use SiteCode::Album;
 
-has 'path' => (is => 'ro', isa => 'Str');
+has 'path';
 
 sub all {
     my $this = shift;
