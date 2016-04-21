@@ -488,7 +488,7 @@ $ cd photo
 $ morbo -v script/photo
 \end{lstlisting}
 
-When we point our browser to http://localhost:3000 we'll get our app.  As you
+When we point our browser to http://127.0.0.1:3000 we'll get our app.  As you
 can see, our version is in /opt/mojo\_book/photo and expects its config file to
 be in /opt/photo.  See the apppendix for a config file example.
 
@@ -772,5 +772,100 @@ below.
 If we've been given a name from the view, then we save the album name in the session and
 redirect back to the landing page.  This should then do another redirect back to the
 album viewer.
+
+\section{Blogging app}
+
+Next, we will focus on a new app that was heavily adapted from Mojo::Pg (one of
+Sebastian Riedel's many creations).  We will look at adding helpers and
+database usage into our bag of tricks.
+
+The code is available via git:
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ cd /opt
+$ git clone git@github.com:brianmed/mojo_book.git
+\end{lstlisting}
+
+The app is runable via:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ cd blog
+$ morbo -v script/blog
+\end{lstlisting}
+
+This app should feel similar to the Photo app; so, we won't repeat very much of
+the information that can be retrieved from their.  Below we start examing the
+unique aspects of the startup routine.
+
+{\Large Startup}
+
+Given that Mojolicious initializes our app via the startup sub, then that's a
+natural place for adding our database setup.  This is accomplished with
+helpers. These our code blocks that are available to the controller and
+templates.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=14, lastline=17]{blog/lib/Blog.pm}
+
+In Line 2 we use the app object and create a helper.  The state variable will
+persist in the process and a Mojo::SQLite object will be available.  Given
+this, at least one database connection per process is required.
+
+The next helper is our Model object.  This is the glue between our controller,
+data, and view.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=19, lastline=21]{blog/lib/Blog.pm}
+
+The code above will create and version control a database.  Super sweet.  A
+very minimal, yet versatile file format is used for this versioning and
+creation.  Below is the actual migration file contents.
+
+\lstinputlisting[basicstyle=\LSTfont, language=SQL, firstline=1, lastline=9]{blog/migrations/blog.sql}
+
+This syntax uses SQL comments with metadata for versioning.  The  \textit{1 up}
+is used when going from version 0 --> 1.  And, the \textit{1 down} is used when
+going from 1 --> 0.
+
+The routes are very similar to the Blog app and are listed below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=23, lastline=32]{blog/lib/Blog.pm}
+
+There are; however, a few key differences.  The / route (index) shows how an
+anonymous sub can be used instead of a package.  Also, the succint format of
+'controller\#action' is used with naming routes.  
+
+These names can be referenced later via url\_for and redirect\_to - in fact,
+the / route uses \textit{redirect->to('\textbf{posts}')}.
+
+{\Large Controller}
+
+Our blog begins here:
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=11, lastline=14]{blog/lib/Blog/Controller/Posts.pm}
+
+Line 3 is where the magick happens. We use the \textit{posts} helper and call
+the \textit{all} sub in the Blog::Model::Posts package.  
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=12, lastline=12]{blog/lib/Blog/Model/Posts.pm}
+
+This returns an array of posts with the template then processes.  The template
+is below and uses a layout for making templates with a common structure easier
+(e.g. HTML documents).
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl]{blog/templates/posts/index.html.ep}
+
+As you can tell, line 2 processes our array and creates the post listings.  Our
+layout, listed below, allows for rapid and concise construction of a plethora
+of templates.
+
+\lstinputlisting[basicstyle=\LSTfont, language=HTML]{blog/templates/layouts/blog.html.ep}
+
+Line 17 is where the content from the \textit{calling} template is inserted.
+
+Further inspection of of the template shows that at line 4 we have a tag helper that
+uses the named route \textbf{show\_post}.  This creates the blog listing.
+
+All that in one line 'o code:
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=13, lastline=13]{blog/lib/Blog/Controller/Posts.pm}
 
 \end{document}
