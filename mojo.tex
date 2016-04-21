@@ -12,6 +12,9 @@
 \usepackage[scaled]{beramono}
 \usepackage[]{microtype}
 
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\clearpage}
+
 \newcommand\Small{\fontsize{10}{10.2}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-60}\lsstyle}
 
@@ -82,6 +85,8 @@ numbers=left}
 
 \maketitle
 \tableofcontents
+
+\stepcounter{chapter}
 
 \chapter*{License}
 \markboth{\MakeUppercase{License}}{}
@@ -277,6 +282,7 @@ template files).
 We are going to be using lite apps going forward until the photo album is
 encountered later on.
 
+\stepcounter{chapter}
 \chapter*{Going Forward}
 \markboth{\MakeUppercase{Going Forward}}{}
 \addcontentsline{toc}{chapter}{Going Forward}
@@ -458,6 +464,7 @@ parameter which will be available in the templates.  Specifically, at line
 \ref{_ex2_4_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
 
+\stepcounter{chapter}
 \chapter*{Mojolicious Applications}
 \markboth{\MakeUppercase{Mojolicious Applications}}{}
 \addcontentsline{toc}{chapter}{Mojolicious Applications}
@@ -499,7 +506,7 @@ can be put here.
 
 What happens next?
 
-{\Large Startup}
+\subsection{Startup}
 
 Mojolicious initializes our app and then calls Photo::startup.
 
@@ -574,7 +581,7 @@ landing page.  The code is below.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=51, lastline=62]{photo/lib/Photo.pm}
 
-{\Large Controller}
+\subsection{Controller}
 
 A controller encapsulates the business logic for our website.  Fine grained
 control can be exerted over the app by using pacakages and subs.  One package
@@ -587,12 +594,12 @@ our app and the other holds all the business logic for the photo album.
 We can view an album, create one, switch to a new album, upload a photo, and
 view a photo.
 
-{\Large Landing Page}
+\subsection{Landing Page}
 
 The main page does several things - allow for viewing; selecting, or creating
 an album.  Below is the method responsible for all this.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=30]{photo/lib/Photo/Controller/Index.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=24]{photo/lib/Photo/Controller/Index.pm}
 
 Code starting at line 4 checks to see if any albums have been created; if not,
 the user is redirected to /album/create.  In addition, we're using the handy
@@ -797,7 +804,7 @@ This app should feel similar to the Photo app; so, we won't repeat very much of
 the information that can be retrieved from their.  Below we start examing the
 unique aspects of the startup routine.
 
-{\Large Startup}
+\subsection{Startup}
 
 Given that Mojolicious initializes our app via the startup sub, then that's a
 natural place for adding our database setup.  This is accomplished with
@@ -836,7 +843,7 @@ anonymous sub can be used instead of a package.  Also, the succint format of
 These names can be referenced later via url\_for and redirect\_to - in fact,
 the / route uses \textit{redirect->to('\textbf{posts}')}.
 
-{\Large Controller}
+\subsection{Controller}
 
 Our blog begins here:
 
