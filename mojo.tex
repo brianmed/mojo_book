@@ -875,4 +875,81 @@ All that in one line 'o code:
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=13, lastline=13]{blog/lib/Blog/Controller/Posts.pm}
 
+\section{Chat app}
+
+Wow, we have a photo app and a blogging app.  What's next is a chat app.  It's
+a Mojolicious::Lite app that in around 80 lines has...
+
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+\item \verb|Real-time websocket chat|
+\item \verb|Database Schema Setup|
+\item \verb|Database Data Reset|
+\item \verb|Records number of users|
+\item \verb|Sends status messages every 10 seconds|
+\item \verb|All templates included|
+\end{itemize}
+
+Starting from the top, we use a helper in exactly the same way as our blogging
+app and then use the super sweet migration features of Mojo::SQLite and resets the
+number of connected users.
+
+This is reflected in the lines below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=6, lastline=10]{chat/chat.pl}
+
+Next, our root page is configured via..
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=12, lastline=12]{chat/chat.pl}
+
+And, uses the template here:
+
+\lstinputlisting[basicstyle=\LSTfont, language=HTML, numbers=none, firstline=71, lastline=80]{chat/chat.pl}
+
+This is a very succint way to express which template goes with a route that
+needs no app logic executed in the controller.
+
+The heart of our app is the websocket connection.  This does several things:
+
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+\item \verb|Setup the connection|
+\item \verb|Identify the connection|
+\item \verb|Sends status notifications|
+\item \verb|Forwards messages via pubsub|
+\item \verb|Receives messages via pubsub|
+\item \verb|Gracefully cleanup|
+\item \verb|Records presence|
+\end{itemize}
+
+First, we configure the connection and then we identify the connection
+uniquely.  The unique connection is identified with the monotonic time that
+steady\_time provides.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=14, lastline=21]{chat/chat.pl}
+
+Next we setup a recurring timer that will send a message every 10 seconds to
+the websocket connection.  This type of app logic is very powerful and there
+are a variety of possibilities with websockets, event loops (IOLoop),
+databases, and the async feature set of Mojolicious which will allow realizing
+amazing apps.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=23, lastline=45]{chat/chat.pl}
+
+The next bit 'o code will blast out and receive the chat messages via the
+pubsub capabilities of Mojo::SQLite and friends.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=47, lastline=51]{chat/chat.pl}
+
+The amount of expressiveness that the api's provide is super cool.  In a couple
+lines of code we have realized the bulk of our chat app.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=53, lastline=62]{chat/chat.pl}
+
+The next bit gracefully closes our connection.  We stop listening for chat
+messages; remove ourselves from the pool of connected users; and stop the
+recurring timer.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=64, lastline=65]{chat/chat.pl}
+
+One last thing that should be noted is that our current database calls block.
+
 \end{document}
