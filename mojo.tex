@@ -108,8 +108,9 @@ technologies. We will be learning Mojolicious [http://mojolicious.org]; at the
 time of this writing it is a "next generation web framework for the Perl
 Programming language".
 
-From chapters 2 to the end we will be building a Photo album application. What
-does next generation mean? It is a MVC framework that includes:
+Chapter 2 will focus as an introduction to Mojolicious while chapter 3 has
+several apps for perusal.  A photo app, blogging app, and a real-time chat app.
+What does next generation mean? It is a MVC framework that includes:
 
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
 \item \verb|Full stack HTTP and WebSocket client/server.|
@@ -138,7 +139,7 @@ system perl is probably a lower version, so we will bootstrap our install with
 Perl-Build and App::cpanminus.
 
 \begin{lstlisting}[style=BashInputStyle]
-$ curl -L -n -O https://raw.github.com/.../perl-build
+$ curl -L -n -O https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build
 $ perl perl-build 5.20.1 /opt/perl-5.20.1
 \end{lstlisting}
 
@@ -211,7 +212,7 @@ Now that we have Mojolicious installed, we can start writing code for our
 website. Our first example is a full program and you are not expected to
 understand everything. It is geared to get your feet wet. After this, we will
 be a tutorial introduction into HTTP, HTML, Javascript, CSS, and other Web
-technologies.  Our first example is a Mojolicious::Lite application. It is a
+technologies.  The first example is a Mojolicious::Lite application. It is a
 Real-time micro web framework. This micro web framework can have the entire web
 structure in a file.
 
@@ -365,7 +366,7 @@ Also, \$self is a Mojolicious::Controller object containing both, the HTTP
 request and response.
 
 \begin{center}
-  \begin{tabular}{|l|r|}
+  \begin{tabular}{|l|l|}
     \hline
     GET  & CODE\\
     \hline
@@ -424,18 +425,18 @@ Input and output are intrinsic to any computer program, perhaps doubly so to a
 web application.  A significant source of user input comes from GET and POST
 parameters.
 
-These parameters present themselves through the requests and
-responses the web server and client make.  They can be in href URLs, forms, and
-javascript code.
+These parameters present themselves through the requests and responses the web
+server and client make.  They can be in href URLs, forms, and javascript code.
 
-As a specific example, the following code can be used to
-demonstrate a POST action that logs a user in.  The parameter is the username -
-there is no password, not very secure.
+As a specific example, the following code can be used to demonstrate a POST
+action that logs a user in.  The parameter is the username - there is no
+password, not very secure.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_3.pl}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_4.pl}
 
-The application usage is straightforward: run the program and then enter your
-username followed by a return.  You should then be logged in.
+The application usage is straightforward: visit 'http://127.0.0.1:3000/' and
+we'll be told how to login, then visit something akin to
+'http://127.0.0.1:3000/Ben'.  You should then be 'logged' in.
 
 The parameter "name" is an agreement between the view and the controller.
 Before you're logged in there is html that presents a form and the form is sent
@@ -524,7 +525,7 @@ called and the slash.html.ep file will be served.
 Given that, lets go back and discet Photo::startup one "section" at a time.
 
 First, we turn on development logging for when we are running in production
-mode.  This is a convience for early stage production or when debugging
+mode.  This is a convenience for early stage production or when debugging
 something.  Simply comment out for Production.  Next, we initialize the
 config data structure with a file.  These are lines 1 and 3 below.
 
@@ -569,17 +570,20 @@ authorization checks.  If they don't pass either one, then a redirect can
 happen, or some flag can be set.
 
 In addition "any" is supported - which is useful for supporting GET and POST on
-the same route.
+the same route.  Below are a couple example routes.  One for GET and another
+for POST.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=37, lastline=49]{photo/lib/Photo.pm}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=41, lastline=49]{photo/lib/Photo.pm}
 
 One thing that should be mentioned about our routes is that they have two modes of
 operation.  One is when we have no session and another is when there is a session.
 Our session stores the selected album and the \$have\_album nested route verifies
 if the session is still valid.. if not, the user agent will be redirected back to the
-landing page.  The code is below.
+landing page.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=51, lastline=62]{photo/lib/Photo.pm}
+The above app logic is shown in the code below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=51, lastline=54]{photo/lib/Photo.pm}
 
 \subsection{Controller}
 
@@ -889,6 +893,20 @@ a Mojolicious::Lite app that in around 80 lines has...
 \item \verb|All templates included|
 \end{itemize}
 
+The code is available via git:
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ cd /opt
+$ git clone git@github.com:brianmed/mojo_book.git
+\end{lstlisting}
+
+The app is runable via:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ cd chat
+$ morbo -v chat.pl
+\end{lstlisting}
+
 Starting from the top, we use a helper in exactly the same way as our blogging
 app and then use the super sweet migration features of Mojo::SQLite and resets the
 number of connected users.
@@ -951,5 +969,87 @@ recurring timer.
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=64, lastline=65]{chat/chat.pl}
 
 One last thing that should be noted is that our current database calls block.
+
+\stepcounter{chapter}
+\chapter*{Examples}
+\markboth{\MakeUppercase{Examples}}{}
+\addcontentsline{toc}{chapter}{Examples}
+
+\section{Basic Authentication}
+
+Authentication and authorization are necessary for content protection.  There
+are several ways they can be realized.  One is with Basic authentication and
+another is with sessions.  This first example is with Basic that returns a 401
+to the client.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=4, lastline=17]{ex4_basic.pl}
+
+We check for the proper username and send back a 401 if not found.
+
+If Bender is found, then one of the GET requests are served..
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=19, lastline=29]{ex4_basic.pl}
+
+The main thing to denote from this example is that Mojolicious makes your life
+easy with enough primitives that get out of your way so that development can happen 
+faster.
+
+\section{Session Authentication}
+
+Our next example is with session authentication.  We have..
+
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+\item \verb|A Landing page|
+\item \verb|Login page view|
+\item \verb|Login page processing|
+\item \verb|Logout processing|
+\item \verb|Session authentication|
+\item \verb|Member area|
+\item \verb|Private file retrieval|
+\end{itemize}
+
+Below is our landing page.  If we are logged in, then we proceed onto the
+member area, if not we get the login page.  The landing page app logic is a
+non-trivial decision where we determine if the login page should be given for
+an already logged in person, the user gets redirected to the member area, or
+they get a real landing page.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=3, lastline=9]{ex4_session.pl}
+
+Our login logic is below.  The login GET request is just a template and
+processing via POST is where we do username authentication.  We don't really do
+any authorization; however, using the power of our minds we can imagine
+different routes that require a specific set of usernames, or we can add groups
+onto our user scheme and show different templates based on that.
+
+The options are really almost limitless.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=11, lastline=35]{ex4_session.pl}
+
+The final piece for our login scheme is that session expiration can be set
+programmatically.  This will give us the ability to set the time our user can
+stay logged in.
+
+An important piece of our session management is the ability to logout.  This is
+done via HTML links.  Below we set the session expiration to a previous time
+and this resets the session.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=37, lastline=45]{ex4_session.pl}
+
+Our actual session validation is done via an under route.  Since this is a
+Mojolicious::Lite app, then all routes after the under will be subject to
+authentication.  The session authentication merely verifies that a username is
+present in the session.
+
+If no username, then we go back to the login screen.  If so, we continue our
+march into the route in question.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=47, lastline=59]{ex4_session.pl}
+
+The main new feature of our member area is that "private" files are protected.
+We use Mojo::Asset::File and present the "private" file (i.e. any file with an
+absolute path) for the user.  These lines are below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=74, lastline=75]{ex4_session.pl}
 
 \end{document}
