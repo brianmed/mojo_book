@@ -134,9 +134,14 @@ What does next generation mean? It is a MVC framework that includes:
 
 {\Large Perl}
 
-Mojolicious requires Perl.  We will be using Perl on Linux with 5.20.1.  Your
-system perl is probably a lower version, so we will bootstrap our install with 
-Perl-Build and App::cpanminus.
+Mojolicious requires Perl.  These days we separate a system perl with a user
+installed Perl.  The user installed is necessary so that we have free reign
+over what is installed, configured, and can allow for easier debugging.
+
+We will be using Perl on OS X with 5.20.1.  Your system Perl will be used to
+bootstrap our install with Perl-Build and App::cpanminus.  Perl-Build will
+download, configure, and install Perl, while App::cpanminus allows for easier
+installation of modules.
 
 \begin{lstlisting}[style=BashInputStyle]
 $ curl -L -n -O https://raw.githubusercontent.com/tokuhirom/Perl-Build/master/perl-build
@@ -150,7 +155,7 @@ Configuring perl '5.20.1'
 ...
 \end{lstlisting}
 
-\begin{lstlisting}[style=BashInputStyle]
+\begin{lstlisting}[style=BashInputStyle, keepspaces=true]
 $ curl -L http://cpanmin.us | /opt/perl-5.20.1/perl - App::cpanminus
 \end{lstlisting}
 
@@ -164,9 +169,9 @@ Successfully installed App-cpanminus-1.7014
 3 distributions installed
 \end{lstlisting}
 
-After doing these things it will be easier to install Mojolicious and any required modules.
-Also, there is now a fully functional perl install that can be tinkered with to your heart's content.
-To verify the install run:
+After doing these things it will be easier to install Mojolicious and any
+required modules.  Also, there is now a fully functional Perl install that can
+be tinkered with to your heart's content.  To verify the install run:
 
 \begin{lstlisting}[style=BashInputStyle]
 $ /opt/perl-5.20.1/bin/perl -v
@@ -192,10 +197,10 @@ For convience, a symlink can be added so that /opt/perl points to
 $ ln -s /opt/perl-5.20.1/bin/perl /opt/perl
 \end{lstlisting}
 
-{\Large Installallation}
+{\Large Installation}
 
-Adding the CPAN module to the system installs everything needed for
-Mojolicious. 
+Adding the Mojolicious CPAN module to the system installs everything required
+for developing and running a web app.
 
 \begin{lstlisting}[style=BashInputStyle]
 $ /opt/perl-5.20.1/bin/cpanm Mojolicious
@@ -211,20 +216,25 @@ Mojolicious will be installed by the cpanm utility.
 Now that we have Mojolicious installed, we can start writing code for our
 website. Our first example is a full program and you are not expected to
 understand everything. It is geared to get your feet wet. After this, we will
-be a tutorial introduction into HTTP, HTML, Javascript, CSS, and other Web
+have a tutorial introduction in HTTP, HTML, Javascript, CSS, and other Web
 technologies.  The first example is a Mojolicious::Lite application. It is a
-Real-time micro web framework. This micro web framework can have the entire web
+real-time micro web framework. This micro web framework can have the entire web
 structure in a file.
+
+Several key features that enable the real-time aspects of the framework are
+websockets, RESTful routes, non-blocking I/O web server, and long polling.
+
+The framework is written by Sebastian Riedel.
 
 \lstinputlisting[language=Perl, style=CodeStyle]{hello_world_text.pl}
 
-Line \ref{_ex1_1_use} turns your perl script into a full featured web
-application, that uses strict, warnings, utf8 and Perl 5.10 features. It's fun.
+Line \ref{_ex1_1_use} turns your Perl script into a full featured web
+application, that uses strict, warnings, and utf8. It's fun.
 
 Run the program like so:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ morbo -v hello_worl.pl
+$ morbo -v hello_world_text.pl
 \end{lstlisting}
 
 \begin{lstlisting}[style=BashOutputStyle]
@@ -241,17 +251,17 @@ Next, modify the contents of hello\_world.pl to look like this:
 
 \lstinputlisting[language=Perl, style=CodeStyle]{hello_world_html.pl}
 
-Our morbo server should automatically restart and load the new file contents.  The code
-at line \ref{_ex1_2_render} display the inlined page below.
+Our morbo server should automatically restart and load the new file contents.
+The code at line \ref{_ex1_2_render} displays the inlined page below.
 
-Next, add Carpe diem after line \ref{_ex1_2_add_line_here}. Save the file and
+Next, add "Carpe diem" after line \ref{_ex1_2_add_line_here}. Save the file and
 reload the page in the browser. The morbo server will restart your server once
-a change is made.
+a change is detected.
 
 The other way to build an app is with a well-structured web application. This
 is where the business logic and application setup are put in several files, as
-opposed to just one.  A full app is created with the "generate app" command and
-an example is below.
+opposed to just one.  A full app is created with the "generate app" command,
+and an example is below.
 
 \begin{lstlisting}[style=BashInputStyle]
 $ mojo generate app Example           
@@ -276,7 +286,7 @@ $ mojo generate app Example
   [write] /private/tmp/example/templates/example/welcome.html.ep
 \end{lstlisting}
 
-As you can see, it has a invocation script, startup package (lib/Example.pm),
+As you can see, it has an invocation script, startup package (lib/Example.pm),
 an example Controller, some tests, and example content (the index.html and .ep
 template files).
 
@@ -301,7 +311,7 @@ After that our attention will be turned to a Photo album app.
 
 {\Large Under the Hood}
 
-As you know, web pages are loaded from a server. When you goto domain.com, then
+As you know, web pages are loaded from a server. When you go to domain.com, then
 the default HTML is loaded using HTTP.  As you will see, the transfer, or
 request, from the server to your web browser client can be considered a file
 transfer. For example, when http://127.0.0.1:3000 was visited something like
@@ -329,7 +339,7 @@ Then, the server responded with:
     Content-Type: text/html;charset=UTF-8
 \end{lstlisting}
 
-If we were to goto http://127.0.0.1:3000/hello, then the GET request would
+If we were to go to http://127.0.0.1:3000/hello, then the GET request would
 start with:
 
 \begin{lstlisting}[style=BlockStyle]
@@ -356,11 +366,11 @@ For example, given the code below:
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl]{routes.pl}
 
-The \textbf{get '/foo'} will redirect a \textbf{HTTP GET /foo} request to the anonymous
-subroutine listed. It should be noted that a GET and POST can be redirected to
-a different subroutine.  This is a very powerful construct that allows us to
-execute arbitrary business logic (system commands, SQL, control flow logic,
-etc) for a given request.
+The \textbf{get '/foo'} will redirect a \textbf{HTTP GET /foo} request to the
+anonymous subroutine listed. It should be noted that a GET and POST can be
+redirected to different subroutines.  This is a very powerful construct that
+allows us to execute arbitrary business logic (system commands, SQL, control
+flow logic, etc) for a given request.
 
 Also, \$self is a Mojolicious::Controller object containing both, the HTTP
 request and response.
@@ -378,9 +388,9 @@ request and response.
 
 {\Large Extending hello\_world.pl}
 
-It would be nice to be able to click and get different "page" from web server
-that gave us feedback. We will use the internal templating system called
-Embedded Perl.
+The next step is expanding on our example and including the ability to realize
+HTML in our routes.  There's a templating system called Embedded Perl that is
+used and allows for intermixing Perl code with the template.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_2.pl}
 
@@ -390,11 +400,12 @@ Once ran via morbo we can click the "carpe" link and get dynamic feedback from o
 
 {\Large From whence we came}
 
-At times it is appropriate to log data while processing a code in the backend.
-In development mode a file in \textbf{log}/development.log is used and in production
-mode a file \textbf{log}/production.log is utilized. The modes can be switched around
-via \textit{MOJO\_MODE} environment variable. Merely creating a log directory will enable
-the output into these files.
+At times it is appropriate to log data while processing code in the backend.
+In development mode a file in \textbf{log}/development.log is used and in
+production mode a file \textbf{log}/production.log is utilized. The modes can
+be switched around via \textit{MOJO\_MODE} environment variable. Merely
+creating a log directory in the app's home directory will enable the output
+into these files.
 
 \begin{lstlisting}[style=BashInputStyle]
 $ mkdir log
@@ -402,7 +413,7 @@ $ mkdir log
 
 Now we can send logging data to the proper file with code such as:
 
-\verbatiminput{ex2_3.pl}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_3.pl}
 
 In addition, usage statistics for each request are logged to the
 development.log file.  For example, the below is from the route snippet above.
@@ -452,7 +463,7 @@ application.
 Templates are the bread and butter of dynamic content generation.  They take
 input from the controller and load that into a templating system to create
 content.  The content is usually a web page with HTML, CSS, and Javascript.
-However, there are other possibilites, as well, such as text.
+However, there are other possibilites, as well, such as text, xls, and pdf.
 
 The input from the controller is placed in a "stash" data structure.  There are
 a few ways to setup this data structure.  One approach is to use the "stash"
@@ -501,7 +512,7 @@ can see, our version is in /opt/mojo\_book/photo and expects its config file to
 be in /opt/photo.  See the apppendix for a config file example.
 
 After the config file has been setup, we can run our app via "script/photo";
-this is a perl script that bootstraps our app.  Most of the time you won't need
+this is a Perl script that bootstraps our app.  Most of the time you won't need
 to modify this; however, if module directories are needed, then "use lib" statements
 can be put here.
 
@@ -511,18 +522,16 @@ What happens next?
 
 Mojolicious initializes our app and then calls Photo::startup.
 
-The startup method adds, configures plugins; sets up some logging; adds in
-helpers; and sets up routes.  For example, as you can see below in the line from
-lib/Photo.pm our route for the index page is setup.
+The startup method adds and configures plugins; sets up some logging; adds in
+helpers; and sets up routes.  For example, as you can see below in the line
+from lib/Photo.pm our route for the index page is setup.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, numbers=none, firstline=35, lastline=35]{photo/lib/Photo.pm}
 
 When a user agent does a GET /, then Photo::Controller::Index::slash will be
 called and the slash.html.ep file will be served.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=13]{photo/lib/Photo/Controller/Index.pm}
-
-Given that, lets go back and discet Photo::startup one "section" at a time.
+Given that, lets go back and disect Photo::startup one "section" at a time.
 
 First, we turn on development logging for when we are running in production
 mode.  This is a convenience for early stage production or when debugging
@@ -531,14 +540,14 @@ config data structure with a file.  These are lines 1 and 3 below.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=8, lastline=10]{photo/lib/Photo.pm}
 
-This file is just a perl data structure and can be hand edited or
-programmatically defined.  Another option is to use JSCONConfig and a JSON
+This file is just a Perl data structure and can be hand edited or
+programmatically defined.  Another option is to use JSONConfig and a JSON
 config file.  Below is an example config file.
 
 \lstinputlisting[basicstyle=\LSTfont]{photo.config}
 
 The next setup phase is to initialize the secret passphrase.  Multiple
-passphrases are supported to allow for phasing out an old passphrase.  These
+passphrases are supported that allows for phasing out an old passphrase.  These
 passphrases are used for things like signed cookies (which are used in the
 sessions).
 
@@ -563,9 +572,9 @@ that we can define "get" and "post" for these routes.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=21, lastline=35]{photo/lib/Photo.pm}
 
-Arbitrary perl (DB lookups, JSON parsing, file processing) can be put in the
-nested route and if "1" is returned the child route will be allowed to run
-"undef" and it won't.  Very handy for doing basic authentication and
+Arbitrary Perl (DB lookups, JSON parsing, file processing) can be put in the
+nested route.  If "1" is returned the child route will be allowed to run and if
+"undef" is returned it won't.  Very handy for doing basic authentication and
 authorization checks.  If they don't pass either one, then a redirect can
 happen, or some flag can be set.
 
@@ -655,7 +664,7 @@ error section is here:
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=13, lastline=24]{photo/templates/album/create.html.ep}
 
-The main points are the \% to embed perl code in the template sandbox and the
+The main points are the \% to embed Perl code in the template sandbox and the
 flash usage.  The flash is persistent for one-request only and is stored in the
 session.  The error would come from the POST form action (shown below).
 
@@ -663,14 +672,14 @@ session.  The error would come from the POST form action (shown below).
 
 The POST action Album::Controller::save does several things, most notably it
 validates the input, creates the album, and stores the album name in the session. 
-That is, it "switches" to that album. Below is the erorr handling.  Of note is that
+That is, it "switches" to that album. Below is the error handling.  Of note is that
 the flash error value is stored with an API similar to the stash.  After setting our
 error flag we redirect back to displaying the create view.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=27, lastline=35]{photo/lib/Photo/Controller/Album.pm}
 
 After the input checks are done and the album created, we switch to that album
-and redirect back to the landing page - while will detect that a selected album
+and redirect back to the landing page - which will detect the selected album
 and act appropriately.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Perl, firstline=53, lastline=57]{photo/lib/Photo/Controller/Album.pm}
@@ -712,7 +721,7 @@ generate a pulldown for the user to select an album.  They are shown below.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=50, lastline=52]{photo/templates/album/show.html.ep}
 
-The ability to intermix perl loop and control structures with plain html is
+The ability to intermix Perl loop and control structures with plain html is
 very powerful. As a specific example, the above allows us to iterate over an 
 array of objects in the stash to create a portion of our html document.
 
@@ -786,9 +795,9 @@ album viewer.
 
 \section{Blogging app}
 
-Next, we will focus on a new app that was heavily adapted from Mojo::Pg (one of
-Sebastian Riedel's many creations).  We will look at adding helpers and
-database usage into our bag of tricks.
+Next, we will focus on a new app that was heavily adapted from Mojo::Pg
+(another one of Sebastian Riedel's many creations).  We will look at adding
+helpers and database usage into our bag of tricks.
 
 The code is available via git:
 
@@ -797,7 +806,7 @@ $ cd /opt
 $ git clone git@github.com:brianmed/mojo_book.git
 \end{lstlisting}
 
-The app is runable via:
+The app is runnable via:
 
 \begin{lstlisting}[style=BashInputStyle]
 $ cd blog
@@ -805,14 +814,14 @@ $ morbo -v script/blog
 \end{lstlisting}
 
 This app should feel similar to the Photo app; so, we won't repeat very much of
-the information that can be retrieved from their.  Below we start examing the
+the information that can be retrieved from there.  Below we start examing the
 unique aspects of the startup routine.
 
 \subsection{Startup}
 
 Given that Mojolicious initializes our app via the startup sub, then that's a
 natural place for adding our database setup.  This is accomplished with
-helpers. These our code blocks that are available to the controller and
+helpers. These are code blocks that are available to the controller and
 templates.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=14, lastline=17]{blog/lib/Blog.pm}
@@ -822,7 +831,7 @@ persist in the process and a Mojo::SQLite object will be available.  Given
 this, at least one database connection per process is required.
 
 The next helper is our Model object.  This is the glue between our controller,
-data, and view.
+data (the Model), and view.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=19, lastline=21]{blog/lib/Blog.pm}
 
@@ -841,7 +850,7 @@ The routes are very similar to the Blog app and are listed below.
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=23, lastline=32]{blog/lib/Blog.pm}
 
 There are; however, a few key differences.  The / route (index) shows how an
-anonymous sub can be used instead of a package.  Also, the succint format of
+anonymous sub can be used instead of a package.  Also, the succinct format of
 'controller\#action' is used with naming routes.  
 
 These names can be referenced later via url\_for and redirect\_to - in fact,
@@ -872,7 +881,7 @@ of templates.
 
 Line 17 is where the content from the \textit{calling} template is inserted.
 
-Further inspection of of the template shows that at line 4 we have a tag helper that
+Further inspection of the template shows that at line 4 we have a tag helper that
 uses the named route \textbf{show\_post}.  This creates the blog listing.
 
 All that in one line 'o code:
@@ -900,7 +909,7 @@ $ cd /opt
 $ git clone git@github.com:brianmed/mojo_book.git
 \end{lstlisting}
 
-The app is runable via:
+The app is runnable via:
 
 \begin{lstlisting}[style=BashInputStyle]
 $ cd chat
@@ -923,7 +932,7 @@ And, uses the template here:
 
 \lstinputlisting[basicstyle=\LSTfont, language=HTML, numbers=none, firstline=71, lastline=80]{chat/chat.pl}
 
-This is a very succint way to express which template goes with a route that
+This is a very succinct way to express which template goes with a route that
 needs no app logic executed in the controller.
 
 The heart of our app is the websocket connection.  This does several things:
@@ -957,8 +966,8 @@ pubsub capabilities of Mojo::SQLite and friends.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=47, lastline=51]{chat/chat.pl}
 
-The amount of expressiveness that the api's provide is super cool.  In a couple
-lines of code we have realized the bulk of our chat app.
+The amount of expressiveness that Mojolicious provides is super cool.  In a
+couple lines of code we have realized the bulk of our chat app.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=53, lastline=62]{chat/chat.pl}
 
