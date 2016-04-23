@@ -1,0 +1,25 @@
+The code samples use ' rather than ' so they will not compile should anyone
+wish to copy-paste.
+
+Some people cannot copy without the line numbers.
+
+Expand on concepts and provide intro material on HTML, CSS, maybe
+Javascript/jQuery and Perl.
+
+Async DB Example
+    
+    - Render later
+    - Timer
+    - Delay
+
+JSON API Example
+    Headers
+    Custom Headers
+
+Plugins
+Testing
+Excercises
+Mojo::Base
+Route hooks
+
+Mojo::UserAgent
