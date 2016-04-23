@@ -1197,4 +1197,24 @@ The \$c->render will display the json to the user.  The point of this example
 is that the Mojo::UserAgent get requests were happening while other requests on
 the server were being served.
 
+\section{Mojo::UserAgent Command-Line}
+
+This is our first command-line example.  We are retrieving the weather for a
+given IP address.  There are two GET requests.  One retrieve the latitude and
+longitude for an IP address, and the next takes that and gets the weather.
+
+The below code sets up our script.  We use Mojo::Base -strict for enabling
+Modern Perl features in our script.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=1, lastline=8]{ex4_cli.pl}
+
+After this, the 1st GET request is done, and then we setup the query for the
+final GET request that retrieves the weather.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=13, lastline=20]{ex4_cli.pl}
+
+Finally, the weather is output.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=22, lastline=29]{ex4_cli.pl}
+
 \end{document}
