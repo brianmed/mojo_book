@@ -1148,4 +1148,49 @@ $ curl -v -X GET 'http://127.0.0.1:3000/v1/select' --data '{"username":"fnord","
 {"datum":{"inserted":"2016-04-23 17:43:12","key":"str","value":"hello_world","email":"a@a.com","id":1},"status":"success"}
 \end{lstlisting}
 
+\section{Synchronizing non-blocking operations}
+
+Our next example was lifted from the Mojolicious Cookbook.  The cookbook has a
+plethora of examples and other goodness.  The example we are focusing on is
+synchronizing api calls in a non-blocking fashion.
+
+What we are going to do is searh metacpan with a couple queries in a
+non-blocking fashion.
+
+The first bit is the delay.  This is methodology for orchestrating callbacks.  Simply do
+Mojo::IOLoop->delay and you..
+
+\begin{lstlisting}[style=BlockStyle]
+Build Mojo::IOLoop::Delay object to manage callbacks and control the flow of
+events for this event loop, which can help you avoid deep nested closures that
+often result from continuation-passing style. Callbacks will be passed along to
+"steps" in Mojo::IOLoop::Delay.
+\end{lstlisting}
+
+Below is what the code looks like that starts the delay.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=4, lastline=9]{ex4_delay.pl}
+
+The steps needed by the delay are sub CODE blocks.  The first one sets up our
+concurrent requests.  This is shown below:
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=11, lastline=18]{ex4_delay.pl}
+
+We use the embedded Mojo::UserAgent object and the begin methods of the delay
+that setup the number of requests that will happen concurrently.  When the GET
+request is finished, then the UserAgent will execute the begin callback.  This
+callback does the following:
+
+\begin{lstlisting}[style=BlockStyle]
+Indicate an active event by incrementing the event counter, the returned
+callback needs to be executed when the event has completed, to decrement the
+event counter again. When all callbacks have been executed and the event
+counter reached zero, "steps" will continue.
+\end{lstlisting}
+
+After the first step is finished, then the rendering takes place.  The code for
+this is below.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=20, lastline=27]{ex4_delay.pl}
+
 \end{document}
