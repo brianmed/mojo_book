@@ -1061,4 +1061,90 @@ absolute path) for the user.  These lines are below.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=74, lastline=75]{ex4_session.pl}
 
+\section{JSON API}
+
+Moving along, our next example utilizes a JSON API that abstracts out a
+key/value store written using Mojo::SQLite.
+
+In our under route which allows for the JSON API authentication.  The under
+does several things, which are:
+
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+\item \verb|Validate JSON|
+\item \verb|Verify username|
+\item \verb|Verify API key|
+\item \verb|Authenticate user|
+\end{itemize}
+
+Below is the validation.  Note how the controller object (\$c) has a req object
+which includes the json already parsed.  Also, our under renders and returns
+undef so that the user is presented with their JSON and the child routes are
+not processed.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
+
+After validation, we authenticate the user.  If there are errors, then a
+similar scenario exists where the json is rendered and undef is returned.
+However, when the authentication succeeds, then "1" is returned and the 
+children routes can be processed.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=40, lastline=57]{ex4_api.pl}
+
+Next, we have helpers for our CRUD datastore and the GET/POST routes that allow
+for data retrieval and modifications.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=59, lastline=84]{ex4_api.pl}
+
+The above are the INSERT and SELECT helpers.  Given how the insert helper returns \$c and
+select returns \$hash, we can do something like this: "\$c->insert->select".  The goal
+is a fluent interface to our datastore.
+
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
+
+After our helpers, we have the actual routes that manipulate data.  Note how straightforward
+it is to return json with something as simple as "\$c->render(json => ...)".
+
+That's basically it.  Below is a sample run via the command-line.
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ curl -v -X POST 'http://127.0.0.1:3000/v1/insert' --data '{"username":"fnord","api_key":"68b329da9893e34099c7d8ad5cb9c940","email":"a@a.com","key":"str","value":"hello_world"}'
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> POST /v1/insert HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> Content-Length: 117
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 117 out of 117 bytes
+< HTTP/1.1 200 OK
+< Server: Mojolicious (Perl)
+< Date: Sat, 23 Apr 2016 17:43:12 GMT
+< Content-Type: application/json;charset=UTF-8
+< Content-Length: 122
+< 
+* Connection #0 to host 127.0.0.1 left intact
+{"status":"success","datum":{"key":"str","value":"hello_world","inserted":"2016-04-23 17:43:12","id":1,"email":"a@a.com"}}
+$ curl -v -X GET 'http://127.0.0.1:3000/v1/select' --data '{"username":"fnord","api_key":"68b329da9893e34099c7d8ad5cb9c940","email":"a@a.com","key":"str"}'
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET /v1/select HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> Content-Length: 95
+> Content-Type: application/x-www-form-urlencoded
+> 
+* upload completely sent off: 95 out of 95 bytes
+< HTTP/1.1 200 OK
+< Server: Mojolicious (Perl)
+< Date: Sat, 23 Apr 2016 17:43:23 GMT
+< Content-Type: application/json;charset=UTF-8
+< Content-Length: 122
+< 
+* Connection #0 to host 127.0.0.1 left intact
+{"datum":{"inserted":"2016-04-23 17:43:12","key":"str","value":"hello_world","email":"a@a.com","id":1},"status":"success"}
+\end{lstlisting}
+
 \end{document}

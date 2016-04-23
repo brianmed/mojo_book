@@ -7,14 +7,14 @@ Expand on concepts and provide intro material on HTML, CSS, maybe
 Javascript/jQuery and Perl.
 
 Async DB Example
-    
-    - Render later
-    - Timer
-    - Delay
+    Render later
+    Timer
+    Delay
 
 JSON API Example
     Headers
     Custom Headers
+    Content negotiation
 
 Plugins
 Testing
@@ -22,4 +22,7 @@ Excercises
 Mojo::Base
 Route hooks
 
-Mojo::UserAgent
+CLI script
+    Mojo::IOLoop
+    Mojo::UserAgent
+    Mojo::DOM usage
