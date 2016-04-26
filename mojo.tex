@@ -1216,17 +1216,35 @@ given IP address.  There are two GET requests.  One retrieve the latitude and
 longitude for an IP address, and the next takes that and gets the weather.
 
 The below code sets up our script.  We use Mojo::Base -strict for enabling
-Modern Perl features in our script.
+Modern Perl features in our script.  Also, the very succinct
+Mojo::IOLoop->delay allows us some freedom for running non-blocking code in a
+serial fashion.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=1, lastline=8]{ex4_cli.pl}
+\lstinputlisting[caption={ex4\_cli.pl: Setup}, basicstyle=\LSTfont, language=Perl, firstline=1, lastline=9]{ex4_cli.pl}
 
-After this, the 1st GET request is done, and then we setup the query for the
-final GET request that retrieves the weather.
+After this, the 1st GET request is done.  Note how we use an array of CODE
+references for our delay method.  The first sub initiates a non-blocking
+request with ip-api.com.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=13, lastline=20]{ex4_cli.pl}
+\lstinputlisting[caption={ex4\_cli.pl: Lat/Lon}, basicstyle=\LSTfont, language=Perl, firstline=10, lastline=17]{ex4_cli.pl}
 
-Finally, the weather is output.
+And then we setup the query for the final GET request that retrieves the
+weather.  Note how the transaction from the previous request is available in
+this delay step.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=22, lastline=29]{ex4_cli.pl}
+\lstinputlisting[caption={ex\_cli.pl: Weather}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=18, lastline=30]{ex4_cli.pl}
+
+In the last step we print the weather.  Note the compact methodology of accessing
+the response and the embedded json embedded.
+
+\lstinputlisting[caption={ex\_cli.pl: Output}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=31, lastline=43]{ex4_cli.pl}
+
+The final coolness that we use from Mojo::IOLoop::Delay is the wait method.
+This will..
+
+\begin{lstlisting}[style=BlockStyle]
+Start "ioloop" and stop it again once an "error" or "finish" event gets
+emitted, does nothing when "ioloop" is already running.
+\end{lstlisting}
 
 \end{document}
