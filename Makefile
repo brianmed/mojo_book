@@ -54,7 +54,7 @@ all: clean doc
 clean: 
 	rm -f $(DOC).{ps,pdf}
 	rm -f mojo_book.pdf
-	rm -f $(DOC).{log,aux,dvi,bbl,blg,log,out,nav,snm,toc,vrb}
+	rm -f $(DOC).{log,aux,dvi,bbl,blg,log,out,nav,snm,toc,vrb,lol}
 	rm -f bibliography-processed.bib
 	rm -f *.vrb
 	rm -f texput.log
