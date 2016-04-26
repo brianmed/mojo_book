@@ -71,7 +71,7 @@
 \lstset{% general command to set parameter(s) 
 basicstyle=\small, % print whole listing small 
 keywordstyle=\color{black}\bfseries\underbar,
-frame=none,
+frame=bottomline,
 literate=%
           {♥}{{$\varheart$}}{1}
           {‹}{{\LEFTarrow}}{1}
@@ -81,17 +81,29 @@ literate=%
 escapeinside={\#*}{*)},
 stringstyle=\ttfamily, 
 showstringspaces=false,
+captionpos=b,
 numbers=left}
 
 \input glyphtounicode
 \pdfgentounicode=1
 
+%%%%%% \usepackage{graphicx}
+%%%%%% \usepackage{titling}
+
 \begin{document}
 
-\title{Get some Mojo}
-\author{Brian Medley}
+%%%%%% \pretitle{%
+%%%%%%   \begin{center}
+%%%%%%   \LARGE
+%%%%%%   \includegraphics{perl5.png}\\[\bigskipamount]
+%%%%%% }
+%%%%%% \posttitle{\end{center}}
+%%%%%% 
+%%%%%% \title{A Mojolicious Book}
+%%%%%% \author{Brian Medley}
+%%%%%% \date{\today}     
+%%%%%% \maketitle
 
-\maketitle
 \setcounter{page}{2}
 \tableofcontents
 
@@ -105,6 +117,9 @@ Please download and share this book unmodified. (The book is avalible under a
 Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.)
 
 https://creativecommons.org/licenses/by-nc-nd/3.0/
+
+Attribution:
+Perl 5 Rapter: https://github.com/kraih/perl-raptor
 
 \chapter*{Rationale}
 \markboth{\MakeUppercase{Rationale}}{}
