@@ -1,8 +1,8 @@
 \documentclass[14pt]{extreport}
 \usepackage[left=0.5in, right=0.5in, top=1.0in, bottom=1.0in]{geometry}
 \usepackage{layout}
-\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{listings}
 \usepackage{verbatim}
 \usepackage{textcomp}
@@ -15,11 +15,14 @@
 \usepackage{titlesec}
 \newcommand{\sectionbreak}{\clearpage}
 
-\newcommand\Small{\fontsize{10}{10.2}\selectfont}
+\newcommand\Small{\fontsize{12}{13.0}\fontencoding{T1}\selectfont}
 \newcommand*\LSTfont{\Small\ttfamily\SetTracking{encoding=*}{-60}\lsstyle}
 
+\DeclareSymbolFont{timespunct}{T1}{ptm}{m}{n}
 \DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
 \DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\varaccent}{\mathpunct}{timespunct}{39}
+\DeclareMathSymbol{\varspace}{\mathpunct}{timespunct}{32}
 \DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
 
 \lstdefinestyle{BashInputStyle}{
@@ -59,7 +62,7 @@
   basicstyle=\LSTfont,
   keywordstyle=\color{black}\bfseries\underbar,
   frame=none,
-  escapeinside={(*@}{@*)},
+  escapeinside={\#*}{*)},
   stringstyle=\ttfamily, 
   showstringspaces=false,
   numbers=left
@@ -72,11 +75,16 @@ frame=none,
 literate=%
           {♥}{{$\varheart$}}{1}
           {‹}{{\LEFTarrow}}{1}
-          {›}{{\RIGHTarrow}}{1},
-escapeinside={(*@}{@*)},
+          {›}{{\RIGHTarrow}}{1}
+          {'}{{$\varaccent$}}{1}
+          {’}{{$\varaccent$}}{1},
+escapeinside={\#*}{*)},
 stringstyle=\ttfamily, 
 showstringspaces=false,
 numbers=left}
+
+\input glyphtounicode
+\pdfgentounicode=1
 
 \begin{document}
 
@@ -107,18 +115,14 @@ https://creativecommons.org/licenses/by-nc-nd/3.0/
 Thus begins our quest for Mojo - a tutorial approach to learning web
 technologies. We will be learning Mojolicious [http://mojolicious.org]; at the
 time of this writing it is a "next generation web framework for the Perl
-Programming language".
-
-Chapter 2 will focus as an introduction to Mojolicious while chapter 3 has
-several apps for perusal.  A photo app, blogging app, and a real-time chat app.
-What does next generation mean? It is a MVC framework that includes:
+Programming language".  The next generation feature set is:
 
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
-\item \verb|Full stack HTTP and WebSocket client/server.|
+\item \verb|Full stack HTTP and WebSocket client/server|
 \item \verb|IPv6, TLS, SNI, IDNA, Comet|
 \item \verb|Non-blocking I/O and embeddable web server|
 \item \verb|JSON and HTML/XML parse with CSS selectors|
-\item \verb|Templates|
+\item \verb|Perlish Templates|
 \item \verb|Sessions|
 \item \verb|Cookie management|
 \item \verb|HTTP / WebSocket|
@@ -128,6 +132,10 @@ What does next generation mean? It is a MVC framework that includes:
 \item \verb|Testing framework|
 \item \verb|Plugins|
 \end{itemize}
+
+Chapter 2 will focus on introducing Mojolicious while chapter 3 has several
+apps for perusal.  A photo app, blogging app, and a real-time chat app.
+Chapter 4 has several practical examples.
 
 \chapter*{Preparation}
 \markboth{\MakeUppercase{Preparation}}{}
@@ -220,12 +228,12 @@ understand everything. It is geared to get your feet wet. After this, we will
 have a tutorial introduction in HTTP, HTML, Javascript, CSS, and other Web
 technologies.  The first example is a Mojolicious::Lite application. It is a
 real-time micro web framework. This micro web framework can have the entire web
-structure in a file.
+structure in a single file.
 
 Several key features that enable the real-time aspects of the framework are
 websockets, RESTful routes, non-blocking I/O web server, and long polling.
 
-The framework is written by Sebastian Riedel.
+The framework is predominately written by Sebastian Riedel.
 
 \lstinputlisting[language=Perl, style=CodeStyle]{hello_world_text.pl}
 
@@ -262,34 +270,7 @@ a change is detected.
 The other way to build an app is with a well-structured web application. This
 is where the business logic and application setup are put in several files, as
 opposed to just one.  A full app is created with the "generate app" command,
-and an example is below.
-
-\begin{lstlisting}[style=BashInputStyle]
-$ mojo generate app Example           
-\end{lstlisting}
-
-\begin{lstlisting}[style=BashOutputStyle]
-  [mkdir] /private/tmp/example/script
-  [write] /private/tmp/example/script/example
-  [chmod] /private/tmp/example/script/example 744
-  [mkdir] /private/tmp/example/lib
-  [write] /private/tmp/example/lib/Example.pm
-  [mkdir] /private/tmp/example/lib/Example/Controller
-  [write] /private/tmp/example/lib/Example/Controller/Example.pm
-  [mkdir] /private/tmp/example/t
-  [write] /private/tmp/example/t/basic.t
-  [mkdir] /private/tmp/example/log
-  [mkdir] /private/tmp/example/public
-  [write] /private/tmp/example/public/index.html
-  [mkdir] /private/tmp/example/templates/layouts
-  [write] /private/tmp/example/templates/layouts/default.html.ep
-  [mkdir] /private/tmp/example/templates/example
-  [write] /private/tmp/example/templates/example/welcome.html.ep
-\end{lstlisting}
-
-As you can see, it has an invocation script, startup package (lib/Example.pm),
-an example Controller, some tests, and example content (the index.html and .ep
-template files).
+and we will discuss this further with the Photo app.
 
 We are going to be using lite apps going forward until the photo album is
 encountered later on.
@@ -304,19 +285,27 @@ encountered later on.
 Here we get down with Mojo.  A brief introduction of HTTP 1.1 is given and then
 we look at some specific ways that Mojolicious creates a framework around
 web technologies to make things easier for development.  Specifically, we will look
-at Routes, Logging, GET/POST Parameters, Templates, and Sessions.
+at what follows:
 
-After that our attention will be turned to a Photo album app.
+\begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
+\item \verb|Routes|
+\item \verb|Logging|
+\item \verb|GET/POST Parameters|
+\item \verb|Templates|
+\item \verb|Sessions|
+\end{itemize}
+
+After that our attention will be turned to apps and examples.
 
 \section{HTTP 1.1}
 
 {\Large Under the Hood}
 
-As you know, web pages are loaded from a server. When you go to domain.com, then
-the default HTML is loaded using HTTP.  As you will see, the transfer, or
-request, from the server to your web browser client can be considered a file
-transfer. For example, when http://127.0.0.1:3000 was visited something like
-the following was sent from your browser to the server:
+As you know, web pages are loaded from a server. When you go to domain.com,
+then the default HTML is loaded using HTTP.  As you will see, the transfer, or
+request, from the web browser client (aka UserAgent) to the server can be
+considered a file transfer. For example, when http://127.0.0.1:3000 was visited
+something like the following was sent from your browser to the server:
 
 \begin{lstlisting}[style=BlockStyle]
     GET / HTTP/1.1
@@ -373,8 +362,8 @@ redirected to different subroutines.  This is a very powerful construct that
 allows us to execute arbitrary business logic (system commands, SQL, control
 flow logic, etc) for a given request.
 
-Also, \$self is a Mojolicious::Controller object containing both, the HTTP
-request and response.
+Also, \$self is a Mojolicious::Controller object.  This contains both the HTTP
+request and HTTP response.
 
 \begin{center}
   \begin{tabular}{|l|l|}
@@ -452,9 +441,9 @@ we'll be told how to login, then visit something akin to
 
 The parameter "name" is an agreement between the view and the controller.
 Before you're logged in there is html that presents a form and the form is sent
-back to the server in the form of a POST request.  This request is processed
+back to the server in the form of a GET request.  This request is processed
 and the "param" method exposes the data to the application - using the "name"
-argument.  "name" is common between the form, the POST request, and the
+argument.  "name" is common between the form, the GET request, and the
 application.
 
 \section{Templates and Stash}
@@ -490,15 +479,38 @@ full blown application features of Mojolicious.  An application of this type
 can be started with:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ mojo generate app Photo
+$ mojo generate app Photo           
 \end{lstlisting}
 
-However, we are going to use the git checkout of this book which includes all the 
-code for our Photo app.
+\begin{lstlisting}[style=BashOutputStyle]
+  [mkdir] /opt/photo/script
+  [write] /opt/photo/script/photo
+  [chmod] /opt/photo/script/photo 744
+  [mkdir] /opt/photo/lib
+  [write] /opt/photo/lib/Photo.pm
+  [mkdir] /opt/photo/lib/Photo/Controller
+  [write] /opt/photo/lib/Photo/Controller/Example.pm
+  [mkdir] /opt/photo/t
+  [write] /opt/photo/t/basic.t
+  [mkdir] /opt/photo/public
+  [write] /opt/photo/public/index.html
+  [mkdir] /opt/photo/templates/layouts
+  [write] /opt/photo/templates/layouts/default.html.ep
+  [mkdir] /opt/photo/templates/example
+  [write] /opt/photo/templates/example/welcome.html.ep
+\end{lstlisting}
+
+As you can see, it has an invocation script, startup package (lib/Example.pm),
+an example Controller, some tests, and example content (the index.html and .ep
+template files).
+
+However, starting from scratch is not necessary; we are going to use the git
+checkout of this book which includes all the code for our Photo app.
 
 \begin{lstlisting}[style=BashOutputStyle]
 $ cd /opt
 $ git clone git@github.com:brianmed/mojo_book.git
+$ cd mojo_book
 \end{lstlisting}
 
 The app is runable via:
@@ -510,7 +522,7 @@ $ morbo -v script/photo
 
 When we point our browser to http://127.0.0.1:3000 we'll get our app.  As you
 can see, our version is in /opt/mojo\_book/photo and expects its config file to
-be in /opt/photo.  See the apppendix for a config file example.
+be in /opt/photo.
 
 After the config file has been setup, we can run our app via "script/photo";
 this is a Perl script that bootstraps our app.  Most of the time you won't need
@@ -1211,10 +1223,10 @@ Modern Perl features in our script.
 After this, the 1st GET request is done, and then we setup the query for the
 final GET request that retrieves the weather.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=13, lastline=20]{ex4_cli.pl}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=13, lastline=20]{ex4_cli.pl}
 
 Finally, the weather is output.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=22, lastline=29]{ex4_cli.pl}
+\lstinputlisting[basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=22, lastline=29]{ex4_cli.pl}
 
 \end{document}

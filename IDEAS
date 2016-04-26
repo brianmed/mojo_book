@@ -26,3 +26,11 @@ CLI script
     Mojo::IOLoop
     Mojo::UserAgent
     Mojo::DOM usage
+
+Naming consitency with examples
+
+Perhaps show a filename above examples
+
+Add a POST form example
+
+Add a jQuery AJAX example
