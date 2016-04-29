@@ -1,23 +1,12 @@
 use Mojolicious::Lite;
 
-get '/:name' => {name => ''} => sub { #*\label{_ex2_3_placeholder}*)
-    my $c = shift;
+get '/:name' => {name => 'Default'} => sub {
+    my $self = shift;
 
-    my $name = $c->param("name");
+    my $name = $self->param("name");
+    my $age = $self->param("age") // 20;
 
-    $c->stash(name => $name); #*\label{_ex2_3_stash}*)
-
-    $c->render("slash");
+    $self->render(text => "Hello world: $name and $age years old.");
 };
 
 app->start;
-
-__DATA__
-
-@@ slash.html.ep
-
-% if (stash('name')) {  #*\label{_ex2_3_stash_usage}*)
-    You are <%= stash('name') %>
-% } else {
-    Please pass in a name to the url like so '<%= url_for('/Ben')->to_abs %>'.
-% }

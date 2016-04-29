@@ -41,6 +41,8 @@ Explain MVC
 
 Add https setup
 
+Add CSRF section
+
 Augment ex4_cli.pl and add a concurrent request..
 
 Make clearer that snippets are broken up - possibly with sequential line

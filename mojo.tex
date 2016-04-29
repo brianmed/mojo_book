@@ -50,7 +50,6 @@
   numbers=none,
   frame=tblr,
   columns=fullflexible,
-  backgroundcolor=\color{blue!10},
   linewidth=1.0\linewidth,
   xleftmargin=0.0\linewidth,
   xrightmargin=0.0\linewidth
@@ -319,7 +318,8 @@ at what follows:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
 \item \verb|Routes|
 \item \verb|Logging|
-\item \verb|GET Parameters|
+\item \verb|Placeholders|
+\item \verb|Query Parameters|
 \item \verb|Templates and Stash|
 \item \verb|Sessions|
 \item \verb|Forms|
@@ -435,25 +435,133 @@ development.log file.  For example, the below is from the route snippet above.
     }
 \end{lstlisting}
 
-\section{Parameters}
+\section{Placeholders}
 
-{\Large Variety is the spice...}
+{\Large What's in a name...}
 
 Input and output are intrinsic to any computer program, perhaps doubly so to a
-web application.  A significant source of user input comes from GET and POST
-parameters.
+web application.  A significant source of user input comes from the URL that the
+user typed in.  These are placeholders and GET/POST parameters.
 
-These parameters present themselves through the requests and responses the web
-server and client make.  They can be in href URLs, forms, and javascript code.
+They are embedded in the the URLs, which makes things easy for copying and
+pasting with friends.  We will be discussing placeholders in this section.
+
+A placeholder is embedded in the URL and parsed by Mojolicious.  They are
+available via the ->param method.
 
 As a specific example, the following code can be used to demonstrate a GET
-request with an optional parameter.  The parameter is a name.
+request with an optional placeholder.  The parameter is a name.
 
 \lstinputlisting[caption={ex2\_2.pl}, language=Perl]{ex2_2.pl}
 
 The application usage is straightforward: visit 'http://127.0.0.1:3000/' and
 you get a default name; visit 'http://127.0.0.1:3000/Ben' and you get the name
 'Ben'.
+
+The above paragraph is detailed below via curl.
+
+\begin{lstlisting}[style=BlockStyle]
+$ curl -v http://127.0.0.1:3000/ 
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Length: 20
+< Server: Mojolicious (Perl)
+< Date: Fri, 29 Apr 2016 21:21:12 GMT
+< Content-Type: text/html;charset=UTF-8
+< 
+* Connection #0 to host 127.0.0.1 left intact
+Hello world: Default
+$ curl -v http://127.0.0.1:3000/Ben
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET /Ben HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Length: 16
+< Server: Mojolicious (Perl)
+< Date: Fri, 29 Apr 2016 21:21:16 GMT
+< Content-Type: text/html;charset=UTF-8
+< 
+* Connection #0 to host 127.0.0.1 left intact
+Hello world: Ben
+\end{lstlisting}
+
+Of note is that the default GET request looks exactly similar with the one in
+the prior section.  However, when we add /Ben onto the URL we get "GET /Ben".
+
+\section{Parameters}
+
+{\Large Variety is the spice...}
+
+This section deals with GET and POST parameters.  These parameters present
+themselves through the request in the query string.  This will be made clearer
+in the curl output below; however, something like "GET /?age=25" is presented
+to the server when the user types (or clicks on a link that has)
+http://127.0.0.1:3000/?age=25
+
+As a specific example, the following code can be used to demonstrate a GET
+request with a placeholder and GET parameter.  Both are optional.
+
+\lstinputlisting[caption={ex2\_3.pl}, language=Perl]{ex2_3.pl}
+
+The application usage is straightforward: visit 'http://127.0.0.1:3000/' and
+you get a default name; visit 'http://127.0.0.1:3000/Ben?age=30' and you get
+the name 'Hello world: Ben and 30 years old.'.
+
+The above paragraph is detailed below via curl.
+
+\begin{lstlisting}[style=BlockStyle]
+$ curl -v http://127.0.0.1:3000/          
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Type: text/html;charset=UTF-8
+< Server: Mojolicious (Perl)
+< Content-Length: 38
+< Date: Fri, 29 Apr 2016 21:55:57 GMT
+< 
+* Connection #0 to host 127.0.0.1 left intact
+Hello world: Default and 20 years old.
+$ curl -v http://127.0.0.1:3000/Ben?age=30
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET /Ben?age=30 HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Type: text/html;charset=UTF-8
+< Date: Fri, 29 Apr 2016 21:56:01 GMT
+< Content-Length: 34
+< Server: Mojolicious (Perl)
+< 
+* Connection #0 to host 127.0.0.1 left intact
+Hello world: Ben and 30 years old.
+\end{lstlisting}
+
+Again, the default GET request looks exactly similar with the one in the prior
+section.  However, when we add /Ben?age=30 onto the URL we get "GET
+/Ben?age=30".
+
+Multiple paramters can be added with a \&.  The first requires a ? and then the
+rest are separated by \&.
+
+For example http://127.0.0.1:3000/Ben?age=30\&developer=1.
 
 \section{Templates and Stash}
 
@@ -468,11 +576,11 @@ The input from the controller is placed in a "stash" data structure.  There are
 a few ways to set up this data structure.  One approach is to use the "stash"
 controller method.
 
-\lstinputlisting[caption={ex2\_3.pl}, language=Perl]{ex2_3.pl}
+\lstinputlisting[caption={ex2\_4.pl}, language=Perl]{ex2_4.pl}
 
-For example, in line \ref{_ex2_3_stash} of ex2\_4.pl we set the "name" stash 
+For example, in line \ref{_ex2_4_stash} of ex2\_4.pl we set the "name" stash 
 parameter which will be available in the templates.  Specifically, at line 
-\ref{_ex2_3_stash_usage} the "stash" helper is used to dynamically adjust
+\ref{_ex2_4_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
 
 \section{Sessions}
@@ -492,10 +600,10 @@ limit, depending on browser.
 \end{lstlisting}
 
 In the code below, when we visit http://127.0.0.1:3000 and reload several
-times, then the browser will remember the counter at line \ref{_ex2_4_count}.  
+times, then the browser will remember the counter at line \ref{_ex2_5_count}.  
 Then, the user will be shown how many times they have visted.
 
-\lstinputlisting[caption={ex2\_4.pl}, language=Perl]{ex2_4.pl}
+\lstinputlisting[caption={ex2\_5.pl}, language=Perl]{ex2_5.pl}
 
 Lets examine what happens in the actual request and response.  What we're going
 to do is use curl and show the headers that are interchanged via the user agent
@@ -559,25 +667,25 @@ can do meaningful work.  A large percentage of user data originates from forms.
 For this section, lets look at the example in different parts.  First, we'll
 have our application logic, and next we'll look at the templates.
 
-The application logic displays the form at line \ref{_ex2_5_index}; processes
-our form at line \ref{_ex2_5_process}; and either displays an error, or success
-at lines \ref{_ex2_5_error} and \ref{_ex2_5_success}.
+The application logic displays the form at line \ref{_ex2_6_index}; processes
+our form at line \ref{_ex2_6_process}; and either displays an error, or success
+at lines \ref{_ex2_6_error} and \ref{_ex2_6_success}.
 
-\lstinputlisting[caption={Application logic}, language=Perl, firstline=5, lastline=23]{ex2_5.pl}
+\lstinputlisting[caption={Application logic}, language=Perl, firstline=5, lastline=23]{ex2_6.pl}
 
 We use the flash for presenting any error message during form processing.  The
-flash is set at line \ref{_ex2_5_flash} and its value is used in the template.
+flash is set at line \ref{_ex2_6_flash} and its value is used in the template.
 The flash is a methodology for passing a value from one request to another and
 only lasts for that one request.
 
 This is perfect for passing success, informational, and error messages between
-requests - such as what is done at line \ref{_ex2_5_flash_usage} below.
+requests - such as what is done at line \ref{_ex2_6_flash_usage} below.
 
 One more thing to note is that in our <form> we have an "action" attribute.
 With this we set the destination of our POST request.  Very important so that
 data shows up at the proper spot.
 
-\lstinputlisting[caption={Templates}, language=Perl, firstline=29, lastline=41]{ex2_5.pl}
+\lstinputlisting[caption={Templates}, language=Perl, firstline=29, lastline=41]{ex2_6.pl}
 
 Now, lets examine exactly what happens when we use our form. 
 
