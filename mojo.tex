@@ -335,7 +335,8 @@ As you know, web pages are loaded from a server. When you go to domain.com,
 then the default HTML is loaded using HTTP.  As you will see, the transfer, or
 request, from the web browser client (aka user agent) to the server can be
 considered a file transfer. For example, when http://127.0.0.1:3000 was visited
-something like the following was sent from your browser to the server:
+something like the following was sent from your browser to the server (the
+request):
 
 \begin{lstlisting}[style=BlockStyle]
     GET / HTTP/1.1
@@ -348,7 +349,7 @@ something like the following was sent from your browser to the server:
     Accept-Language: en-US,en;q=0.8
 \end{lstlisting}
 
-Then, the server responded with:
+Then, the server responded with (the reply):
 
 \begin{lstlisting}[style=BlockStyle]
     HTTP/1.1 200 OK
@@ -369,6 +370,10 @@ start with:
 Of note, is that when we access http://127.0.0.1:3000 there is an implied "/"
 and when http://127.0.0.1:3000/hello there is a specific "/hello".  These are
 the pages that the server is being requested to serve.
+
+Also, the structure of the request and response should be noted.  The lines
+that are Word: or Word-Dash-Word: are called headers.  These are metadata that
+describe your request and response.
 
 \section{Routes}
 
