@@ -37,6 +37,8 @@ Add a jQuery AJAX example
 
 Debugging
 
+Explain MVC
+
 Augment ex4_cli.pl and add a concurrent request..
 
 Make clearer that snippets are broken up - possibly with sequential line

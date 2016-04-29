@@ -319,10 +319,10 @@ at what follows:
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
 \item \verb|Routes|
 \item \verb|Logging|
-\item \verb|GET/POST Parameters|
-\item \verb|Templates|
-\item \verb|Forms|
+\item \verb|GET Parameters|
+\item \verb|Templates and Stash|
 \item \verb|Sessions|
+\item \verb|Forms|
 \end{itemize}
 
 After that our attention will be turned to apps and examples.
@@ -377,17 +377,19 @@ the pages that the server is being requested to serve.
 Routes enable Mojolicious to easily glue together an incoming request with
 code.
 
-From the Mojolicious::Lite perldoc:
+For example, if we pointed our browser at http://127.0.0.1:3000, then the
+following request would be sent to the server:
 
-Routes are basically just fancy paths that can contain different kinds of
-placeholders.
+\begin{lstlisting}[style=BlockStyle]
+    GET / HTTP 1.1
+\end{lstlisting}
 
-For example, given the code below:
+And the route below would be used.
 
-\lstinputlisting[caption={ex2\_1.pl}, language=Perl]{ex2_1.pl}
+\lstinputlisting[caption={Index Route}, language=Perl, firstline=3, lastline=7]{ex2_1.pl}
 
-The \textbf{get '/carpe'} will redirect a \textbf{HTTP GET /carpe} request to
-the anonymous subroutine listed. It should be noted that a GET and POST can be
+The \textbf{get '/'} will redirect the \textbf{HTTP GET /} request to the
+anonymous subroutine shown. It should be noted that a GET and POST can be
 redirected to different subroutines; and we will examine POST later in the
 chapter.  This is a very powerful construct that allows us to execute arbitrary
 business logic (system commands, SQL, control flow logic, etc) for a given
@@ -395,17 +397,6 @@ request.
 
 Also, \$self is a Mojolicious::Controller object.  This contains both the HTTP
 request and HTTP response.
-
-\begin{center}
-  \begin{tabular}{|l|l|}
-    \hline
-    GET  & CODE\\
-    \hline
-    GET / & \ref{_ex2_1_index}: get "/" => sub {}\\
-    GET /carpe & \ref{_ex2_1_carpe}: get "/carpe" => sub {}\\
-    \hline
-  \end{tabular}
-\end{center}
 
 \section{Logging}
 
@@ -450,22 +441,14 @@ parameters.
 These parameters present themselves through the requests and responses the web
 server and client make.  They can be in href URLs, forms, and javascript code.
 
-As a specific example, the following code can be used to demonstrate a POST
-action that logs a user in.  The parameter is the username - there is no
-password, not very secure.
+As a specific example, the following code can be used to demonstrate a GET
+request with an optional parameter.  The parameter is a name.
 
-\lstinputlisting[caption={ex2\_3.pl}, language=Perl]{ex2_3.pl}
+\lstinputlisting[caption={ex2\_2.pl}, language=Perl]{ex2_2.pl}
 
 The application usage is straightforward: visit 'http://127.0.0.1:3000/' and
-we'll be told how to login, then visit something akin to
-'http://127.0.0.1:3000/Ben'.  You should then be 'logged' in.
-
-The parameter "name" is an agreement between the view and the controller.
-Before you're logged in there is html that presents a form and the form is sent
-back to the server in the form of a GET request.  This request is processed
-and the "param" method exposes the data to the application - using the "name"
-argument.  "name" is common between the form, the GET request, and the
-application.
+you get a default name; visit 'http://127.0.0.1:3000/Ben' and you get the name
+'Ben'.
 
 \section{Templates and Stash}
 
@@ -486,6 +469,93 @@ For example, in line \ref{_ex2_3_stash} of ex2\_4.pl we set the "name" stash
 parameter which will be available in the templates.  Specifically, at line 
 \ref{_ex2_3_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
+
+\section{Sessions}
+
+{\Large Lets stick around}
+
+A session is mechanism that uses cookies for saving state between different
+requests and responses.  The cookie is a special header in the browser that is
+saved by the browser between requests and responses in a cookie jar.  Technically,
+the session is defined as:
+
+\begin{lstlisting}[style=BlockStyle]
+Persistent data storage for the next few requests, all session data gets
+serialized with Mojo::JSON and stored Base64 encoded in HMAC-SHA1 signed
+cookies, to prevent tampering. Note that cookies usually have a 4096 byte (4KB)
+limit, depending on browser.
+\end{lstlisting}
+
+In the code below, when we visit http://127.0.0.1:3000 and reload several
+times, then the browser will remember the counter at line \ref{_ex2_4_count}.  
+Then, the user will be shown how many times they have visted.
+
+\lstinputlisting[caption={ex2\_4.pl}, language=Perl]{ex2_4.pl}
+
+Lets examine what happens in the actual request and response.  What we're going
+to do is use curl and show the headers that are interchanged via the user agent
+and the server.
+
+Our initial request is here.  The last line shows that this is the first time this
+page has been visted.  Please note that there the Set-Cookie header in the response
+is parsed by curl and saved into the file "jar".
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3001/
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3001 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:3001
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 29 Apr 2016 01:59:07 GMT
+* Added cookie mojolicious="eyJleHBpcmVzIjoxNDYxODk4NzQ3LCJjb3VudCI6MX0---72e64d66da00d8ca1f80ee4f8384f0957612188d" for domain 127.0.0.1, path /, expire 1461898747
+< Set-Cookie: mojolicious=eyJleHBpcmVzIjoxNDYxODk4NzQ3LCJjb3VudCI6MX0---72e64d66da00d8ca1f80ee4f8384f0957612188d; expires=Fri, 29 Apr 2016 02:59:07 GMT; path=/; HttpOnly
+< Server: Mojolicious (Perl)
+< Content-Type: text/html;charset=UTF-8
+< Content-Length: 26
+< 
+    You have visted once.
+\end{lstlisting}
+
+The next time we run curl we'll send the Cookie header in the request so that the server
+can retrieve the value(s) that were saved earlier.  This cookie is then made available in the
+session object for the route.
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3001/
+*   Trying 127.0.0.1...
+* Connected to 127.0.0.1 (127.0.0.1) port 3001 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:3001
+> User-Agent: curl/7.43.0
+> Accept: */*
+> Cookie: mojolicious=eyJleHBpcmVzIjoxNDYxODk4NzQ3LCJjb3VudCI6MX0---72e64d66da00d8ca1f80ee4f8384f0957612188d
+> 
+< HTTP/1.1 200 OK
+< Server: Mojolicious (Perl)
+< Content-Length: 29
+< Content-Type: text/html;charset=UTF-8
+* Replaced cookie mojolicious="eyJleHBpcmVzIjoxNDYxODk4NzQ5LCJjb3VudCI6Mn0---5a8ec66a8db5e54a4842f1159e1f116631e62a27" for domain 127.0.0.1, path /, expire 1461898749
+< Set-Cookie: mojolicious=eyJleHBpcmVzIjoxNDYxODk4NzQ5LCJjb3VudCI6Mn0---5a8ec66a8db5e54a4842f1159e1f116631e62a27; expires=Fri, 29 Apr 2016 02:59:09 GMT; path=/; HttpOnly
+< Date: Fri, 29 Apr 2016 01:59:09 GMT
+< 
+    You have visted 2 times.
+* Connection #0 to host 127.0.0.1 left intact
+\end{lstlisting}
+
+Do you see the message that we visited the index page twice?  Our cookie jar
+saved the state and the server correctly interpreted Cookie: header in the
+request.
+
+\section{Forms}
+
+{\Large User Input}
+
+Without user input the web would be boring.  We need the user's data so that
+we can do meaningful work.  A large percentage of user data originates from forms.
 
 \stepcounter{chapter}
 \chapter*{Mojolicious Applications}

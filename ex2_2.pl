@@ -1,6 +1,11 @@
-get '/carpe' => sub {
+use Mojolicious::Lite;
+
+get '/:name' => {name => 'Default'} => sub {
     my $self = shift;
-    my $now = scalar(localtime(time()));
-    $self->app->log->debug($self->app->dumper({ now => $now }));
-    $self->render("carpe", now => $now);
+
+    my $name = $self->param("name");
+
+    $self->render(text => "Hello world: $name");
 };
+
+app->start;
