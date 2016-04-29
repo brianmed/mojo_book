@@ -1,13 +1,11 @@
 use Mojolicious::Lite;
 
-get '/:name' => {name => ''} => sub { #*\label{_ex2_4_placeholder}*)
-    my $c = shift;
+get '/' => sub {
+    my $self = shift;
 
-    my $name = $c->param("name");
+    ++$self->session->{count}; #*\label{_ex2_4_count}*)
 
-    $c->stash(name => $name); #*\label{_ex2_4_stash}*)
-
-    $c->render("slash");
+    $self->render("slash");
 };
 
 app->start;
@@ -16,8 +14,8 @@ __DATA__
 
 @@ slash.html.ep
 
-% if (stash('name')) {  #*\label{_ex2_4_stash_usage}*)
-    You are <%= stash('name') %>
+% if (1 == session("count")) {
+    You have visted once.
 % } else {
-    Please pass in a name to the url like so '<%= url_for('/Ben')->to_abs %>'.
+    You have visted <%= session("count") %> times.
 % }

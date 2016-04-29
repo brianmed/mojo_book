@@ -132,13 +132,13 @@ sub photo {
     my $c = shift;
 
     my $dir = $c->app->home->rel_dir("albums");
-    my $album = SiteCode::Album->new(path => "$dir/" . $c->session->{album}, name => $c->session->{album}); # <!-- (*@\label{_photo_session}@*) -->
+    my $album = SiteCode::Album->new(path => "$dir/" . $c->session->{album}, name => $c->session->{album}); #*@\label{_photo_session}*)
 
     my $slot = $c->param("slot");
 
-    my $filename = $album->photo($slot); # <!-- (*@\label{_photo_filename}@*) -->
+    my $filename = $album->photo($slot); #*\label{_photo_filename}*)
 
-    $c->reply->asset(Mojo::Asset::File->new(path => $filename)); # <!-- (*@\label{_photo_reply}@*) -->
+    $c->reply->asset(Mojo::Asset::File->new(path => $filename)); #*\label{_photo_reply}*)
 }
 
 1;

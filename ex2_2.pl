@@ -1,41 +1,11 @@
 use Mojolicious::Lite;
 
-get '/carpe' => sub {
+get '/:name' => {name => 'Default'} => sub {
     my $self = shift;
 
-    $self->render("carpe", now => scalar(localtime(time())));
-};
+    my $name = $self->param("name");
 
-get '/' => sub {
-    my $self = shift;
-
-    $self->render("index");
+    $self->render(text => "Hello world: $name");
 };
 
 app->start;
-
-__DATA__
-
-@@ index.html.ep
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Hello World</title>
-</head>
-<body>
-    Hello world<br>
-    <a href=/carpe>Carpe Diem</a>
-</body>
-</html>
-
-@@ carpe.html.ep
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Carpe Diem</title>
-</head>
-<body>
-    Carpe Diem: <%= $now %>
-</body>
-</html>
