@@ -4,6 +4,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
+\usepackage{caption}
+\usepackage{xcolor}
 \usepackage{verbatim}
 \usepackage{textcomp}
 \usepackage{pslatex}	    % to use PostScript fonts
@@ -24,6 +26,12 @@
 \DeclareMathSymbol{\varaccent}{\mathpunct}{timespunct}{39}
 \DeclareMathSymbol{\varspace}{\mathpunct}{timespunct}{32}
 \DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-4pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
@@ -58,6 +66,10 @@
   xrightmargin=0.0\linewidth
 }
 
+\lstdefinestyle{PerlStyle}{
+  language=Perl
+}
+
 \lstdefinestyle{CodeStyle}{
   basicstyle=\LSTfont,
   keywordstyle=\color{black}\bfseries\underbar,
@@ -69,9 +81,11 @@
 }
 
 \lstset{% general command to set parameter(s) 
-basicstyle=\small, % print whole listing small 
+basicstyle=\LSTfont,
 keywordstyle=\color{black}\bfseries\underbar,
-frame=bottomline,
+frame=lrb,
+xleftmargin=\fboxsep,
+xrightmargin=-\fboxsep,
 literate=%
           {♥}{{$\varheart$}}{1}
           {‹}{{\LEFTarrow}}{1}
@@ -81,7 +95,6 @@ literate=%
 escapeinside={\#*}{*)},
 stringstyle=\ttfamily, 
 showstringspaces=false,
-captionpos=b,
 numbers=left}
 
 \input glyphtounicode
@@ -250,10 +263,11 @@ websockets, RESTful routes, non-blocking I/O web server, and long polling.
 
 The framework is predominately written by Sebastian Riedel.
 
-\lstinputlisting[language=Perl, style=CodeStyle]{hello_world_text.pl}
+Now, lets turn our attention onto some code. In the code below, line
+\ref{_ex1_1_use} turns your Perl script into a full featured web application
+that uses strict, warnings, and utf8. It's fun.
 
-Line \ref{_ex1_1_use} turns your Perl script into a full featured web
-application that uses strict, warnings, and utf8. It's fun.
+\lstinputlisting[caption={Hello World - ex1\_1.pl}, language=Perl]{ex1_1.pl}
 
 Run the program like so:
 
@@ -273,7 +287,7 @@ any browser. In your URL bar put: http://127.0.0.1:3000 and view the page.
 
 Next, modify the contents of hello\_world.pl to look like this:
 
-\lstinputlisting[language=Perl, style=CodeStyle]{hello_world_html.pl}
+\lstinputlisting[caption={HTML Hello - ex1\_2.pl}, language=Perl]{ex1_2.pl}
 
 Our morbo server should automatically restart and load the new file contents.
 The code at line \ref{_ex1_2_render} displays the inlined page below.
@@ -307,6 +321,7 @@ at what follows:
 \item \verb|Logging|
 \item \verb|GET/POST Parameters|
 \item \verb|Templates|
+\item \verb|Forms|
 \item \verb|Sessions|
 \end{itemize}
 
@@ -369,7 +384,7 @@ placeholders.
 
 For example, given the code below:
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl]{routes.pl}
+\lstinputlisting[caption={Routes - ex2\_1.pl}, language=Perl]{ex2_1.pl}
 
 The \textbf{get '/foo'} will redirect a \textbf{HTTP GET /foo} request to the
 anonymous subroutine listed. It should be noted that a GET and POST can be
@@ -397,7 +412,7 @@ The next step is expanding on our example and including the ability to realize
 HTML in our routes.  There's a templating system called Embedded Perl that is
 used and allows for intermixing Perl code with the template.
 
-\lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_2.pl}
+\lstinputlisting[caption={} language=Perl]{ex2_2.pl}
 
 Once run via morbo we can click the "carpe" link and get dynamic feedback from our web server.
 

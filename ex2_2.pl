@@ -3,7 +3,7 @@ use Mojolicious::Lite;
 get '/carpe' => sub {
     my $self = shift;
 
-    $self->render("carpe", now => scalar(localtime(time())));
+    $self->render("carpe");
 };
 
 get '/' => sub {
@@ -24,7 +24,7 @@ __DATA__
 </head>
 <body>
     Hello world<br>
-    <a href=/carpe>Carpe Diem</a>
+    <a href="<%= url_for("/carpe") %>">Carpe Diem</a>
 </body>
 </html>
 
@@ -36,6 +36,7 @@ __DATA__
     <title>Carpe Diem</title>
 </head>
 <body>
-    Carpe Diem: <%= $now %>
+    Carpe Diem<br>
+    <a href="<%= url_for("/") %>">Return</a>
 </body>
 </html>

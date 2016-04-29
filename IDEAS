@@ -38,3 +38,54 @@ Add a jQuery AJAX example
 Debugging
 
 Augment ex4_cli.pl and add a concurrent request..
+
+Make clearer that snippets are broken up - possibly with sequential line
+numbers.
+
+You installed perl 5.20.1 in the instructions, but I don't think you used any
+of its features. I would just remove that bit and assume everyone has perl >=
+5.10.
+
+Better quantify assumptions on knowledge of Perl, unix/linux, development
+environment.
+
+Add blurb about secure_compare and other Mojolicious features not written
+about.
+
+# ZoffixWork
+# bpmedley, RE: http://bmedley.org/mojo.pdf  The immediate concern is all the
+# hyphens in shell commands in the book are actually UTF8 minus signs, so it
+# makes it impossible to copy-paste them (I'm assuming the book *will* be
+# available in digital format) and copy/pasting code examples leaves spaces
+# after nearly every character. You also keep using full paths to morbo, et.
+# al. and I don't think that's necessary and should be avoided f
+# 12:15		or clarity. <html>, <head>, and <body> are all optional tags.
+#    Perhaps, it will be clearer if they are omitted in the code examples (at
+#    least in Hello World example) to simplify overall snippet. In fact, I
+#    think the "Getting Started" section on homepage of http://mojolicio.us/ is
+#    the perfect example to use: it's just 3 lines. To the uninitiated, it'll
+#    likely be confusing why you first use Lite and the full apps. I think
+#    there shoul
+# 12:15		d be a section explaining the purpose of Lite apps. There should be
+#    a section (say, section 0.7.0) explaining the MVC concept. People
+#    unfamiliar with it with get confused right when you start talking about
+#    Controllers. The code example after section 0.7.2 looks really messy. I
+#    think it should be written with 70-col, or so, max line width so there
+#    would be no wraps. I also don't think this form for dereference is the
+#    common one: $$
+# 12:15		site_config{hypnotoad_ip}
+# 12:16		Sorry for the noise... Anyway, that's my two cents.
+#
+# ajr_: bpmedley; you might also want to make it explicit what you expect the
+# reader to know before they start reading. Keep things as simple as possible.
+# There are so many packages around today, it's impossible to know them all.
+#
+# Form validation, CSRF, template layouts, deployment, non-blocking, and testing
+#
+# Working with JSON
+#
+# Working with a Database
+#
+# Exception pages
+#
+# User Agent
