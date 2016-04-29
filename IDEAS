@@ -1,0 +1,40 @@
+The code samples use ' rather than ' so they will not compile should anyone
+wish to copy-paste.
+
+Some people cannot copy without the line numbers.
+
+Expand on concepts and provide intro material on HTML, CSS, maybe
+Javascript/jQuery and Perl.
+
+Async DB Example
+    Render later
+    Timer
+    Delay
+
+JSON API Example
+    Headers
+    Custom Headers
+    Content negotiation
+
+Plugins
+Testing
+Excercises
+Mojo::Base
+Route hooks
+
+CLI script
+    Mojo::IOLoop
+    Mojo::UserAgent
+    Mojo::DOM usage
+
+Naming consitency with examples
+
+Perhaps show a filename above examples
+
+Add a POST form example
+
+Add a jQuery AJAX example
+
+Debugging
+
+Augment ex4_cli.pl and add a concurrent request..

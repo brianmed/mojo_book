@@ -4,11 +4,11 @@
 
 #           Beamer                   pgf/tikz        Linux                  Apple fink               apple TexLive                        Current directory
 #TEXINPUTS=./latex-beamer-current//:./pgf-current//:/usr/share/texmf/tex//:/sw/share/texmf-dist/tex//:/usr/local/texlive/2011/texmf-dist//:.
-TEXINPUTS=.:/usr/local/texlive/2014/texmf-dist//:/usr/local/texlive/2011/texmf-dist//:/usr/local/texlive/2013/texmf-dist//:custom_themes//
+TEXINPUTS=.:/usr/local/texlive/2015/texmf-dist//:/usr/local/texlive/2011/texmf-dist//:/usr/local/texlive/2013/texmf-dist//:custom_themes//
 #texlive: :/usr/local/texlive//
 export TEXINPUTS
 
-PDFLATEX=/usr/local/texlive/2014//bin/x86_64-darwin/pdflatex
+PDFLATEX=/usr/local/texlive/2015//bin/x86_64-darwin/pdflatex
 DOC=mojo
 
 # ZoffixWork
@@ -52,10 +52,11 @@ DOC=mojo
 all: clean doc
 
 clean: 
-	rm -rf $(DOC).{ps,pdf}
-	rm -rf $(DOC).{log,aux,dvi,bbl,blg,log,out,nav,snm,toc,vrb}
+	rm -f $(DOC).{ps,pdf}
+	rm -f mojo_book.pdf
+	rm -f $(DOC).{log,aux,dvi,bbl,blg,log,out,nav,snm,toc,vrb,lol}
 	rm -f bibliography-processed.bib
-	rm -rf *.vrb
+	rm -f *.vrb
 	rm -f texput.log
 
 test:
@@ -65,4 +66,5 @@ doc:
 	$(PDFLATEX) $(DOC).tex
 	$(PDFLATEX) $(DOC).tex
 	$(PDFLATEX) $(DOC).tex
-	open mojo.pdf
+	/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Resources/join.py -o mojo_book.pdf mojo_title.pdf mojo.pdf
+	open mojo_book.pdf
