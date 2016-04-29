@@ -205,6 +205,8 @@ Successfully installed App-cpanminus-1.7014
 3 distributions installed
 \end{lstlisting}
 
+\clearpage
+
 After doing these things it will be easier to install Mojolicious and any
 required modules.  Also, there is now a fully functional Perl install that can
 be tinkered with to your heart's content.  To verify the install run:
@@ -338,7 +340,7 @@ considered a file transfer. For example, when http://127.0.0.1:3000 was visited
 something like the following was sent from your browser to the server (the
 request):
 
-\begin{lstlisting}[style=BlockStyle]
+\begin{lstlisting}[style=BashOutputStyle]
     GET / HTTP/1.1
     Host: 127.0.0.1:3000
     Connection: keep-alive
@@ -351,7 +353,7 @@ request):
 
 Then, the server responded with (the reply):
 
-\begin{lstlisting}[style=BlockStyle]
+\begin{lstlisting}[style=BashOutputStyle]
     HTTP/1.1 200 OK
     Content-Length: 2
     Server: Mojolicious (Perl)
@@ -460,7 +462,9 @@ you get a default name; visit 'http://127.0.0.1:3000/Ben' and you get the name
 
 The above paragraph is detailed below via curl.
 
-\begin{lstlisting}[style=BlockStyle]
+\clearpage
+
+\begin{lstlisting}[style=BashOutputStyle]
 $ curl -v http://127.0.0.1:3000/ 
 *   Trying 127.0.0.1...
 * Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
@@ -519,7 +523,9 @@ the name 'Hello world: Ben and 30 years old.'.
 
 The above paragraph is detailed below via curl.
 
-\begin{lstlisting}[style=BlockStyle]
+\clearpage
+
+\begin{lstlisting}[style=BashOutputStyle]
 $ curl -v http://127.0.0.1:3000/          
 *   Trying 127.0.0.1...
 * Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
@@ -609,6 +615,8 @@ Lets examine what happens in the actual request and response.  What we're going
 to do is use curl and show the headers that are interchanged via the user agent
 and the server.
 
+\clearpage
+
 Our initial request is here.  The last line shows that this is the first time this
 page has been visted.  Please note that there the Set-Cookie header in the response
 is parsed by curl and saved into the file "jar".
@@ -684,6 +692,8 @@ requests - such as what is done at line \ref{_ex2_6_flash_usage} below.
 One more thing to note is that in our <form> we have an "action" attribute.
 With this we set the destination of our POST request.  Very important so that
 data shows up at the proper spot.
+
+\clearpage
 
 \lstinputlisting[caption={Templates}, language=Perl, firstline=29, lastline=41]{ex2_6.pl}
 
@@ -888,6 +898,8 @@ nested route.  If "1" is returned the child route will be allowed to run and if
 authorization checks.  If they don't pass either one, then a redirect can
 happen, or some flag can be set.
 
+\clearpage
+
 In addition "any" is supported - which is useful for supporting GET and POST on
 the same route.  Below are a couple example routes.  One for GET and another
 for POST.
@@ -985,6 +997,8 @@ validates the input, creates the album, and stores the album name in the session
 That is, it "switches" to that album. Below is the error handling.  Of note is that
 the flash error value is stored with an API similar to the stash.  After setting our
 error flag we redirect back to displaying the create view.
+
+\clearpage
 
 \lstinputlisting[caption={Switching albums error checking}, language=Perl, firstline=27, lastline=35]{photo/lib/Photo/Controller/Album.pm}
 
@@ -1191,6 +1205,8 @@ As you can tell, line 2 processes our array and creates the post listings.  Our
 layout, listed below, allows for rapid and concise construction of a plethora
 of templates.
 
+\clearpage
+
 \lstinputlisting[caption={Blog layout}, language=HTML]{blog/templates/layouts/blog.html.ep}
 
 Line 17 is where the content from the \textit{calling} template is inserted.
@@ -1241,6 +1257,8 @@ This is reflected in the lines below.
 Next, our index page is configured via..
 
 \lstinputlisting[caption={Index route}, language=Perl, firstline=12, lastline=12]{chat/chat.pl}
+
+\clearpage
 
 And, uses the template here:
 
@@ -1311,6 +1329,8 @@ We check for the proper username and send back a 401 if not found.
 
 \lstinputlisting[caption={Authentication logic}, language=Perl, firstline=4, lastline=17]{ex4_basic.pl}
 
+\clearpage
+
 If Bender is found, then one of the GET requests are served..
 
 \lstinputlisting[caption={Protected content}, language=Perl, firstline=19, lastline=29]{ex4_basic.pl}
@@ -1347,6 +1367,8 @@ any authorization; however, using the power of our minds we can imagine
 different routes that require a specific set of usernames, or we can add groups
 onto our user scheme and show different templates based on that.
 
+\clearpage
+
 The options are really almost limitless.
 
 \lstinputlisting[caption={Login logic}, language=Perl, firstline=11, lastline=35]{ex4_session.pl}
@@ -1358,6 +1380,8 @@ stay logged in.
 An important piece of our session management is the ability to logout.  This is
 done via HTML links.  Below we set the session expiration to a previous time
 and this resets the session.
+
+\clearpage
 
 \lstinputlisting[caption={Logout logic}, language=Perl, firstline=37, lastline=45]{ex4_session.pl}
 
@@ -1399,6 +1423,8 @@ not processed.
 
 \lstinputlisting[caption={Authentication start}, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
 
+\clearpage
+
 After validation, we authenticate the user.  If there are errors, then a
 similar scenario exists where the JSON is rendered and undef is returned.
 However, when the authentication succeeds, then "1" is returned and the 
@@ -1409,6 +1435,8 @@ children routes can be processed.
 Next, we have helpers for our CRUD datastore and the GET/POST routes that allow
 for data retrieval and modifications.
 
+\clearpage
+
 \lstinputlisting[caption={CRUD helpers}, language=Perl, firstline=59, lastline=84]{ex4_api.pl}
 
 The above are the INSERT and SELECT helpers.  Given how the insert helper returns \$c and
@@ -1418,9 +1446,13 @@ is a fluent interface to our datastore.
 After our helpers, we have the actual routes that manipulate data.  Note how straightforward
 it is to return JSON with something as simple as "\$c->render(json => ...)".
 
+\clearpage
+
 \lstinputlisting[caption={CRUD routes}, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
 
-That's basically it.  Below is a sample run via the command-line.
+That's basically it.  Next is a sample run via the command-line.
+
+\clearpage
 
 \begin{lstlisting}[style=BashOutputStyle]
 $ curl -v -X POST 'http://127.0.0.1:3000/v1/insert' --data '{"username":"fnord","api_key":"68b329da9893e34099c7d8ad5cb9c940","email":"a@a.com","key":"str","value":"hello_world"}'
