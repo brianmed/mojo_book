@@ -113,7 +113,7 @@ numbers=left}
 \markboth{\MakeUppercase{License}}{}
 \addcontentsline{toc}{chapter}{License}
 
-Please download and share this book unmodified. (The book is avalible under a
+Please download and share this book unmodified. (The book is available under a
 Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License.)
 
 https://creativecommons.org/licenses/by-nc-nd/3.0/
@@ -214,7 +214,7 @@ this system using "man perl" or "perldoc perl".  If you have access to the
 Internet, point your browser at http://www.perl.org/, the Perl Home Page.
 \end{lstlisting}
 
-For convience, a symlink can be added so that /opt/perl points to
+For convenience, a symlink can be added so that /opt/perl points to
 /opt/perl/5.20.1/bin/perl.
 
 \begin{lstlisting}[style=BashInputStyle]
@@ -318,7 +318,7 @@ After that our attention will be turned to apps and examples.
 
 As you know, web pages are loaded from a server. When you go to domain.com,
 then the default HTML is loaded using HTTP.  As you will see, the transfer, or
-request, from the web browser client (aka UserAgent) to the server can be
+request, from the web browser client (aka user agent) to the server can be
 considered a file transfer. For example, when http://127.0.0.1:3000 was visited
 something like the following was sent from your browser to the server:
 
@@ -399,7 +399,7 @@ used and allows for intermixing Perl code with the template.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_2.pl}
 
-Once ran via morbo we can click the "carpe" link and get dynamic feedback from our web server.
+Once run via morbo we can click the "carpe" link and get dynamic feedback from our web server.
 
 \section{Logging}
 
@@ -468,16 +468,16 @@ application.
 Templates are the bread and butter of dynamic content generation.  They take
 input from the controller and load that into a templating system to create
 content.  The content is usually a web page with HTML, CSS, and Javascript.
-However, there are other possibilites, as well, such as text, xls, and pdf.
+However, there are other possibilities, as well, such as text, XML, and pdf.
 
 The input from the controller is placed in a "stash" data structure.  There are
-a few ways to setup this data structure.  One approach is to use the "stash"
+a few ways to set up this data structure.  One approach is to use the "stash"
 controller method.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_4.pl}
 
-For example, in line \ref{_ex2_4_stash} of ex2\_4.pl we set the "name" stash 
-parameter which will be available in the templates.  Specifically, at line 
+For example, in line \ref{_ex2_4_stash} of ex2\_4.pl we set the "name" stash
+parameter which will be available in the templates.  Specifically, at line
 \ref{_ex2_4_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
 
@@ -494,7 +494,7 @@ full blown application features of Mojolicious.  An application of this type
 can be started with:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ mojo generate app Photo           
+$ mojo generate app Photo
 \end{lstlisting}
 
 \begin{lstlisting}[style=BashOutputStyle]
@@ -528,7 +528,7 @@ $ git clone git@github.com:brianmed/mojo_book.git
 $ cd mojo_book
 \end{lstlisting}
 
-The app is runable via:
+The app is runnable via:
 
 \begin{lstlisting}[style=BashInputStyle]
 $ cd photo
@@ -539,7 +539,7 @@ When we point our browser to http://127.0.0.1:3000 we'll get our app.  As you
 can see, our version is in /opt/mojo\_book/photo and expects its config file to
 be in /opt/photo.
 
-After the config file has been setup, we can run our app via "script/photo";
+After the config file has been set up, we can run our app via "script/photo";
 this is a Perl script that bootstraps our app.  Most of the time you won't need
 to modify this; however, if module directories are needed, then "use lib" statements
 can be put here.
@@ -559,7 +559,7 @@ from lib/Photo.pm our route for the index page is setup.
 When a user agent does a GET /, then Photo::Controller::Index::slash will be
 called and the slash.html.ep file will be served.
 
-Given that, lets go back and disect Photo::startup one "section" at a time.
+Given that, lets go back and dissect Photo::startup one "section" at a time.
 
 First, we turn on development logging for when we are running in production
 mode.  This is a convenience for early stage production or when debugging
@@ -575,7 +575,7 @@ config file.  Below is an example config file.
 \lstinputlisting[basicstyle=\LSTfont]{photo.config}
 
 The next setup phase is to initialize the secret passphrase.  Multiple
-passphrases are supported that allows for phasing out an old passphrase.  These
+passphrases are supported to allow for phasing out an old passphrase.  These
 passphrases are used for things like signed cookies (which are used in the
 sessions).
 
@@ -593,7 +593,7 @@ sessions).
 %%% The next piece setup is hypnotoad and we will defer that till we talk about
 %%% deployment.
 
-After our passphrase we setup our routes; an "under" nested route that verifies
+After our passphrase we set up our routes; an "under" nested route that verifies
 the session; and route setup itself.  At line 15 the "entry" point to our app
 from the user agent is defined - namely the initial page.  It should be noted
 that we can define "get" and "post" for these routes.  
@@ -625,7 +625,7 @@ The above app logic is shown in the code below.
 \subsection{Controller}
 
 A controller encapsulates the business logic for our website.  Fine grained
-control can be exerted over the app by using pacakages and subs.  One package
+control can be exerted over the app by using packages and subs.  One package
 can control the "main" page with login and logout and other packages can focus
 on other sub systems of our app.
 
@@ -668,7 +668,7 @@ That's all you got to do, and you get:
 
 {\Large Photo}
 
-Initialy, no photo albums exist in the model.
+Initially, no photo albums exist in the model.
 
 Given that, the landing page redirects the user to an action that creates an
 album.  This action is not in Photo::Controller::Album, it uses automatic
@@ -788,7 +788,7 @@ src for the img tag. Without it, it would be difficult to have pictures.
 
 Finally, we the left and right arrows over the image if there is more than photo.
 
-Ok!  We've done a lot and have a bit more to go.  We should talk about the file upload
+OK!  We've done a lot and have a bit more to go.  We should talk about the file upload
 and img src tag routes.  Below is the form code that will POST to our upload route.
 
 \lstinputlisting[basicstyle=\LSTfont, numbers=none, language=Html, firstline=38, lastline=38]{photo/templates/album/show.html.ep}
@@ -842,7 +842,7 @@ $ morbo -v script/blog
 \end{lstlisting}
 
 This app should feel similar to the Photo app; so, we won't repeat very much of
-the information that can be retrieved from there.  Below we start examing the
+the information that can be retrieved from there.  Below we start examining the
 unique aspects of the startup routine.
 
 \subsection{Startup}
@@ -890,7 +890,7 @@ Our blog begins here:
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=11, lastline=14]{blog/lib/Blog/Controller/Posts.pm}
 
-Line 3 is where the magick happens. We use the \textit{posts} helper and call
+Line 3 is where the magic happens. We use the \textit{posts} helper and call
 the \textit{all} sub in the Blog::Model::Posts package.  
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=12, lastline=12]{blog/lib/Blog/Model/Posts.pm}
@@ -966,7 +966,7 @@ needs no app logic executed in the controller.
 The heart of our app is the websocket connection.  This does several things:
 
 \begin{itemize} \itemsep1pt \parskip0pt \parsep0pt
-\item \verb|Setup the connection|
+\item \verb|Set up the connection|
 \item \verb|Identify the connection|
 \item \verb|Sends status notifications|
 \item \verb|Forwards messages via pubsub|
@@ -981,7 +981,7 @@ steady\_time provides.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=14, lastline=21]{chat/chat.pl}
 
-Next we setup a recurring timer that will send a message every 10 seconds to
+Next we set up a recurring timer that will send a message every 10 seconds to
 the websocket connection.  This type of app logic is very powerful and there
 are a variety of possibilities with websockets, event loops (IOLoop),
 databases, and the async feature set of Mojolicious which will allow realizing
@@ -1105,14 +1105,14 @@ does several things, which are:
 \end{itemize}
 
 Below is the validation.  Note how the controller object (\$c) has a req object
-which includes the json already parsed.  Also, our under renders and returns
+which includes the JSON already parsed.  Also, our under renders and returns
 undef so that the user is presented with their JSON and the child routes are
 not processed.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
 
 After validation, we authenticate the user.  If there are errors, then a
-similar scenario exists where the json is rendered and undef is returned.
+similar scenario exists where the JSON is rendered and undef is returned.
 However, when the authentication succeeds, then "1" is returned and the 
 children routes can be processed.
 
@@ -1130,7 +1130,7 @@ is a fluent interface to our datastore.
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
 
 After our helpers, we have the actual routes that manipulate data.  Note how straightforward
-it is to return json with something as simple as "\$c->render(json => ...)".
+it is to return JSON with something as simple as "\$c->render(json => ...)".
 
 That's basically it.  Below is a sample run via the command-line.
 
@@ -1181,7 +1181,7 @@ Our next example was lifted from the Mojolicious Cookbook.  The cookbook has a
 plethora of examples and other goodness.  The example we are focusing on is
 synchronizing api calls in a non-blocking fashion.
 
-What we are going to do is searh metacpan with a couple queries in a
+What we are going to do is search metacpan with a couple queries in a
 non-blocking fashion.
 
 The first bit is the delay.  This is methodology for orchestrating callbacks.  Simply do
