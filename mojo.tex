@@ -318,7 +318,7 @@ After that our attention will be turned to apps and examples.
 
 As you know, web pages are loaded from a server. When you go to domain.com,
 then the default HTML is loaded using HTTP.  As you will see, the transfer, or
-request, from the web browser client (aka UserAgent) to the server can be
+request, from the web browser client (aka user agent) to the server can be
 considered a file transfer. For example, when http://127.0.0.1:3000 was visited
 something like the following was sent from your browser to the server:
 
@@ -468,7 +468,7 @@ application.
 Templates are the bread and butter of dynamic content generation.  They take
 input from the controller and load that into a templating system to create
 content.  The content is usually a web page with HTML, CSS, and Javascript.
-However, there are other possibilites, as well, such as text, xls, and pdf.
+However, there are other possibilities, as well, such as text, XML, and pdf.
 
 The input from the controller is placed in a "stash" data structure.  There are
 a few ways to set up this data structure.  One approach is to use the "stash"
@@ -476,8 +476,8 @@ controller method.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl]{ex2_4.pl}
 
-For example, in line \ref{_ex2_4_stash} of ex2\_4.pl we set the "name" stash 
-parameter which will be available in the templates.  Specifically, at line 
+For example, in line \ref{_ex2_4_stash} of ex2\_4.pl we set the "name" stash
+parameter which will be available in the templates.  Specifically, at line
 \ref{_ex2_4_stash_usage} the "stash" helper is used to dynamically adjust
 the template output.
 
@@ -494,7 +494,7 @@ full blown application features of Mojolicious.  An application of this type
 can be started with:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ mojo generate app Photo           
+$ mojo generate app Photo
 \end{lstlisting}
 
 \begin{lstlisting}[style=BashOutputStyle]
@@ -539,7 +539,7 @@ When we point our browser to http://127.0.0.1:3000 we'll get our app.  As you
 can see, our version is in /opt/mojo\_book/photo and expects its config file to
 be in /opt/photo.
 
-After the config file has been setup, we can run our app via "script/photo";
+After the config file has been set up, we can run our app via "script/photo";
 this is a Perl script that bootstraps our app.  Most of the time you won't need
 to modify this; however, if module directories are needed, then "use lib" statements
 can be put here.
@@ -559,7 +559,7 @@ from lib/Photo.pm our route for the index page is setup.
 When a user agent does a GET /, then Photo::Controller::Index::slash will be
 called and the slash.html.ep file will be served.
 
-Given that, lets go back and disect Photo::startup one "section" at a time.
+Given that, lets go back and dissect Photo::startup one "section" at a time.
 
 First, we turn on development logging for when we are running in production
 mode.  This is a convenience for early stage production or when debugging
@@ -575,7 +575,7 @@ config file.  Below is an example config file.
 \lstinputlisting[basicstyle=\LSTfont]{photo.config}
 
 The next setup phase is to initialize the secret passphrase.  Multiple
-passphrases are supported that allows for phasing out an old passphrase.  These
+passphrases are supported to allow for phasing out an old passphrase.  These
 passphrases are used for things like signed cookies (which are used in the
 sessions).
 
@@ -842,7 +842,7 @@ $ morbo -v script/blog
 \end{lstlisting}
 
 This app should feel similar to the Photo app; so, we won't repeat very much of
-the information that can be retrieved from there.  Below we start examing the
+the information that can be retrieved from there.  Below we start examining the
 unique aspects of the startup routine.
 
 \subsection{Startup}
@@ -1105,14 +1105,14 @@ does several things, which are:
 \end{itemize}
 
 Below is the validation.  Note how the controller object (\$c) has a req object
-which includes the json already parsed.  Also, our under renders and returns
+which includes the JSON already parsed.  Also, our under renders and returns
 undef so that the user is presented with their JSON and the child routes are
 not processed.
 
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
 
 After validation, we authenticate the user.  If there are errors, then a
-similar scenario exists where the json is rendered and undef is returned.
+similar scenario exists where the JSON is rendered and undef is returned.
 However, when the authentication succeeds, then "1" is returned and the 
 children routes can be processed.
 
@@ -1130,7 +1130,7 @@ is a fluent interface to our datastore.
 \lstinputlisting[basicstyle=\LSTfont, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
 
 After our helpers, we have the actual routes that manipulate data.  Note how straightforward
-it is to return json with something as simple as "\$c->render(json => ...)".
+it is to return JSON with something as simple as "\$c->render(json => ...)".
 
 That's basically it.  Below is a sample run via the command-line.
 
@@ -1181,7 +1181,7 @@ Our next example was lifted from the Mojolicious Cookbook.  The cookbook has a
 plethora of examples and other goodness.  The example we are focusing on is
 synchronizing api calls in a non-blocking fashion.
 
-What we are going to do is searh metacpan with a couple queries in a
+What we are going to do is search metacpan with a couple queries in a
 non-blocking fashion.
 
 The first bit is the delay.  This is methodology for orchestrating callbacks.  Simply do
