@@ -2,26 +2,25 @@
 
 use Mojolicious::Lite;
 
-get '/' => sub {
-    my $self = shift;
-
-    $self->render("slash");
-};
+# Present form
+get '/' => "slash"; #*\label{_ex2_5_index}*)
 
 post '/' => sub {
     my $self = shift;
 
-    if ("Bender" eq $self->param("name")) {
+    # Process
+    if ("Bender" eq $self->param("name")) { #*\label{_ex2_5_process}*)
         $self->redirect_to("/bender");
 
         return;
     }
 
-    $self->flash(error => "Not bender");
-    $self->redirect_to("/");
+    # Error
+    $self->flash(error => "Not bender"); #*\label{_ex2_5_flash}*)
+    $self->redirect_to("/"); #*\label{_ex2_5_error}*)
 };
 
-get '/bender';
+get '/bender'; #*\label{_ex2_5_success}*)
 
 app->start;
 
@@ -29,11 +28,11 @@ __DATA__
 
 @@ slash.html.ep
 
-% if (flash("error")) {
+% if (flash("error")) {  # #*\label{_ex2_5_flash_usage}*)
     <%= flash("error") %><br>
 % }
 
-<form method=post action="/">
+<form method=post action="/"> %# #*\label{_ex2_5_action}*)
 Name: <input type=text name=name>
 </form>
 

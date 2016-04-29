@@ -501,11 +501,9 @@ page has been visted.  Please note that there the Set-Cookie header in the respo
 is parsed by curl and saved into the file "jar".
 
 \begin{lstlisting}[style=BashOutputStyle]
-$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3001/
-*   Trying 127.0.0.1...
-* Connected to 127.0.0.1 (127.0.0.1) port 3001 (#0)
+$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3000/
 > GET / HTTP/1.1
-> Host: 127.0.0.1:3001
+> Host: 127.0.0.1:3000
 > User-Agent: curl/7.43.0
 > Accept: */*
 > 
@@ -525,11 +523,9 @@ can retrieve the value(s) that were saved earlier.  This cookie is then made ava
 session object for the route.
 
 \begin{lstlisting}[style=BashOutputStyle]
-$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3001/
-*   Trying 127.0.0.1...
-* Connected to 127.0.0.1 (127.0.0.1) port 3001 (#0)
+$ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3000/
 > GET / HTTP/1.1
-> Host: 127.0.0.1:3001
+> Host: 127.0.0.1:3000
 > User-Agent: curl/7.43.0
 > Accept: */*
 > Cookie: mojolicious=eyJleHBpcmVzIjoxNDYxODk4NzQ3LCJjb3VudCI6MX0---72e64d66da00d8ca1f80ee4f8384f0957612188d
@@ -543,7 +539,6 @@ $ curl -v --cookie jar --cookie-jar jar http://127.0.0.1:3001/
 < Date: Fri, 29 Apr 2016 01:59:09 GMT
 < 
     You have visted 2 times.
-* Connection #0 to host 127.0.0.1 left intact
 \end{lstlisting}
 
 Do you see the message that we visited the index page twice?  Our cookie jar
@@ -554,8 +549,106 @@ request.
 
 {\Large User Input}
 
-Without user input the web would be boring.  We need the user's data so that
-we can do meaningful work.  A large percentage of user data originates from forms.
+Without user input the web would be boring.  We need the user's data so that we
+can do meaningful work.  A large percentage of user data originates from forms.
+For this section, lets look at the example in different parts.  First, we'll
+have our application logic, and next we'll look at the templates.
+
+The application logic displays the form at line \ref{_ex2_5_index}; processes
+our form at line \ref{_ex2_5_process}; and either displays an error, or success
+at lines \ref{_ex2_5_error} and \ref{_ex2_5_success}.
+
+\lstinputlisting[caption={Application logic}, language=Perl, firstline=5, lastline=23]{ex2_5.pl}
+
+We use the flash for presenting any error message during form processing.  The
+flash is set at line \ref{_ex2_5_flash} and its value is used in the template.
+The flash is a methodology for passing a value from one request to another and
+only lasts for that one request.
+
+This is perfect for passing success, informational, and error messages between
+requests - such as what is done at line \ref{_ex2_5_flash_usage} below.
+
+One more thing to note is that in our <form> we have an "action" attribute.
+With this we set the destination of our POST request.  Very important so that
+data shows up at the proper spot.
+
+\lstinputlisting[caption={Templates}, language=Perl, firstline=29, lastline=41]{ex2_5.pl}
+
+Now, lets examine exactly what happens when we use our form. 
+
+Using curl, we're going to request our form, and then submit the form.  The initial
+request is shown below.  This is exactly as if typing "http://127.0.0.1:3000" in the
+URL bar and then hitting enter.
+
+This will send off a GET request to the server which responds with our form.
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ curl -v http://127.0.0.1:3000/
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET / HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Content-Length: 73
+< Server: Mojolicious (Perl)
+< Date: Fri, 29 Apr 2016 03:02:40 GMT
+< Content-Type: text/html;charset=UTF-8
+< 
+
+<form method=post action="/">
+Name: <input type=text name=name>
+</form>
+\end{lstlisting}
+
+The next command will simulate sending filling out the form with "Bender" and
+pressing enter.  Note how the curl request is now a POST.  This queues our
+application logic to process the 'post => "/"' route.  The route verifies the
+user input (that name does, in fact, equal "Bender") and redirects us onto
+success route.
+
+Note the use of 302 Found redirection logic.
+
+This is a separate request that the user agent must follow in order to complete
+the form.
+
+\begin{lstlisting}[style=BashOutputStyle]
+$ curl -v -L -d 'name=Bender' http://127.0.0.1:3000/
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> POST / HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> Content-Length: 11
+> Content-Type: application/x-www-form-urlencoded
+> 
+< HTTP/1.1 302 Found
+< Location: /bender
+< Date: Fri, 29 Apr 2016 03:06:38 GMT
+< Content-Length: 0
+< Server: Mojolicious (Perl)
+< 
+* Connection #0 to host 127.0.0.1 left intact
+* Issue another request to this URL: 'http://127.0.0.1:3000/bender'
+* Switch from POST to GET
+* Re-using existing connection! (#0) with host 127.0.0.1
+* Connected to 127.0.0.1 (127.0.0.1) port 3000 (#0)
+> GET /bender HTTP/1.1
+> Host: 127.0.0.1:3000
+> User-Agent: curl/7.43.0
+> Accept: */*
+> 
+< HTTP/1.1 200 OK
+< Date: Fri, 29 Apr 2016 03:06:38 GMT
+< Content-Length: 9
+< Server: Mojolicious (Perl)
+< Content-Type: text/html;charset=UTF-8
+< 
+Awesome!
+\end{lstlisting}
+
+We have achieved Awesome via our form processing.
 
 \stepcounter{chapter}
 \chapter*{Mojolicious Applications}
