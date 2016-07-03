@@ -28,11 +28,11 @@ __DATA__
 
 @@ slash.html.ep
 
-% if (flash("error")) {  # #*\label{_ex2_6_flash_usage}*)
+% if (flash("error")) {  #*\label{_ex2_6_flash_usage}*)
     <%= flash("error") %><br>
 % }
 
-<form method=post action="/"> %# #*\label{_ex2_6_action}*)
+<form method=post action="/"> #*\label{_ex2_6_action}*)
 Name: <input type=text name=name>
 </form>
 
