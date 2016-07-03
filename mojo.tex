@@ -790,21 +790,21 @@ $ mojo generate app Photo
 \end{lstlisting}
 
 \begin{lstlisting}[style=BashOutputStyle]
-  [mkdir] /opt/photo/script
-  [write] /opt/photo/script/photo
-  [chmod] /opt/photo/script/photo 744
-  [mkdir] /opt/photo/lib
-  [write] /opt/photo/lib/Photo.pm
-  [mkdir] /opt/photo/lib/Photo/Controller
-  [write] /opt/photo/lib/Photo/Controller/Example.pm
-  [mkdir] /opt/photo/t
-  [write] /opt/photo/t/basic.t
-  [mkdir] /opt/photo/public
-  [write] /opt/photo/public/index.html
-  [mkdir] /opt/photo/templates/layouts
-  [write] /opt/photo/templates/layouts/default.html.ep
-  [mkdir] /opt/photo/templates/example
-  [write] /opt/photo/templates/example/welcome.html.ep
+  [mkdir] /.../photo/script
+  [write] /.../photo/script/photo
+  [chmod] /.../photo/script/photo 744
+  [mkdir] /.../photo/lib
+  [write] /.../photo/lib/Photo.pm
+  [mkdir] /.../photo/lib/Photo/Controller
+  [write] /.../photo/lib/Photo/Controller/Example.pm
+  [mkdir] /.../photo/t
+  [write] /.../photo/t/basic.t
+  [mkdir] /.../photo/public
+  [write] /.../photo/public/index.html
+  [mkdir] /.../photo/templates/layouts
+  [write] /.../photo/templates/layouts/default.html.ep
+  [mkdir] /.../photo/templates/example
+  [write] /.../photo/templates/example/welcome.html.ep
 \end{lstlisting}
 
 As you can see, it has an invocation script, startup package (lib/Example.pm),
@@ -815,7 +815,7 @@ However, starting from scratch is not necessary; we are going to use the git
 checkout of this book which includes all the code for our Photo app.
 
 \begin{lstlisting}[style=BashOutputStyle]
-$ cd /opt
+$ cd ~
 $ git clone git@github.com:brianmed/mojo_book.git
 $ cd mojo_book
 \end{lstlisting}
@@ -828,8 +828,8 @@ $ morbo -v script/photo
 \end{lstlisting}
 
 When we point our browser to http://127.0.0.1:3000 we'll get our app.  As you
-can see, our version is in /opt/mojo\_book/photo and expects its config file to
-be in /opt/photo.
+can see, our version is in ~/mojo\_book/photo and expects its config file to
+be in ~/photo.
 
 After the config file has been set up, we can run our app via "script/photo";
 this is a Perl script that bootstraps our app.  Most of the time you won't need
@@ -1127,7 +1127,7 @@ helpers and database usage into our bag of tricks.
 The code is available via git:
 
 \begin{lstlisting}[style=BashOutputStyle]
-$ cd /opt
+$ cd ~
 $ git clone git@github.com:brianmed/mojo_book.git
 \end{lstlisting}
 
@@ -1235,7 +1235,7 @@ a Mojolicious::Lite app that in around 80 lines has...
 The code is available via git:
 
 \begin{lstlisting}[style=BashOutputStyle]
-$ cd /opt
+$ cd ~
 $ git clone git@github.com:brianmed/mojo_book.git
 \end{lstlisting}
 
