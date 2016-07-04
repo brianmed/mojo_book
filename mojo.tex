@@ -1076,6 +1076,8 @@ used to populate our class.
 
 \lstinputlisting[caption={Dot code - templates/album/show.html.ep}, language=Html, firstline=87, lastline=90]{photo/templates/album/show.html.ep}
 
+\clearpage
+
 The next snippet displays the pictures. The line at \ref{_form_url_for} provides the 
 src for the img tag. Without it, it would be difficult to have pictures.
 
@@ -1310,6 +1312,8 @@ couple lines of code we have realized the bulk of our chat app.
 The next bit gracefully closes our connection.  We stop listening for chat
 messages; remove ourselves from the pool of connected users; and stop the
 recurring timer.
+
+\clearpage
 
 \lstinputlisting[caption={Cleanup - chat.pl}, language=Perl, firstline=53, lastline=62]{chat/chat.pl}
 
@@ -1568,6 +1572,8 @@ references for our delay method.  The first sub initiates a non-blocking
 request with ip-api.com.
 
 \lstinputlisting[caption={Lat/Lon - ex4\_cli.pl}, basicstyle=\LSTfont, language=Perl, firstline=10, lastline=17]{ex4_cli.pl}
+
+\clearpage
 
 And then we set up the query for the final GET request that retrieves the
 weather.  Note how the transaction from the previous request is available in
