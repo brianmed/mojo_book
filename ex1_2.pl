@@ -18,6 +18,6 @@ __DATA__
     <title>Hello World</title>
 </head>
 <body>
-    Hello world<br> %# Edit here #*\label{_ex1_2_add_line_here}*)
+    Hello world<br> <%# Edit here #*\label{_ex1_2_add_line_here}*) %>
 </body>
 </html>
