@@ -393,7 +393,7 @@ following request would be sent to the server:
 
 And the route below would be used.
 
-\lstinputlisting[caption={Index Route}, language=Perl, firstline=3, lastline=7]{ex2_1.pl}
+\lstinputlisting[caption={Index Route - ex2\_1.pl}, language=Perl, firstline=3, lastline=7]{ex2_1.pl}
 
 The \textbf{get '/'} will redirect the \textbf{HTTP GET /} request to the
 anonymous subroutine shown. It should be noted that a GET and POST can be
@@ -679,7 +679,7 @@ The application logic displays the form at line \ref{_ex2_6_index}; processes
 our form at line \ref{_ex2_6_process}; and either displays an error, or success
 at lines \ref{_ex2_6_error} and \ref{_ex2_6_success}.
 
-\lstinputlisting[caption={Application logic}, language=Perl, firstline=5, lastline=23]{ex2_6.pl}
+\lstinputlisting[caption={Application logic - ex2\_6.pl}, language=Perl, firstline=5, lastline=23]{ex2_6.pl}
 
 We use the flash for presenting any error message during form processing.  The
 flash is set at line \ref{_ex2_6_flash} and its value is used in the template.
@@ -695,7 +695,7 @@ data shows up at the proper spot.
 
 \clearpage
 
-\lstinputlisting[caption={Templates}, language=Perl, firstline=29, lastline=41]{ex2_6.pl}
+\lstinputlisting[caption={Templates - ex2\_6.pl}, language=Perl, firstline=29, lastline=41]{ex2_6.pl}
 
 Now, lets examine exactly what happens when we use our form. 
 
@@ -846,7 +846,7 @@ The startup method adds and configures plugins; sets up some logging; adds in
 helpers; and sets up routes.  For example, as you can see below in the line
 from lib/Photo.pm our route for the index page is set up.
 
-\lstinputlisting[caption={Index Route}, language=Perl, numbers=none, firstline=35, lastline=35]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Index Route - lib/Photo.pm}, language=Perl, numbers=none, firstline=35, lastline=35]{photo/lib/Photo.pm}
 
 When a user agent does a GET /, then Photo::Controller::Index::slash will be
 called and the slash.html.ep file will be served.
@@ -858,20 +858,20 @@ mode.  This is a convenience for early stage production or when debugging
 something.  Simply comment out for Production.  Next, we initialize the
 config data structure with a file.  These are lines 1 and 3 below.
 
-\lstinputlisting[caption={Setup}, language=Perl, firstline=8, lastline=10]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Setup - lib/Photo.pm}, language=Perl, firstline=8, lastline=10]{photo/lib/Photo.pm}
 
 This file is just a Perl data structure and can be hand edited or
 programmatically defined.  Another option is to use JSONConfig and a JSON
 config file.  Below is an example config file.
 
-\lstinputlisting[caption={Configuration}]{photo.config}
+\lstinputlisting[caption={Configuration - photo.config}]{photo.config}
 
 The next set up phase is to initialize the secret passphrase.  Multiple
 passphrases are supported that allows for phasing out an old passphrase.  These
 passphrases are used for things like signed cookies (which are used in the
 sessions).
 
-\lstinputlisting[caption={Secrets setup}, language=Perl, numbers=none, firstline=12, lastline=12]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Secrets setup - lib/Photo.pm}, language=Perl, numbers=none, firstline=12, lastline=12]{photo/lib/Photo.pm}
 
 % TODO use a database helper
 
@@ -890,7 +890,7 @@ the session; and route set up itself.  At line 15 the "entry" point to our app
 from the user agent is defined - namely the initial page.  It should be noted
 that we can define "get" and "post" for these routes.  
 
-\lstinputlisting[caption={Under route}, language=Perl, firstline=21, lastline=35]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Under route - lib/Photo.pm}, language=Perl, firstline=21, lastline=35]{photo/lib/Photo.pm}
 
 Arbitrary Perl (DB lookups, JSON parsing, file processing) can be put in the
 nested route.  If "1" is returned the child route will be allowed to run and if
@@ -904,7 +904,7 @@ In addition "any" is supported - which is useful for supporting GET and POST on
 the same route.  Below are a couple example routes.  One for GET and another
 for POST.
 
-\lstinputlisting[caption={Initial routes}, language=Perl, firstline=41, lastline=49]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Initial routes - lib/Photo.pm}, language=Perl, firstline=41, lastline=49]{photo/lib/Photo.pm}
 
 One thing that should be mentioned about our routes is that they have two modes of
 operation.  One is when we have no session and another is when there is a session.
@@ -914,7 +914,7 @@ landing page.
 
 The above app logic is shown in the code below.
 
-\lstinputlisting[caption={Session route}, language=Perl, firstline=51, lastline=54]{photo/lib/Photo.pm}
+\lstinputlisting[caption={Session route - lib/Photo.pm}, language=Perl, firstline=51, lastline=54]{photo/lib/Photo.pm}
 
 \subsection{Controller}
 
@@ -934,7 +934,7 @@ view a photo.
 The main page does several things - allow for viewing; selecting, or creating
 an album.  Below is the method responsible for all this.
 
-\lstinputlisting[caption={Landing page logic}, language=Perl, firstline=8, lastline=24]{photo/lib/Photo/Controller/Index.pm}
+\lstinputlisting[caption={Landing page logic - Photo/Controller/Index.pm}, language=Perl, firstline=8, lastline=24]{photo/lib/Photo/Controller/Index.pm}
 
 Code starting at line 4 checks to see if any albums have been created; if not,
 the user is redirected to /album/create.  In addition, we're using the handy
@@ -984,13 +984,13 @@ template is album/create.html.ep.
 The main things to note in this template are the error and form handling.  The
 error section is here:
 
-\lstinputlisting[caption={Error handling}, language=Html, firstline=13, lastline=24]{photo/templates/album/create.html.ep}
+\lstinputlisting[caption={Error handling - templates/album/create.html.ep}, language=Html, firstline=13, lastline=24]{photo/templates/album/create.html.ep}
 
 The main points are the \% to embed Perl code in the template sandbox and the
 flash usage.  The flash is persistent for one-request only and is stored in the
 session.  The error would come from the POST form action (shown below).
 
-\lstinputlisting[caption={Form start}, language=Html, firstline=29, lastline=29]{photo/templates/album/create.html.ep}
+\lstinputlisting[caption={Form start - templates/album/create.html.ep}, language=Html, firstline=29, lastline=29]{photo/templates/album/create.html.ep}
 
 The POST action Album::Controller::save does several things, most notably it
 validates the input, creates the album, and stores the album name in the session. 
@@ -1000,13 +1000,13 @@ error flag we redirect back to displaying the create view.
 
 \clearpage
 
-\lstinputlisting[caption={Switching albums error checking}, language=Perl, firstline=27, lastline=35]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Switching albums error checking - lib/Photo.pm}, language=Perl, firstline=27, lastline=35]{photo/lib/Photo/Controller/Album.pm}
 
 After the input checks are done and the album created, we switch to that album
 and redirect back to the landing page - which will detect the selected album
 and act appropriately.
 
-\lstinputlisting[caption={Switching albums logic}, language=Perl, firstline=53, lastline=57]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Switching albums logic - lib/Photo/Controller/Album.pm}, language=Perl, firstline=53, lastline=57]{photo/lib/Photo/Controller/Album.pm}
 
 Also, one thing to see that we have a "warn" in the code there. It's main
 purpose is to show that this is possible and will go the "console". For
@@ -1020,12 +1020,12 @@ view.  Below is how that is accomplished.
 
 It should be noted that we are able to pass an object to the view.
 
-\lstinputlisting[caption={Viewing albums}, language=Perl, firstline=17, lastline=19]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Viewing albums - lib/Photo/Controller/Album.pm}, language=Perl, firstline=17, lastline=19]{photo/lib/Photo/Controller/Album.pm}
 
 In addition, we put some debug information in the log to demonstrate how that
 operates.
 
-\lstinputlisting[caption={Debugging example}, language=Perl, firstline=15, lastline=15]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Debugging example - lib/Photo/Controller/Album.pm}, language=Perl, firstline=15, lastline=15]{photo/lib/Photo/Controller/Album.pm}
 
 Our template for this action (album/show.html.ep) does several things. In the
 HTML body we have our error handling, form to handle a new photo upload, button
@@ -1036,14 +1036,14 @@ photos to view and the second is when we have a photo.
 
 The form code is shown below.
 
-\lstinputlisting[caption={Form setup}, language=Html, firstline=38, lastline=67]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Form setup - templates/album/show.html.ep}, language=Html, firstline=38, lastline=67]{photo/templates/album/show.html.ep}
 
 At line \ref{_form_start} we specify action that will happen when we upload a
 file.  Line \ref{_form_object} is pretty cool because we're accessing a value in
 the stash that is an object.  Lines 13 to 15 process our album array to
 generate a pulldown for the user to select an album.  They are shown below.
 
-\lstinputlisting[caption={Album links}, language=Html, firstline=50, lastline=52]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Album links - templates/album/show.html.ep}, language=Html, firstline=50, lastline=52]{photo/templates/album/show.html.ep}
 
 The ability to intermix Perl loop and control structures with plain html is
 very powerful. As a specific example, the above allows us to iterate over an 
@@ -1051,7 +1051,7 @@ array of objects in the stash to create a portion of our html document.
 
 After our form, we process the HTML to display the album.  This is shown below.
 
-\begin{lstlisting}[caption={Display album}, language=Html]
+\begin{lstlisting}[caption={Display album - templates/album/show.html.ep}, language=Html]
     % if (0 == @{ stash('slots') }) {
         <div class="row">
             <div class="span12">
@@ -1074,21 +1074,21 @@ This snippet processes our album array and is used to give us a 'lil dot to
 click on to maneuver through the pics.  Of note is how the \$active variable is
 used to populate our class.
 
-\lstinputlisting[caption={Dot code}, language=Html, firstline=87, lastline=90]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Dot code - templates/album/show.html.ep}, language=Html, firstline=87, lastline=90]{photo/templates/album/show.html.ep}
 
 The next snippet displays the pictures. The line at \ref{_form_url_for} provides the 
 src for the img tag. Without it, it would be difficult to have pictures.
 
-\lstinputlisting[caption={Display pictures}, language=Html, firstline=93, lastline=108]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Display pictures - templates/album/show.html.ep}, language=Html, firstline=93, lastline=108]{photo/templates/album/show.html.ep}
 
 Finally, we the left and right arrows over the image if there is more than photo.
 
-\lstinputlisting[caption={Navigation}, numbers=none, language=Html, firstline=110, lastline=113]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Navigation - templates/album/show.html.ep}, numbers=none, language=Html, firstline=110, lastline=113]{photo/templates/album/show.html.ep}
 
 OK!  We've done a lot and have a bit more to go.  We should talk about the file upload
 and img src tag routes.  Below is the form code that will POST to our upload route.
 
-\lstinputlisting[caption={Upload form}, numbers=none, language=Html, firstline=38, lastline=38]{photo/templates/album/show.html.ep}
+\lstinputlisting[caption={Upload form - templates/album/show.html.ep}, numbers=none, language=Html, firstline=38, lastline=38]{photo/templates/album/show.html.ep}
 
 The upload action is this sub: Photo::Controller::Album::upload.  This does
 some validation, creates a photo album object, and then stores the photo in a
@@ -1098,7 +1098,7 @@ and the other being the image itself.
 
 The img src tag route, which is the Photo::Controller::Album::photo sub is shown below.
 
-\lstinputlisting[caption={Display photo}, language=Perl, firstline=131, lastline=142]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Display photo - lib/Photo/Controller/Album.pm}, language=Perl, firstline=131, lastline=142]{photo/lib/Photo/Controller/Album.pm}
 
 This retrieves our selected album, gets the photo in a particular slot, and
 then sets our reply to use that file. At line \ref{_photo_session} is where the
@@ -1112,7 +1112,7 @@ The last bit of code is used to manually switch to a different album. It's main 
 is when the session expires and the user has to choose an album, again.  The code is
 below.
 
-\lstinputlisting[caption={Switch albums}, language=Perl, firstline=60, lastline=78]{photo/lib/Photo/Controller/Album.pm}
+\lstinputlisting[caption={Switch albums - lib/Photo/Controller/Album.pm}, language=Perl, firstline=60, lastline=78]{photo/lib/Photo/Controller/Album.pm}
 
 If we've been given a name from the view, then we save the album name in the session and
 redirect back to the landing page.  This should then do another redirect back to the
@@ -1129,6 +1129,12 @@ The code is available via git:
 \begin{lstlisting}[style=BashOutputStyle]
 $ cd ~
 $ git clone git@github.com:brianmed/mojo_book.git
+\end{lstlisting}
+
+We'll will need the Mojo::SQLite CPAN module for this, so lets cpanm the module:
+
+\begin{lstlisting}[style=BashInputStyle]
+$ /opt/perl-5.20.1/bin/cpanm Mojo::SQLite
 \end{lstlisting}
 
 The app is runnable via:
@@ -1149,7 +1155,7 @@ natural place for adding our database set up.  This is accomplished with
 helpers. These are code blocks that are available to the controller and
 templates.
 
-\lstinputlisting[caption={Helpers}, language=Perl, firstline=14, lastline=17]{blog/lib/Blog.pm}
+\lstinputlisting[caption={Helpers - lib/Blog.pm}, language=Perl, firstline=14, lastline=17]{blog/lib/Blog.pm}
 
 In Line 2 we use the app object and create a helper.  The state variable will
 persist in the process and a Mojo::SQLite object will be available.  Given
@@ -1162,11 +1168,11 @@ The code below will create and version control a database.  Super sweet.  A
 very minimal, yet versatile file format is used for this versioning and
 creation.
 
-\lstinputlisting[caption={Migration Logic}, language=Perl, firstline=19, lastline=21]{blog/lib/Blog.pm}
+\lstinputlisting[caption={Migration Logic - lib/Blog.pm}, language=Perl, firstline=19, lastline=21]{blog/lib/Blog.pm}
 
 Below is the actual migration file contents.
 
-\lstinputlisting[caption={Migration SQL}, language=SQL, firstline=1, lastline=9]{blog/migrations/blog.sql}
+\lstinputlisting[caption={Migration SQL - migrations/blog.sql}, language=SQL, firstline=1, lastline=9]{blog/migrations/blog.sql}
 
 This syntax uses SQL comments with metadata for versioning.  The  \textit{1 up}
 is used when going from version 0 --> 1.  And, the \textit{1 down} is used when
@@ -1174,7 +1180,7 @@ going from 1 --> 0.
 
 The routes are very similar to the Blog app and are listed below.
 
-\lstinputlisting[caption={Blog routes}, language=Perl, firstline=23, lastline=32]{blog/lib/Blog.pm}
+\lstinputlisting[caption={Blog routes - lib/Blog.pm}, language=Perl, firstline=23, lastline=32]{blog/lib/Blog.pm}
 
 There are; however, a few key differences.  The / route (index) shows how an
 anonymous sub can be used instead of a package.  Also, the succinct format of
@@ -1187,19 +1193,19 @@ the / route uses \textit{redirect->to('\textbf{posts}')}.
 
 Our blog begins here:
 
-\lstinputlisting[caption={Initial route}, language=Perl, firstline=11, lastline=14]{blog/lib/Blog/Controller/Posts.pm}
+\lstinputlisting[caption={Initial route - lib/Blog/Controller/Posts.pm}, language=Perl, firstline=11, lastline=14]{blog/lib/Blog/Controller/Posts.pm}
 
 Line 3 is where the magic happens. We use the \textit{posts} helper and call
 the \textit{all} sub in the Blog::Model::Posts package.  
 
 This returns an array of posts which the template then processes.
 
-\lstinputlisting[caption={Posts SQL}, language=Perl, firstline=12, lastline=12]{blog/lib/Blog/Model/Posts.pm}
+\lstinputlisting[caption={Posts SQL - lib/Blog/Model/Posts.pm}, language=Perl, firstline=12, lastline=12]{blog/lib/Blog/Model/Posts.pm}
 
 The template is below and uses a layout for making templates with a common
 structure easier (e.g. HTML documents).
 
-\lstinputlisting[caption={Post template}, language=HTML]{blog/templates/posts/index.html.ep}
+\lstinputlisting[caption={Post template - templates/posts/index.html.ep}, language=HTML]{blog/templates/posts/index.html.ep}
 
 As you can tell, line 2 processes our array and creates the post listings.  Our
 layout, listed below, allows for rapid and concise construction of a plethora
@@ -1207,7 +1213,7 @@ of templates.
 
 \clearpage
 
-\lstinputlisting[caption={Blog layout}, language=HTML]{blog/templates/layouts/blog.html.ep}
+\lstinputlisting[caption={Blog layout - templates/layouts/blog.html.ep}, language=HTML]{blog/templates/layouts/blog.html.ep}
 
 Line 17 is where the content from the \textit{calling} template is inserted.
 
@@ -1216,7 +1222,7 @@ uses the named route \textbf{show\_post}.  This creates the blog listing.
 
 All that in one line 'o code:
 
-\lstinputlisting[caption={Blog posts rendering}, language=Perl, firstline=13, lastline=13]{blog/lib/Blog/Controller/Posts.pm}
+\lstinputlisting[caption={Blog posts rendering - lib/Blog/Controller/Posts.pm}, language=Perl, firstline=13, lastline=13]{blog/lib/Blog/Controller/Posts.pm}
 
 \section{Chat app}
 
@@ -1252,17 +1258,17 @@ number of connected users.
 
 This is reflected in the lines below.
 
-\lstinputlisting[caption={Chat database}, language=Perl, firstline=6, lastline=10]{chat/chat.pl}
+\lstinputlisting[caption={Chat database - chat.pl}, language=Perl, firstline=6, lastline=10]{chat/chat.pl}
 
 Next, our index page is configured via..
 
-\lstinputlisting[caption={Index route}, language=Perl, firstline=12, lastline=12]{chat/chat.pl}
+\lstinputlisting[caption={Index route - chat.pl}, language=Perl, firstline=12, lastline=12]{chat/chat.pl}
 
 \clearpage
 
 And, uses the template here:
 
-\lstinputlisting[caption={Chat logic}, language=HTML, numbers=none, firstline=71, lastline=80]{chat/chat.pl}
+\lstinputlisting[caption={Chat logic - chat.pl}, language=HTML, numbers=none, firstline=71, lastline=80]{chat/chat.pl}
 
 This is a very succinct way to express which template goes with a route that
 needs no app logic executed in the controller.
@@ -1283,7 +1289,7 @@ First, we configure the connection and then we identify the connection
 uniquely.  The unique connection is identified with the monotonic time that
 steady\_time provides.
 
-\lstinputlisting[caption={Websocket route}, language=Perl, firstline=14, lastline=21]{chat/chat.pl}
+\lstinputlisting[caption={Websocket route - chat.pl}, language=Perl, firstline=14, lastline=21]{chat/chat.pl}
 
 Next we set up a recurring timer that will send a message every 10 seconds to
 the websocket connection.  This type of app logic is very powerful and there
@@ -1291,12 +1297,12 @@ are a variety of possibilities with websockets, event loops (IOLoop),
 databases, and the async feature set of Mojolicious which will allow realizing
 amazing apps.
 
-\lstinputlisting[caption={Notifications}, language=Perl, firstline=23, lastline=45]{chat/chat.pl}
+\lstinputlisting[caption={Notifications - chat.pl}, language=Perl, firstline=23, lastline=45]{chat/chat.pl}
 
 The next bit 'o code will blast out and receive the chat messages via the
 pubsub capabilities of Mojo::SQLite and friends.
 
-\lstinputlisting[caption={PubSub}, language=Perl, firstline=47, lastline=51]{chat/chat.pl}
+\lstinputlisting[caption={PubSub - chat.pl}, language=Perl, firstline=47, lastline=51]{chat/chat.pl}
 
 The amount of expressiveness that Mojolicious provides is super cool.  In a
 couple lines of code we have realized the bulk of our chat app.
@@ -1305,11 +1311,11 @@ The next bit gracefully closes our connection.  We stop listening for chat
 messages; remove ourselves from the pool of connected users; and stop the
 recurring timer.
 
-\lstinputlisting[caption={Cleanup}, language=Perl, firstline=53, lastline=62]{chat/chat.pl}
+\lstinputlisting[caption={Cleanup - chat.pl}, language=Perl, firstline=53, lastline=62]{chat/chat.pl}
 
 Finally, our app announces its presensce via a DB call.
 
-\lstinputlisting[caption={Presence}, language=Perl, firstline=64, lastline=65]{chat/chat.pl}
+\lstinputlisting[caption={Presence - chat.pl}, language=Perl, firstline=64, lastline=65]{chat/chat.pl}
 
 One last thing that should be noted is that our current database calls block.
 
@@ -1327,13 +1333,13 @@ to the client.
 
 We check for the proper username and send back a 401 if not found.
 
-\lstinputlisting[caption={Authentication logic}, language=Perl, firstline=4, lastline=17]{ex4_basic.pl}
+\lstinputlisting[caption={Authentication logic - ex4\_basic.pl}, language=Perl, firstline=4, lastline=17]{ex4_basic.pl}
 
 \clearpage
 
 If Bender is found, then one of the GET requests are served..
 
-\lstinputlisting[caption={Protected content}, language=Perl, firstline=19, lastline=29]{ex4_basic.pl}
+\lstinputlisting[caption={Protected content - ex4\_basic.pl}, language=Perl, firstline=19, lastline=29]{ex4_basic.pl}
 
 The main thing to denote from this example is that Mojolicious makes your life
 easy with enough primitives that get out of your way so that development can happen 
@@ -1359,7 +1365,7 @@ non-trivial decision where we determine if the login page should be given for
 an already logged in person, the user gets redirected to the member area, or
 they get a real landing page.
 
-\lstinputlisting[caption={Initial route}, language=Perl, firstline=3, lastline=9]{ex4_session.pl}
+\lstinputlisting[caption={Initial route - ex4\_session.pl}, language=Perl, firstline=3, lastline=9]{ex4_session.pl}
 
 Our login logic is below.  The login GET request is just a template and
 processing via POST is where we do username authentication.  We don't really do
@@ -1371,7 +1377,7 @@ onto our user scheme and show different templates based on that.
 
 The options are really almost limitless.
 
-\lstinputlisting[caption={Login logic}, language=Perl, firstline=11, lastline=35]{ex4_session.pl}
+\lstinputlisting[caption={Login logic - ex4\_sesion.pl}, language=Perl, firstline=11, lastline=35]{ex4_session.pl}
 
 The final piece for our login scheme is that session expiration can be set
 programmatically.  This will give us the ability to set the time our user can
@@ -1383,7 +1389,7 @@ and this resets the session.
 
 \clearpage
 
-\lstinputlisting[caption={Logout logic}, language=Perl, firstline=37, lastline=45]{ex4_session.pl}
+\lstinputlisting[caption={Logout logic - ex4\_sesion.pl}, language=Perl, firstline=37, lastline=45]{ex4_session.pl}
 
 Our actual session validation is done via an under route.  Since this is a
 Mojolicious::Lite app, then all routes after the under will be subject to
@@ -1393,13 +1399,13 @@ present in the session.
 If no username, then we go back to the login screen.  If so, we continue our
 march into the route in question.
 
-\lstinputlisting[caption={Authentication logic}, language=Perl, firstline=47, lastline=59]{ex4_session.pl}
+\lstinputlisting[caption={Authentication logic - ex4\_sesion.pl}, language=Perl, firstline=47, lastline=59]{ex4_session.pl}
 
 The main new feature of our member area is that "private" files are protected.
 We use Mojo::Asset::File and present the "private" file (i.e. any file with an
 absolute path) for the user.  These lines are below.
 
-\lstinputlisting[caption={Protected content}, language=Perl, firstline=74, lastline=75]{ex4_session.pl}
+\lstinputlisting[caption={Protected content - ex4\_sesion.pl}, language=Perl, firstline=74, lastline=75]{ex4_session.pl}
 
 \section{JSON API}
 
@@ -1421,7 +1427,7 @@ which includes the JSON already parsed.  Also, our under renders and returns
 undef so that the user is presented with their JSON and the child routes are
 not processed.
 
-\lstinputlisting[caption={Authentication start}, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
+\lstinputlisting[caption={Authentication start - ex4\_api.pl}, language=Perl, firstline=10, lastline=19]{ex4_api.pl}
 
 \clearpage
 
@@ -1430,14 +1436,14 @@ similar scenario exists where the JSON is rendered and undef is returned.
 However, when the authentication succeeds, then "1" is returned and the 
 children routes can be processed.
 
-\lstinputlisting[caption={Validate credentials}, language=Perl, firstline=40, lastline=57]{ex4_api.pl}
+\lstinputlisting[caption={Validate credentials - ex4\_api.pl}, language=Perl, firstline=40, lastline=57]{ex4_api.pl}
 
 Next, we have helpers for our CRUD datastore and the GET/POST routes that allow
 for data retrieval and modifications.
 
 \clearpage
 
-\lstinputlisting[caption={CRUD helpers}, language=Perl, firstline=59, lastline=84]{ex4_api.pl}
+\lstinputlisting[caption={CRUD helpers - ex4\_api.pl}, language=Perl, firstline=59, lastline=84]{ex4_api.pl}
 
 The above are the INSERT and SELECT helpers.  Given how the insert helper returns \$c and
 select returns \$hash, we can do something like this: "\$c->insert->select".  The goal
@@ -1448,7 +1454,7 @@ it is to return JSON with something as simple as "\$c->render(json => ...)".
 
 \clearpage
 
-\lstinputlisting[caption={CRUD routes}, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
+\lstinputlisting[caption={CRUD routes - ex4\_api.pl}, language=Perl, firstline=117, lastline=133]{ex4_api.pl}
 
 That's basically it.  Next is a sample run via the command-line.
 
@@ -1516,12 +1522,12 @@ often result from continuation-passing style. Callbacks will be passed along to
 
 Below is what the code looks like that starts the delay.
 
-\lstinputlisting[caption={Index route}, language=Perl, firstline=4, lastline=9]{ex4_delay.pl}
+\lstinputlisting[caption={Index route - ex4\_delay.pl}, language=Perl, firstline=4, lastline=9]{ex4_delay.pl}
 
 The steps needed by the delay are sub CODE blocks.  The first one sets up our
 concurrent requests.  This is shown below:
 
-\lstinputlisting[caption={GET requests}, language=Perl, firstline=11, lastline=18]{ex4_delay.pl}
+\lstinputlisting[caption={GET requests - ex4\_delay.pl}, language=Perl, firstline=11, lastline=18]{ex4_delay.pl}
 
 We use the embedded Mojo::UserAgent object and the begin methods of the delay
 that set up the number of requests that will happen concurrently.  When the GET
@@ -1538,7 +1544,7 @@ counter reached zero, "steps" will continue.
 After the first step is finished, then the rendering takes place.  The code for
 this is below.
 
-\lstinputlisting[caption={Request output}, language=Perl, firstline=20, lastline=27]{ex4_delay.pl}
+\lstinputlisting[caption={Request output - ex4\_delay.pl}, language=Perl, firstline=20, lastline=27]{ex4_delay.pl}
 
 The \$c->render will display the json to the user.  The point of this example
 is that the Mojo::UserAgent get requests were happening while other requests on
@@ -1555,24 +1561,24 @@ Modern Perl features in our script.  Also, the very succinct
 Mojo::IOLoop->delay allows us some freedom for running non-blocking code in a
 serial fashion.
 
-\lstinputlisting[caption={Setup}, basicstyle=\LSTfont, language=Perl, firstline=1, lastline=9]{ex4_cli.pl}
+\lstinputlisting[caption={Setup - ex4\_cli.pl}, basicstyle=\LSTfont, language=Perl, firstline=1, lastline=9]{ex4_cli.pl}
 
 After this, the 1st GET request is done.  Note how we use an array of CODE
 references for our delay method.  The first sub initiates a non-blocking
 request with ip-api.com.
 
-\lstinputlisting[caption={Lat/Lon}, basicstyle=\LSTfont, language=Perl, firstline=10, lastline=17]{ex4_cli.pl}
+\lstinputlisting[caption={Lat/Lon - ex4\_cli.pl}, basicstyle=\LSTfont, language=Perl, firstline=10, lastline=17]{ex4_cli.pl}
 
 And then we set up the query for the final GET request that retrieves the
 weather.  Note how the transaction from the previous request is available in
 this delay step.
 
-\lstinputlisting[caption={Weather}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=18, lastline=30]{ex4_cli.pl}
+\lstinputlisting[caption={Weather - ex4\_cli.pl}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=18, lastline=30]{ex4_cli.pl}
 
 In the last step we print the weather.  Note the compact methodology of accessing
 the response and the embedded json embedded.
 
-\lstinputlisting[caption={Output}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=31, lastline=43]{ex4_cli.pl}
+\lstinputlisting[caption={Output - ex4\_cli.pl}, basicstyle=\LSTfont, language=Perl, keepspaces=true, firstline=31, lastline=43]{ex4_cli.pl}
 
 The final coolness that we use from Mojo::IOLoop::Delay is the wait method.
 This will..
