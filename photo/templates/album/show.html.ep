@@ -35,10 +35,10 @@
 <div class="row">
 <div class="span12">
 
-<form action="/album/upload" method="post" enctype="multipart/form-data"> %# #*\label{_form_start}*)
+<form action="/album/upload" method="post" enctype="multipart/form-data"> <%# #*\label{_form_start}*) %>
   <fieldset>
     <legend>
-        <%= stash('album')->name %> - %# #*\label{_form_object}*)
+        <%= stash('album')->name %> - <%# #*\label{_form_object}*) %>
         <div class="btn-group">
             <a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
               Albums
@@ -96,7 +96,7 @@
         % my $active = $slot->{idx} ? "" : "active";
 
         <div class="item <%= $active %>">
-            <img src="<%= url_for->path("/album/photo/$slot->{idx}") %>"> %# #*\label{_form_url_for}*)
+            <img src="<%= url_for->path("/album/photo/$slot->{idx}") %>"> <%# #*\label{_form_url_for}*) %>
             <div class="carousel-caption">
                  <h4><%= $slot->{label} %></h4>
 
